@@ -1,6 +1,134 @@
 .App {
+  overflow: hidden;
   min-height: 100vh;
-  width: 100%;
+  min-width: 100vw;
   text-align: center;
+}
+
+#light {
+  background-color: #fff;
+}
+
+#dark {
   background-color: #30303f;
+}
+
+#light .test {
+  color: red;
+}
+
+/* NAVBAR STYLES */
+
+#light .navbar {
+  background-color: #6200ee;
+  color: #fff;
+}
+
+#dark .navbar {
+  background-color: #30303f;
+  color: #fff;
+}
+
+.navbar {
+  background-color: #292938;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 6px 30px;
+}
+
+.navbar-btns {
+  display: flex;
+  flex-direction: row !important;
+  column-gap: 7px !important;
+}
+
+.navbar-btns Button {
+  background-color: #3f8ea6;
+}
+
+/*  REGISTER STYLE HERE */
+
+.main {
+  min-height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 20px;
+  color: #3f8ea6;
+}
+
+#dark .btn-submit {
+  background-color: #3f8ea6;
+}
+
+.btn-submit {
+  width: 100%;
+  margin-top: 15px;
+}
+
+.form {
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px;
+}
+
+.form-group {
+  padding-top: 5px;
+}
+
+.input {
+  background-color: #292938;
+  color: #fff;
+  text-align: center;
+}
+
+.input:focus {
+  background-color: #313141;
+  color: #fff;
+}
+
+/* HOME PAGE STYLES HERE */
+body {
+  overflow: hidden;
+}
+
+.main {
+  padding: 10px;
+}
+
+.main-page {
+  height: 100vh;
+  overflow-y: scroll;
+}
+
+/* SIDE BAR  */
+
+.sidebar {
+  height: 100vh;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px;
+}
+
+.sidebar-btns {
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-btns Button {
+  text-align: center;
+  margin: 5px;
+  color: #30303f;
+  border-radius: 18px;
+  font-size: 18px;
+}
+
+/* COLLECTIONS STYLE */
+.card{
+  border: none;
+  transition: box-shadow .3s;
+}
+.card:hover{
+  box-shadow: rgba(0, 0, 0, 0.56) 0px 15px 50px 0px;
+}
+
+.card_body{
+  background-color: #3f8ea6;
 }
