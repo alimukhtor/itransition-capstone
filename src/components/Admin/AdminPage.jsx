@@ -1,9 +1,8 @@
-import { Button, Col, Container, Form, Nav, Row, Tab } from "react-bootstrap";
+import { Button, Col, Form, Nav, Row, Tab } from "react-bootstrap";
 import "../../App.css";
 import { FiPlusCircle } from "react-icons/fi";
 import { BsCollection } from "react-icons/bs";
 import { FiUsers } from "react-icons/fi";
-import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import { useState } from "react";
 import UserList from "./UserList";
@@ -15,7 +14,7 @@ const AdminPage = () => {
   const token = window.localStorage.getItem("token");
   useEffect(() => {
     fetchUsers();
-  }, [setUsers]);
+  });
   const fetchUsers = async () => {
     const response = await fetch(
       "https://itransition-capstone.herokuapp.com/users/allUsers",

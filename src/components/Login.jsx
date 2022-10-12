@@ -18,7 +18,7 @@ const Login = () => {
   const navigate = useNavigate();
   const [notFound, setNotFound] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isBlocked, setisBlocked] = useState(false);
+  // const [isBlocked, setisBlocked] = useState(false);
   const [allFieldsRequired, setAllFieldsRequired] = useState(false);
   const [error, setError] = useState(false);
   const [login, setLogin] = useState({
@@ -79,11 +79,11 @@ const Login = () => {
               in <BiHappy /> Redirecting to homepage...
             </Alert>
           ) 
-          : isBlocked ? (
-            <Alert variant="danger" className="rounded-pill mb-5">
-              <MdCancel /> User account blocked. You cannot log in!
-            </Alert>
-          ) 
+          // : isBlocked ? (
+          //   <Alert variant="danger" className="rounded-pill mb-5">
+          //     <MdCancel /> User account blocked. You cannot log in!
+          //   </Alert>
+          // ) 
           : error ? (
             <Alert variant="danger" className="rounded-pill mb-5">
               <AiOutlineExclamationCircle /> Something really bad happened in server side <ImSad />

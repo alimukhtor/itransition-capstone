@@ -6,7 +6,7 @@ const SingleCollection =()=> {
     const token = window.localStorage.getItem("token");
     useEffect(()=> {
         fetchSingleCollection()
-    },[])
+    })
     const fetchSingleCollection =async()=> {
         const response = await fetch(`https://itransition-capstone.herokuapp.com/collections/${id}`, {
             method:"GET",
