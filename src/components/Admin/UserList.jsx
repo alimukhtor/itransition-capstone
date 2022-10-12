@@ -2,8 +2,7 @@ import { Table, Form, Container } from "react-bootstrap";
 
 const UserList = ({ users }) => {
   return (
-    <Container className="p-5">
-      <Table striped bordered hover variant="dark" className="">
+      <Table striped bordered hover variant="dark">
         <thead>
           <tr>
             <th>
@@ -47,7 +46,6 @@ const UserList = ({ users }) => {
             ))}
         </tbody>
       </Table>
-    </Container>
   );
 };
 export default UserList;

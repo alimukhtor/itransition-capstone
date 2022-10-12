@@ -14,7 +14,7 @@ const AdminPage = () => {
   const token = window.localStorage.getItem("token");
   useEffect(() => {
     fetchUsers();
-  });
+  }, []);
   const fetchUsers = async () => {
     const response = await fetch(
       "https://itransition-capstone.herokuapp.com/users/allUsers",

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button, Card, Col, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { FaUserCircle } from "react-icons/fa";
 import "../../App.css";
 const Collections = () => {
   const [collections, setCollections] = useState([]);
@@ -13,7 +14,7 @@ const Collections = () => {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": "Bearer " + token,
+            Authorization: "Bearer " + token,
           },
         }
       );
@@ -21,23 +22,32 @@ const Collections = () => {
       setCollections(data);
       console.log("Collections", data);
     };
-    fetchUsers()
-  },[]);
+    fetchUsers();
+  }, []);
   console.log("Col", collections);
   return (
     <Row>
       {collections.map((collection) => (
-        <Col md={6} lg={3} key={collection._id}>
-          <Card className="card border-0">
+        <Col xs={12} md={4} lg={2} key={collection._id}>
+          <Card className="card border-0 h-100">
             <Link to={`singleCollection/${collection._id}`}>
-            <Card.Img variant="top" src={collection.image} />
-            <Card.Body className="card_body">
-              <Card.Title>{collection.name}</Card.Title>
-              <Card.Text className="text-light">
-                {collection.description}
-              </Card.Text>
-              <Button variant="success">Go somewhere</Button>
-            </Card.Body>
+              <Card.Img variant="top" src={collection.image} className="card_img"/>
+              <Card.Body className="card_body">
+                <span class="tag tag-teal">{collection.topic}</span>
+                <Card.Title className="title">{collection.name} collection</Card.Title>
+                <Card.Text className="text">
+                  {collection.description}
+                </Card.Text>
+                <div className="d-flex">
+                  <div class="user">
+                    <span><FaUserCircle/></span>
+                    <div class="user-info">
+                      <h5>{collection.owner.username}</h5>
+                    </div>
+                  </div>
+                  <button variant="success" className="card_btn">view</button>
+                </div>
+              </Card.Body>
             </Link>
           </Card>
         </Col>
