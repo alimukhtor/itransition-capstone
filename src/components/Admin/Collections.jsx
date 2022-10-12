@@ -7,7 +7,7 @@ const Collections = () => {
   const token = window.localStorage.getItem("token");
   useEffect(() => {
     fetchUsers();
-  }, [setCollections]);
+  });
   const fetchUsers = async () => {
     const response = await fetch(
       "https://itransition-capstone.herokuapp.com/collections/allCollections",
