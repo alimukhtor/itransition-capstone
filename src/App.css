@@ -129,6 +129,10 @@ body {
   box-shadow: rgba(0, 0, 0, 0.56) 0px 15px 50px 0px;
 }
 
+.card:visited{
+  text-decoration: none;
+}
+
 .card_body{
   background-color: #3f8ea6;
 }
