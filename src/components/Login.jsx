@@ -45,9 +45,10 @@ const Login = () => {
           },
         });
         const data = await response.json();
-        console.log("DAATA",data);
         const { accessToken } = data;
         localStorage.setItem("token", accessToken);
+        localStorage.setItem("userId", data.user._id);
+        localStorage.setItem("userRole", data.user.role);
         if (response.status === 401) {
           setNotFound(true);
         } else if (data.user.role === 'admin') {

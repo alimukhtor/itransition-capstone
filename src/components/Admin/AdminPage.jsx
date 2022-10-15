@@ -39,7 +39,7 @@ const AdminPage = () => {
               <Nav.Link eventKey="first" className="text-light">
                 <BsCollection
                   className="mb-1 mx-2"
-                  tabIdstyle={{ fontSize: "20px" }}
+                  tabidstyle={{ fontSize: "20px" }}
                 />
                 Collections
               </Nav.Link>
@@ -67,17 +67,7 @@ const AdminPage = () => {
           />
         </Col>
         <Col sm={10} className="main-page">
-        <div className="d-flex justify-content-center p-3">
-          <Form className="d-flex">
-            <Form.Control
-              type="search"
-              placeholder="Search everything"
-              className="mr-1 rounded-pill"
-              aria-label="Search"
-            />
-            <Button variant="outline-success" className="rounded-pill">Search</Button>
-          </Form>
-        </div>
+        
           <Tab.Content>
             <Tab.Pane eventKey="first">
               <Collections />

@@ -16,7 +16,7 @@ const UserPage = () => {
               <Nav.Link eventKey="first" className="text-light">
                 <BsCollection
                   className="mb-1 mx-2"
-                  tabIdstyle={{ fontSize: "20px" }}
+                  tabiydstyle={{ fontSize: "20px" }}
                 />
                 Collections
               </Nav.Link>

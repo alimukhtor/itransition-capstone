@@ -13,10 +13,6 @@
   background-color: #30303f;
 }
 
-#light .test {
-  color: red;
-}
-
 /* NAVBAR STYLES */
 
 #light .navbar {
@@ -30,6 +26,8 @@
 }
 
 .navbar {
+  display: flex;
+  justify-content: space-between;
   background-color: #292938;
   box-shadow: rgba(0, 0, 0, 0.3) 0px 6px 30px;
 }
@@ -87,9 +85,6 @@
 }
 
 /* HOME PAGE STYLES HERE */
-body {
-  overflow: hidden;
-}
 
 .main {
   padding: 10px;
@@ -121,6 +116,7 @@ body {
 }
 
 /* COLLECTIONS STYLE */
+
 .card {
   border: none;
   transition: box-shadow 0.2s;
@@ -138,7 +134,7 @@ body {
   position: relative;
 }
 
-.card_img{
+.card_img {
   width: 100%;
   height: 20vh;
   object-fit: cover;
@@ -162,13 +158,13 @@ body {
   background-color: #5e76bf;
 }
 
-.title{
+.title {
   font-size: 20px !important;
   font-weight: 500;
   color: black;
 }
 
-.text{
+.text {
   font-size: 18px;
   color: black;
   margin: 0 0 40px;
@@ -185,35 +181,97 @@ body {
   height: 40px;
   margin-right: 5px;
 }
+
 .user-info h5 {
   margin-top: 12px;
   color: black;
   font-weight: 500;
 }
 
-.card_btn{
-  margin-top: 12px;
+.card_btn {
   margin-left: auto;
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 10px;
+}
+
+.card_btn button:first-child{
+  margin-top: 12px;
+  margin-left: auto;
   border-radius: 15px;
-  background-color: rgb(62, 185, 62);
+  background-color: #5e76bf;
   border: none;
   width: 60px;
   height: 30px;
 }
 
+.card_btn button:last-child{
+  margin-top: 12px;
+  margin-left: auto;
+  border-radius: 15px;
+  background-color: red;
+  border: none;
+  width: 60px;
+  height: 30px;
+}
 /* ITEMS STYLE */
 
-.item-tools{
-  font-size: 30px;
+.item-section{
+  display: flex;
+  justify-content: space-around;
 }
 
-.item-tools span{
-  margin: 5px;
+.item-section div {
+  font-size: 25px;
+  width: 50px;
 }
 
-.comment-toast{
+.item-section div:hover {
+  border-radius: 10px;
+  background-color: rgb(190, 190, 190);
+  color: #fff;
+}
+
+.comment-toast {
   flex-basis: auto !important;
+  width: 100%;
+  
+}
+
+/* SINGLE ITEM STYLE */
+
+.section-2 img {
+  width: 100%;
+  height: auto;
+}
+
+.section-3 {
+  color: #5e76bf;
+}
+
+.owner{
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  margin: 10px;
+}
+
+.owner span:last-child{
+  color: red;
+  font-size: 20px;
+}
+
+.owner:hover span:last-child{
+  color: red;
+  font-size: 30px;
+  transition: ease-out 0.5s;
+}
+
+.owner:hover{
+  border-radius: 15px;
+  background-color: rgb(190, 190, 190);;
+}
+
+.owner_info p:first-child{
+  text-align: left;
 }
