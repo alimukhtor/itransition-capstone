@@ -1,7 +1,146 @@
-import { Table, Form, Container } from "react-bootstrap";
+import { useState } from "react";
+import { Table, Form, Button, Alert } from "react-bootstrap";
+import { BiLockOpenAlt } from "react-icons/bi";
+import { HiLockClosed } from "react-icons/hi";
+import { RiDeleteBin2Fill } from "react-icons/ri";
+import { AiFillWarning } from "react-icons/ai";
+import { GrUserAdmin } from "react-icons/gr";
+const UserList = ({ users, setUsers }) => {
+  const [isCheckAll, setIsCheckAll] = useState(false);
+  const [onlyAdmin, setOnlyAdmin] = useState(false);
+  const [isChecked, setisChecked] = useState([]);
+  const token = window.localStorage.getItem("token");
 
-const UserList = ({ users }) => {
+  // selects single row
+  const handlecheckbox = (e) => {
+    const { value, checked } = e.target;
+    if (checked) {
+      setisChecked([...isChecked, value]);
+    } else {
+      setisChecked(isChecked.filter((e) => e !== value));
+    }
+  };
+
+  // selects all selected row
+  const handleSelectAll = () => {
+    setIsCheckAll(!isCheckAll);
+    setisChecked(users.map((user) => user._id));
+    if (isCheckAll) {
+      setisChecked([]);
+    }
+  };
+
+  // deletes selected users
+  const handleDeleteUser = async () => {
+    const response = await fetch(
+      `https://itransition-capstone.herokuapp.com/users/deleteUsers`,
+      {
+        method: "DELETE",
+        body: JSON.stringify(isChecked),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+      }
+    );
+    if (response.status === 200) {
+      const data = await response.json();
+      console.log(
+        "FILTERED USERS",
+        users.filter((user) => data.find((row) => row === user._id))
+      );
+      setUsers(users.filter((user) => !data.find((row) => row === user._id)));
+    } else if (response.status === 403) {
+      setOnlyAdmin(true);
+    }
+  };
+
+  // blocks/actives selected users status
+  const handleBlockUserStatus = async (event) => {
+    let userStatus = event.currentTarget.getAttribute("name");
+    try {
+      const response = await fetch(
+        `https://itransition-capstone.herokuapp.com/users/updateUserStatus`,
+        {
+          method: "PUT",
+          body: JSON.stringify({ isChecked, title: userStatus }),
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
+          },
+        }
+      );
+      if (response.ok) {
+        window.location.reload();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // changes selected user roles
+  const handleChangeUserRole = async (event) => {
+    let userRole = event.currentTarget.getAttribute("name");
+    try {
+      const response = await fetch(
+        `https://itransition-capstone.herokuapp.com/users/updateUserRole`,
+        {
+          method: "PUT",
+          body: JSON.stringify({ isChecked, title: userRole }),
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
+          },
+        }
+      );
+      if (response.ok) {
+        window.location.reload();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
+    <div className="p-3 my-1">
+      <div className="toolbar-btns">
+        <Button
+          variant="success"
+          style={{ fontSize: "25px" }}
+          name="admin"
+          onClick={(e) => handleChangeUserRole(e)}
+        >
+          <GrUserAdmin />
+        </Button>
+        <Button
+          variant="danger"
+          name="user"
+          onClick={(e) => handleChangeUserRole(e)}
+        >
+          Remove from admin
+        </Button>
+        <Button
+          variant="danger"
+          name="blocked"
+          onClick={(e) => handleBlockUserStatus(e)}
+        >
+          <HiLockClosed style={{ fontSize: "25px" }} />
+        </Button>
+        <Button
+          variant="success"
+          name="active"
+          onClick={(e) => handleBlockUserStatus(e)}
+        >
+          <BiLockOpenAlt style={{ fontSize: "25px" }} />
+        </Button>
+        <Button variant="danger" onClick={() => handleDeleteUser()}>
+          <RiDeleteBin2Fill style={{ fontSize: "30px" }} />
+        </Button>
+      </div>
+      {onlyAdmin ? (
+        <Alert variant="danger">
+          You do not have permission for this action <AiFillWarning />
+        </Alert>
+      ) : null}
       <Table striped bordered hover variant="dark">
         <thead>
           <tr>
@@ -10,8 +149,8 @@ const UserList = ({ users }) => {
                 <Form.Check
                   type="checkbox"
                   label="Select all"
-                  //   checked={isCheckAll}
-                  //   onChange={handleSelectAll}
+                  checked={isCheckAll}
+                  onChange={handleSelectAll}
                 />
               </Form.Group>
             </th>
@@ -26,14 +165,14 @@ const UserList = ({ users }) => {
           {users
             .sort((a, b) => a.username.localeCompare(b.username))
             .map((user) => (
-              <tr key={user._id} onClick={() => alert("hi")}>
+              <tr key={user._id}>
                 <td>
                   <Form.Group>
                     <Form.Check
                       type="checkbox"
                       value={user._id}
-                      // checked={isCheckAll ? isCheckAll : user.isChecked}
-                      // onChange={(e) => handlecheckbox(e)}
+                      checked={isCheckAll ? isCheckAll : user.isChecked}
+                      onChange={(e) => handlecheckbox(e)}
                     />
                   </Form.Group>
                 </td>
@@ -46,6 +185,7 @@ const UserList = ({ users }) => {
             ))}
         </tbody>
       </Table>
+    </div>
   );
 };
 export default UserList;

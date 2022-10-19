@@ -1,12 +1,13 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Alert, Button, Form } from "react-bootstrap";
 import { MdAdd } from "react-icons/md";
+import { AiFillWarning } from "react-icons/ai";
 import "../../App.css";
-// add validation for
+
+const LIMIT_CUSTOM_FIELDS = 3;
 
 export const AddCustomFields = ({ handleAddCustomField, fields }) => {
   const [showFormInputs, setShowFormInputs] = useState(false);
-  // const [counter, setCounter] = useState()
   const [customInputTypeLimit, setCustomInputTypeLimit] = useState(false);
   const [inputType, setInputType] = useState("");
   const [customFieldValues, setCustomFieldValues] = useState({
@@ -21,22 +22,19 @@ export const AddCustomFields = ({ handleAddCustomField, fields }) => {
       [fieldName]: value,
     });
   };
-  
+
   // finds repeted input types and sets validation
-  const handleChangeInputType =(e)=> {
-    handleCustomInputFields("type", e.target.value)
-    let counter = {};
-    for (var i = 0; i < fields.length; i++) {
-      counter[fields[i].type] = (counter[fields[i].type] || 0) + 1;
+  const handleChangeInputType = (e) => {
+    const key = e.target.value;
+    handleCustomInputFields("type", e.target.value);
+    const filtersByType = fields.filter((field) => field.type === key);
+    setCustomInputTypeLimit(false);
+    if (filtersByType.length >= LIMIT_CUSTOM_FIELDS) {
+      setCustomInputTypeLimit(true);
+      setInputType(key);
     }
-    for (var key in counter) {
-      if (counter[key] >= 3) {
-        setCustomInputTypeLimit(true);
-        setInputType(key);
-        return;
-      }
-    }
-  }
+  };
+
   return (
     <div>
       <span
@@ -52,26 +50,27 @@ export const AddCustomFields = ({ handleAddCustomField, fields }) => {
       {showFormInputs && (
         <Form>
           {customInputTypeLimit ? (
-            <Alert variant="danger">
+            <Alert variant="danger" className="rounded-pill">
               You are not allowed to create same {inputType} input more than 3
-              times!{" "}
+              times <AiFillWarning />
             </Alert>
           ) : null}
           <h3>Create your own custom inputs:</h3>
+          <Form.Label>Title</Form.Label>
           <Form.Control
             type="text"
+            className="rounded-pill"
             placeholder="title"
             value={customFieldValues.title}
             onChange={(e) => handleCustomInputFields("title", e.target.value)}
           />
+          <Form.Label>Choose input type</Form.Label>
           <Form.Control
             as="select"
-            className="my-3"
-            defaultValue="Choose input type"
+            className="mb-3 rounded-pill"
             value={customFieldValues.type}
-            onChange={(e)=> handleChangeInputType(e)}
+            onChange={(e) => handleChangeInputType(e)}
           >
-            <option>Choose input type</option>
             <option>text</option>
             <option>textarea</option>
             <option>number</option>
@@ -79,8 +78,8 @@ export const AddCustomFields = ({ handleAddCustomField, fields }) => {
             <option>checkbox</option>
           </Form.Control>
           <Button
-            className="mr-auto"
-            type="button"
+            variant="info"
+            className="rounded-pill"
             disabled={customInputTypeLimit ? true : false}
             onClick={() => {
               handleAddCustomField(customFieldValues, setCustomFieldValues);

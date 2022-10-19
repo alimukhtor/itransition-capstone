@@ -12,11 +12,8 @@ import { Navbar, Nav, Button, Form } from "react-bootstrap";
 import { RiLeafFill } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import ReactSwitch from "react-switch";
-import { useNavigate } from "react-router-dom";
 export const ThemeContext = createContext(null);
 function App() {
-  const navigate = useNavigate();
-  const userRole = localStorage.getItem("userRole");
   const [theme, setTheme] = useState("dark");
   const toggleTheme = () => {
     setTheme((curr) => (curr === "light" ? "dark" : "light"));
@@ -28,13 +25,7 @@ function App() {
           variant="dark"
           className="navbar d-flex justify-content space-between"
         >
-          <Navbar.Brand
-            onClick={() =>
-              userRole === "admin"
-                ? navigate("/adminPage")
-                : navigate("/userPage")
-            }
-          >
+          <Navbar.Brand>
             ITRANSITION
             <RiLeafFill className="mb-2 ml-1" />
           </Navbar.Brand>

@@ -1,4 +1,4 @@
-import { Button, Col, Form, Nav, Row, Tab } from "react-bootstrap";
+import { Col, Nav, Row, Tab } from "react-bootstrap";
 import "../../App.css";
 import { FiPlusCircle } from "react-icons/fi";
 import { BsCollection } from "react-icons/bs";
@@ -73,7 +73,7 @@ const AdminPage = () => {
               <Collections />
             </Tab.Pane>
             <Tab.Pane eventKey="third">
-              <UserList users={users} />
+              <UserList users={users} setUsers={setUsers}/>
             </Tab.Pane>
           </Tab.Content>
         </Col>

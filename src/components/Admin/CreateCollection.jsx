@@ -17,12 +17,7 @@ const CreateCollection = (props) => {
     topic: "",
     description: "",
     owner: userId,
-    customFields: [
-      {
-        title: "",
-        type: "",
-      },
-    ],
+    customFields: [],
   });
 
   // handles controlled inputs and sets object keys and values 
@@ -48,10 +43,12 @@ const CreateCollection = (props) => {
     }
   };
 
+  console.log("Request",requestData);
+  console.log("DAATa",requestData.customFields);
   // creates collection with uploading img and custom fields
   const createCollection = async () => {
     const response = await fetch(
-      "https://itransition-capstone.herokuapp.com/collections",
+      "http://localhost:3030/collections",
       {
         method: "POST",
         body: JSON.stringify(requestData),
@@ -69,6 +66,7 @@ const CreateCollection = (props) => {
           const fd = new FormData();
           fd.append("image", image);
           await fetch(
+    
             `https://itransition-capstone.herokuapp.com/collections/${data._id}`,
             {
               method: "POST",
@@ -121,6 +119,7 @@ const CreateCollection = (props) => {
             <Form.Label>Name</Form.Label>
             <Form.Control
               type="text"
+              className="rounded-pill"
               placeholder="Enter name"
               value={requestData.name}
               onChange={(e) => {
@@ -132,6 +131,7 @@ const CreateCollection = (props) => {
             <Form.Label>Description</Form.Label>
             <Form.Control
               type="textarea"
+              className="rounded-pill"
               placeholder="description"
               value={requestData.description}
               onChange={(e) => {
@@ -143,6 +143,7 @@ const CreateCollection = (props) => {
             <Form.Label>Topic</Form.Label>
             <Form.Control
               type="text"
+              className="rounded-pill"
               placeholder="topic"
               value={requestData.topic}
               onChange={(e) => {
@@ -154,6 +155,7 @@ const CreateCollection = (props) => {
             <Form.Label>Upload an image</Form.Label>
             <Form.Control
               type="file"
+              className="rounded-pill"
               alt="file-upload"
               value={requestData.image}
               onChange={(event) => {

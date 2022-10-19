@@ -3,9 +3,8 @@ import { Form } from "react-bootstrap";
 export const CustomFields = ({ fields }) => {
   return (
     <>
-      {fields.slice(1).map((field) => (
-        <Form.Group>
-          
+      {fields.map((field, i) => (
+        <Form.Group key={i}>
           {field.type === "textarea" ? (
             <>
               <Form.Label>{field.title}</Form.Label>
@@ -14,7 +13,7 @@ export const CustomFields = ({ fields }) => {
           ) : (
             <>
               <Form.Label>{field.title}</Form.Label>
-              <Form.Control type={field.type} />
+              <Form.Control type={field.type} className="rounded-pill" />
             </>
           )}
         </Form.Group>

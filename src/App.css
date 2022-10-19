@@ -275,3 +275,13 @@
 .owner_info p:first-child{
   text-align: left;
 }
+
+/* USER LIST STYLE */
+
+.toolbar-btns{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+  gap: 8px;
+}
