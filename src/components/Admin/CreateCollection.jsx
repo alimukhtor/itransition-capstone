@@ -25,6 +25,7 @@ const CreateCollection = (props) => {
     ],
   });
 
+  // handles controlled inputs and sets object keys and values 
   const handleInput = (fieldName, value) => {
     setRequestData({
       ...requestData,
@@ -32,6 +33,7 @@ const CreateCollection = (props) => {
     });
   };
 
+  // adds custom fields with specific title and type of inputs form
   const handleAddCustomField = (newFields, setCustomFieldValues) => {
     const { customFields } = requestData;
     const newCustomFields = [...customFields];
@@ -45,6 +47,8 @@ const CreateCollection = (props) => {
       setCustomFieldValues('')
     }
   };
+
+  // creates collection with uploading img and custom fields
   const createCollection = async () => {
     const response = await fetch(
       "https://itransition-capstone.herokuapp.com/collections",
@@ -82,6 +86,7 @@ const CreateCollection = (props) => {
     }
   };
 
+  // resets form input values after submit
   const handleResetForm = (e) => {
     e.preventDefault();
     e.target.reset();
@@ -159,7 +164,6 @@ const CreateCollection = (props) => {
           {isSelected ? (
             <CustomFields fields={requestData.customFields} />
           ) : null}
-
           <AddCustomFields handleAddCustomField={handleAddCustomField} fields={requestData.customFields}/>
           <Button
             variant="success"

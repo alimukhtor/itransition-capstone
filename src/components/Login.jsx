@@ -6,18 +6,15 @@ import {
   Container,
   Form,
   Row,
-  Spinner,
 } from "react-bootstrap";
 import { MdCancel } from "react-icons/md";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 import { ImSad } from "react-icons/im";
-import { BiHappy } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const navigate = useNavigate();
   const [notFound, setNotFound] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   // const [isBlocked, setisBlocked] = useState(false);
   const [allFieldsRequired, setAllFieldsRequired] = useState(false);
   const [error, setError] = useState(false);
@@ -52,10 +49,7 @@ const Login = () => {
         if (response.status === 401) {
           setNotFound(true);
         } else if (data.user.role === 'admin') {
-          setIsLoggedIn(true);
-          setTimeout(() => {
-            navigate("/adminPage");
-          }, 2000);
+          navigate("/adminPage");
         } else if(response.status === 204) {
           setAllFieldsRequired(true)
         }else if(data.user.role === 'user') {
@@ -74,12 +68,7 @@ const Login = () => {
             <Alert variant="danger" className="rounded-pill mb-5">
               <MdCancel /> User with this email not found <ImSad />
             </Alert>
-          ) : isLoggedIn ? (
-            <Alert variant="danger" className="rounded-pill mb-5">
-              <Spinner animation="grow" variant="success" /> Successfully Logged
-              in <BiHappy /> Redirecting to homepage...
-            </Alert>
-          ) 
+          )
           // : isBlocked ? (
           //   <Alert variant="danger" className="rounded-pill mb-5">
           //     <MdCancel /> User account blocked. You cannot log in!
