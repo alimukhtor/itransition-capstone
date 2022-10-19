@@ -23,20 +23,20 @@ export const AddCustomFields = ({ handleAddCustomField, fields }) => {
   };
   
   // finds repeted input types and sets validation
-  const handleCustomInputValidation = () => {
+  const handleChangeInputType =(e)=> {
+    handleCustomInputFields("type", e.target.value)
     let counter = {};
     for (var i = 0; i < fields.length; i++) {
       counter[fields[i].type] = (counter[fields[i].type] || 0) + 1;
     }
     for (var key in counter) {
-      if (counter[key] > 3) {
+      if (counter[key] >= 3) {
         setCustomInputTypeLimit(true);
         setInputType(key);
         return;
       }
     }
-  };
-  
+  }
   return (
     <div>
       <span
@@ -69,7 +69,7 @@ export const AddCustomFields = ({ handleAddCustomField, fields }) => {
             className="my-3"
             defaultValue="Choose input type"
             value={customFieldValues.type}
-            onChange={(e) => handleCustomInputFields("type", e.target.value)}
+            onChange={(e)=> handleChangeInputType(e)}
           >
             <option>Choose input type</option>
             <option>text</option>
@@ -81,8 +81,8 @@ export const AddCustomFields = ({ handleAddCustomField, fields }) => {
           <Button
             className="mr-auto"
             type="button"
+            disabled={customInputTypeLimit ? true : false}
             onClick={() => {
-              handleCustomInputValidation();
               handleAddCustomField(customFieldValues, setCustomFieldValues);
               setShowFormInputs(false);
             }}
