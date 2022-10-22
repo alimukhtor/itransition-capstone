@@ -1,14 +1,13 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Alert, Button, Form, Modal } from "react-bootstrap";
 import { AddCustomFields } from "./AddCustomFields";
 import { TiTick } from "react-icons/ti";
 import { ImCancelCircle } from "react-icons/im";
 import { BiBookAdd } from "react-icons/bi";
 import { CustomFields } from "./CustomFields";
-import ReactMarkdown from 'react-markdown'
+import ReactMarkdown from "react-markdown";
 
 const CreateCollection = (props) => {
-  const markdown = `Just a link: https://reactjs.com.`
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
   const [image, setImage] = useState(null);
@@ -22,7 +21,6 @@ const CreateCollection = (props) => {
     customFields: [],
   });
 
-  console.log("requestData",requestData);
   // handles controlled inputs and sets object keys and values
   const handleInput = (fieldName, value) => {
     setRequestData({
@@ -48,32 +46,36 @@ const CreateCollection = (props) => {
   // creates collection with uploading img and custom fields
   const createCollection = async (e) => {
     e.preventDefault();
-    const response = await fetch(`${window.remote_url}/collections`, {
-      method: "POST",
-      body: JSON.stringify(requestData),
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + token,
-      },
-    });
-    if (response.ok) {
-      try {
-        setIsCollectionCreated(true);
-        const data = await response.json();
-        if (image) {
-          const fd = new FormData();
-          fd.append("image", image);
-          await fetch(`${window.remote_url}/collections/${data._id}`, {
-            method: "POST",
-            body: fd,
-            headers: {
-              Authorization: "Bearer " + token,
-            },
-          });
+    try {
+      const response = await fetch(`${window.remote_url}/collections`, {
+        method: "POST",
+        body: JSON.stringify(requestData),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+      });
+      if (response.ok) {
+        try {
+          setIsCollectionCreated(true);
+          const data = await response.json();
+          if (image) {
+            const fd = new FormData();
+            fd.append("image", image);
+            await fetch(`${window.remote_url}/collections/${data._id}`, {
+              method: "POST",
+              body: fd,
+              headers: {
+                Authorization: "Bearer " + token,
+              },
+            });
+          }
+        } catch (error) {
+          console.log(error);
         }
-      } catch (error) {
-        console.log(error);
       }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -120,7 +122,6 @@ const CreateCollection = (props) => {
               }}
             />
           </Form.Group>
-          <ReactMarkdown children={requestData.description} />
           <Form.Group>
             <Form.Label>Description</Form.Label>
             <Form.Control

@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { Alert, Button, Col, Container, Form, Row, Spinner } from "react-bootstrap";
 import { MdCancel } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
+import { FcGoogle } from "react-icons/fc";
+import { FaFacebook } from "react-icons/fa";
+import { FaTwitter } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
 const Registration = () => {
   const navigate = useNavigate();
   const [emailExist, setEmailExist] = useState(false);
@@ -41,7 +44,7 @@ const Registration = () => {
   };
   return (
     <Container>
-      <Row className="main">
+      <Row className="main-login">
         <Col md={6}>
           {emailExist ? (
             <Alert variant="danger" className="rounded-pill mb-5">
@@ -55,7 +58,7 @@ const Registration = () => {
           ) : null
           }
           <Form className="form" onSubmit={handleSubmit}>
-            <h3>Register!</h3>
+            <h3>Create an account</h3>
             <Form.Group className="form-group">
               <Form.Label>Username</Form.Label>
               <Form.Control
@@ -89,10 +92,17 @@ const Registration = () => {
             <Button
               variant=""
               type="submit"
-              className="btn-submit rounded-pill"
+              className="btn-submit rounded-pill mb-2"
             >
               Sign Up
             </Button>
+            <span>______________________Or continue with______________________</span>
+            <div className="d-flex justify-content-center mt-3" style={{fontSize:"35px"}}>
+              <FcGoogle/>
+              <FaFacebook className="mx-4"/>
+              <FaTwitter className="text-info"/>
+            </div>
+            <p className="mt-3">Already have an account? <Link to="/login">Sign in</Link></p>
           </Form>
         </Col>
       </Row>

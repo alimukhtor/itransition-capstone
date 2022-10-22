@@ -1,25 +1,30 @@
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { createContext, useState } from "react";
 import { Route, Routes } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { Navbar, Nav, Button, Form } from "react-bootstrap";
+import { RiLeafFill } from "react-icons/ri";
+import { BiUserCircle } from "react-icons/bi";
+import ReactSwitch from "react-switch";
 import Registration from "./components/Registration";
 import Login from "./components/Login";
 import AdminPage from "./components/Admin/AdminPage";
-import { createContext, useState } from "react";
-import UserPage from "./components/User/UserPage";
 import SingleCollection from "./components/Admin/SingleCollections";
 import SingleItem from "./components/Admin/SingleItem";
-import { Navbar, Nav, Button, Form } from "react-bootstrap";
-import { RiLeafFill } from "react-icons/ri";
-import { Link } from "react-router-dom";
-import ReactSwitch from "react-switch";
+import { UserProfile } from "./components/Admin/UserProfile";
 export const ThemeContext = createContext(null);
 
 // deployed app url
-window.remote_url = "https://itransition-capstone.herokuapp.com"
+window.remote_url = "https://itransition-capstone.herokuapp.com";
 
 function App() {
   const [theme, setTheme] = useState("dark");
   const [query, setQuery] = useState("");
+  const [smShow, setSmShow] = useState(false);
+  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
+  const [loggedInUserData, setLoggedInUserData] = useState([]);
+
   const toggleTheme = () => {
     setTheme((curr) => (curr === "light" ? "dark" : "light"));
   };
@@ -30,11 +35,11 @@ function App() {
         `${window.remote_url}/collections/search?title=${query}`
       );
       const data = await response.json();
-      console.log("SEARCHED RESULT", data);
     } catch (error) {
       console.log(error);
     }
   };
+
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
       <div className="App" id={theme}>
@@ -67,27 +72,45 @@ function App() {
           </div>
           <Nav className="ml-auto">
             <div className="navbar-btns">
-              <label> {theme === "light" ? "Light Mode" : "Dark Mode"}</label>
+              <label> {theme === "light" ? "Light" : "Dark"}</label>
               <ReactSwitch onChange={toggleTheme} checked={theme === "dark"} />
-              <Link to="/register">
-                <Button variant="">Register</Button>
-              </Link>
-              <Link to="login">
-                <Button variant="">Login</Button>
-              </Link>
             </div>
+            <Link to="/register">
+              <Button variant="info" className="rounded-pill mx-2">
+                Register
+              </Button>
+            </Link>
+            {isUserLoggedIn ? (
+              <div className="d-flex mt-1">
+                <BiUserCircle
+                  style={{ fontSize: "30px" }}
+                  onClick={() => setSmShow(true)}
+                />
+                <p className="mr-3">{loggedInUserData.username}</p>
+              </div>
+            ) : (
+              <Link to="/login">
+                <Button variant="info" className="rounded-pill">Login</Button>
+              </Link>
+            )}
+            <UserProfile smShow={smShow} setSmShow={setSmShow} setIsUserLoggedIn={setIsUserLoggedIn}/>
           </Nav>
         </Navbar>
         <Routes>
-          <Route path="/adminPage" element={<AdminPage />} />
+          <Route
+            path="/adminPage"
+            element={<AdminPage setLoggedInUserData={setLoggedInUserData} />}
+          />
           <Route
             path="/adminPage/singleCollection/:collectionId"
             element={<SingleCollection />}
           />
           <Route path="/singleItem/:id" element={<SingleItem />} />
-          <Route path="/userPage" element={<UserPage />} />
           <Route path="/register" element={<Registration />} />
-          <Route path="/login" element={<Login />} />
+          <Route
+            path="/login"
+            element={<Login setIsUserLoggedIn={setIsUserLoggedIn} />}
+          />
         </Routes>
       </div>
     </ThemeContext.Provider>

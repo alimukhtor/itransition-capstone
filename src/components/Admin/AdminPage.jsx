@@ -8,36 +8,61 @@ import { useState } from "react";
 import UserList from "./UserList";
 import CreateCollection from "./CreateCollection";
 import Collections from "./Collections";
-const AdminPage = () => {
+const AdminPage = ({ setLoggedInUserData }) => {
   const [users, setUsers] = useState([]);
+  const [userRole, setUserRole] = useState("");
   const [modalShow, setModalShow] = useState(false);
   const token = window.localStorage.getItem("token");
   useEffect(() => {
     fetchUsers();
   }, []);
   const fetchUsers = async () => {
-    const response = await fetch(
-      `${window.remote_url}/users/allUsers`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-      }
-    );
+    const response = await fetch(`${window.remote_url}/users/allUsers`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+    });
     const data = await response.json();
     setUsers(data);
   };
 
   // function to show modal
   const showModal = () => setModalShow(true);
-  
+
+  useEffect(() => {
+    getUserInfo();
+  }, [setLoggedInUserData]);
+
+  // get user /me route
+  const getUserInfo = async () => {
+    const response = await fetch(`${window.remote_url}/users/me`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+    });
+    if (response.ok) {
+      const user = await response.json();
+      console.log("USER INFO", user);
+      setLoggedInUserData(user);
+      if (user.role === "admin") {
+        setUserRole("Admin");
+      } else {
+        setUserRole("User");
+      }
+    }
+  };
   return (
     <Row className="main">
       <Tab.Container id="left-tabs-example" defaultActiveKey="first">
         <Col className="sidebar">
-          <h2 className="test">Admin Page</h2>
+          {userRole === "Admin" ? (
+            <h2 className="text-info">Welcome to {userRole} Page</h2>
+          ) : (
+            <h2 className="text-info">Welcome to {userRole} Page</h2>
+          )}
           <Nav variant="pills" className="flex-column">
             <Nav.Item>
               <Nav.Link eventKey="first" className="text-light">
@@ -65,7 +90,7 @@ const AdminPage = () => {
               </Nav.Link>
             </Nav.Item>
           </Nav>
-          <CreateCollection 
+          <CreateCollection
             show={modalShow}
             onHide={() => setModalShow(false)}
           />

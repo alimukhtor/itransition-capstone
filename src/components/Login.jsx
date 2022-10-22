@@ -12,9 +12,10 @@ import { AiOutlineExclamationCircle } from "react-icons/ai";
 import { ImSad } from "react-icons/im";
 import { useNavigate } from "react-router-dom";
 
-const Login = () => {
+const Login = ({setIsUserLoggedIn}) => {
   const navigate = useNavigate();
   const [notFound, setNotFound] = useState(false);
+  const [successMsg, setSuccessMsg] = useState(false)
   const [isBlocked, setisBlocked] = useState(false);
   const [allFieldsRequired, setAllFieldsRequired] = useState(false);
   const [error, setError] = useState(false);
@@ -42,14 +43,17 @@ const Login = () => {
           },
         });
         const data = await response.json();
+        console.log(data);
         const { accessToken } = data;
         localStorage.setItem("token", accessToken);
         localStorage.setItem("userId", data.user._id);
-        if (response.status === 401) {
-          setNotFound(true);
-        } else if (data.user.role === 'admin') {
+        if((response.status === 200) && (data.user.role === 'admin') || (data.user.role === 'user')){
+          setIsUserLoggedIn(true)
+          setSuccessMsg(true)
           navigate("/adminPage");
-        }else if(data.user.status === 'blocked'){
+        } else if (response.status === 401) {
+          setNotFound(true);
+        } else if(data.user.status === 'blocked'){
           setisBlocked(true)
           navigate("/register")
         } else if(response.status === 204) {
@@ -62,7 +66,7 @@ const Login = () => {
   };
   return (
     <Container>
-      <Row className="main">
+      <Row className="main-login">
         <Col md={6}>
           {notFound ? (
             <Alert variant="danger" className="rounded-pill mb-5">
