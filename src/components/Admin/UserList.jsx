@@ -45,10 +45,6 @@ const UserList = ({ users, setUsers }) => {
     );
     if (response.status === 200) {
       const data = await response.json();
-      console.log(
-        "FILTERED USERS",
-        users.filter((user) => data.find((row) => row === user._id))
-      );
       setUsers(users.filter((user) => !data.find((row) => row === user._id)));
     } else if (response.status === 403) {
       setOnlyAdmin(true);
@@ -56,11 +52,11 @@ const UserList = ({ users, setUsers }) => {
   };
 
   // blocks/actives selected users status
-  const handleBlockUserStatus = async (event) => {
+  const handleChangeUserStatus = async (event) => {
     let userStatus = event.currentTarget.getAttribute("name");
     try {
       const response = await fetch(
-        `https://itransition-capstone.herokuapp.com/users/updateUserStatus`,
+        `${window.remote_url}/users/updateUserStatus`,
         {
           method: "PUT",
           body: JSON.stringify({ isChecked, title: userStatus }),
@@ -71,7 +67,17 @@ const UserList = ({ users, setUsers }) => {
         }
       );
       if (response.ok) {
-        window.location.reload();
+        const userIds = await response.json();
+        const usersWithupdatedStatus = users
+          .map(user => {
+            if (userIds.includes(user._id)) {
+              user.status = userStatus;
+            }
+            return {
+              ...user
+            };
+          })
+          setUsers(usersWithupdatedStatus)
       }
     } catch (error) {
       console.log(error);
@@ -83,7 +89,7 @@ const UserList = ({ users, setUsers }) => {
     let userRole = event.currentTarget.getAttribute("name");
     try {
       const response = await fetch(
-        `https://itransition-capstone.herokuapp.com/users/updateUserRole`,
+        `${window.remote_url}/users/updateUserRole`,
         {
           method: "PUT",
           body: JSON.stringify({ isChecked, title: userRole }),
@@ -94,7 +100,17 @@ const UserList = ({ users, setUsers }) => {
         }
       );
       if (response.ok) {
-        window.location.reload();
+        const userIds = await response.json();
+        const usersWithupdatedRole = users
+          .map(user => {
+            if (userIds.includes(user._id)) {
+              user.role = userRole;
+            }
+            return {
+              ...user
+            };
+          })
+          setUsers(usersWithupdatedRole)
       }
     } catch (error) {
       console.log(error);
@@ -121,14 +137,14 @@ const UserList = ({ users, setUsers }) => {
         <Button
           variant="danger"
           name="blocked"
-          onClick={(e) => handleBlockUserStatus(e)}
+          onClick={(e) => handleChangeUserStatus(e)}
         >
           <HiLockClosed style={{ fontSize: "25px" }} />
         </Button>
         <Button
           variant="success"
           name="active"
-          onClick={(e) => handleBlockUserStatus(e)}
+          onClick={(e) => handleChangeUserStatus(e)}
         >
           <BiLockOpenAlt style={{ fontSize: "25px" }} />
         </Button>

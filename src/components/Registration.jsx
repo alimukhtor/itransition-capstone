@@ -22,7 +22,7 @@ const Registration = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const response = await fetch("https://itransition-capstone.herokuapp.com/users/register", {
+    const response = await fetch(`${window.remote_url}/users/register`, {
       method: "POST",
       body: JSON.stringify(registration),
       headers: {

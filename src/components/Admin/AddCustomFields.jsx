@@ -41,12 +41,10 @@ export const AddCustomFields = ({ handleAddCustomField, fields }) => {
         className="btn"
         onClick={() => {
           setShowFormInputs(true);
-          // shows empty inputs for providing new data
         }}
       >
         <MdAdd style={{ fontSize: "25px" }} />
       </span>
-
       {showFormInputs && (
         <Form>
           {customInputTypeLimit ? (

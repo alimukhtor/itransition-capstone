@@ -1,8 +1,8 @@
+import "../../App.css";
 import { useEffect, useState } from "react";
 import { Card, Col, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
-import "../../App.css";
 const Collections = () => {
   const [collections, setCollections] = useState([]);
   const token = window.localStorage.getItem("token");
@@ -10,9 +10,9 @@ const Collections = () => {
 
   // gets all colections
   useEffect(() => {
-    const fetchUsers = async () => {
+    const fetchAllCollections = async () => {
       const response = await fetch(
-        "https://itransition-capstone.herokuapp.com/collections/allCollections",
+        `${window.remote_url}/collections/allCollections`,
         {
           method: "GET",
           headers: {
@@ -24,13 +24,13 @@ const Collections = () => {
       const data = await response.json();
       setCollections(data);
     };
-    fetchUsers();
+    fetchAllCollections();
   }, []);
 
-  // deletes single collection by id 
+  // deletes single collection by id
   const deleteCollection = async (id) => {
     const response = await fetch(
-      `https://itransition-capstone.herokuapp.com/collections/${id}/deleteCollection`,
+      `${window.remote_url}/collections/${id}/deleteCollection`,
       {
         method: "DELETE",
         headers: {
@@ -39,29 +39,25 @@ const Collections = () => {
         },
       }
     );
-    if(response.ok){
-      const restCollections = collections.filter(c => c._id !== id);  
-      setCollections(restCollections)
+    if (response.ok) {
+      const restCollections = collections.filter((c) => c._id !== id);
+      setCollections(restCollections);
     }
   };
 
   return (
     <Row>
       {collections.map((collection) => (
-        <Col xs={12} md={5} lg={3} key={collection._id} className="p-4">
+        <Col xs={12} md={6} lg={3} key={collection._id} className="p-4">
           <Card className="card border-0 h-100">
-            <Card.Img
-              variant="top"
-              src={collection.image}
-              className="card_img"
-            />
+            <Card.Img src={collection.image} className="card_img" />
             <Card.Body className="card_body">
               <span class="tag tag-teal">{collection.topic}</span>
               <Card.Title className="title">
-                {collection.name} collection
+                {collection.name}
               </Card.Title>
               <Card.Text className="text">{collection.description}</Card.Text>
-              <div className="d-flex">
+              <div className="d-flex justify-content-center">
                 <div className="user">
                   <span>
                     <FaUserCircle />

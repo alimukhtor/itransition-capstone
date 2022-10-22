@@ -1,5 +1,5 @@
-import { Col, Nav, Row, Tab } from "react-bootstrap";
 import "../../App.css";
+import { Col, Nav, Row, Tab } from "react-bootstrap";
 import { FiPlusCircle } from "react-icons/fi";
 import { BsCollection } from "react-icons/bs";
 import { FiUsers } from "react-icons/fi";
@@ -17,7 +17,7 @@ const AdminPage = () => {
   }, []);
   const fetchUsers = async () => {
     const response = await fetch(
-      "https://itransition-capstone.herokuapp.com/users/allUsers",
+      `${window.remote_url}/users/allUsers`,
       {
         method: "GET",
         headers: {
@@ -29,10 +29,14 @@ const AdminPage = () => {
     const data = await response.json();
     setUsers(data);
   };
+
+  // function to show modal
+  const showModal = () => setModalShow(true);
+  
   return (
-    <Tab.Container id="left-tabs-example" defaultActiveKey="first">
-      <Row className="main">
-        <Col sm={2} className="sidebar">
+    <Row className="main">
+      <Tab.Container id="left-tabs-example" defaultActiveKey="first">
+        <Col className="sidebar">
           <h2 className="test">Admin Page</h2>
           <Nav variant="pills" className="flex-column">
             <Nav.Item>
@@ -48,7 +52,7 @@ const AdminPage = () => {
               <Nav.Link
                 eventKey="second"
                 className="text-light"
-                onClick={() => setModalShow(true)}
+                onClick={showModal}
               >
                 <FiPlusCircle className="mx-1" style={{ fontSize: "20px" }} />
                 Create collection
@@ -61,24 +65,23 @@ const AdminPage = () => {
               </Nav.Link>
             </Nav.Item>
           </Nav>
-          <CreateCollection
+          <CreateCollection 
             show={modalShow}
             onHide={() => setModalShow(false)}
           />
         </Col>
         <Col sm={10} className="main-page">
-        
           <Tab.Content>
             <Tab.Pane eventKey="first">
               <Collections />
             </Tab.Pane>
             <Tab.Pane eventKey="third">
-              <UserList users={users} setUsers={setUsers}/>
+              <UserList users={users} setUsers={setUsers} />
             </Tab.Pane>
           </Tab.Content>
         </Col>
-      </Row>
-    </Tab.Container>
+      </Tab.Container>
+    </Row>
   );
 };
 export default AdminPage;

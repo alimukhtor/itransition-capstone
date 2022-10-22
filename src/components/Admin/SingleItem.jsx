@@ -13,7 +13,7 @@ const SingleItem = () => {
   }, []);
   const fetchItemDetails = async () => {
     const response = await fetch(
-      `https://itransition-capstone.herokuapp.com/items/${id}`,
+      `${window.remote_url}/items/${id}`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -30,7 +30,7 @@ const SingleItem = () => {
 
   const fetchComments = async () => {
     const response = await fetch(
-      `https://itransition-capstone.herokuapp.com/items/${id}/comments`,
+      `${window.remote_url}/items/${id}/comments`,
       {
         headers: {
           "Content-Type": "application/json",

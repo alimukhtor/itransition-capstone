@@ -34,7 +34,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-        const response = await fetch("https://itransition-capstone.herokuapp.com/users/login", {
+        const response = await fetch(`${window.remote_url}/users/login`, {
           method: "POST",
           body: JSON.stringify(login),
           headers: {

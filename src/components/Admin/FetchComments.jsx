@@ -1,7 +1,7 @@
+import "../../App.css";
 import { useEffect, useState } from "react";
 import { FaUserCircle } from "react-icons/fa";
 import { BiTrash } from "react-icons/bi";
-import "../../App.css";
 export const FetchComments = ({ itemId }) => {
   const [comments, setComments] = useState([]);
   const token = localStorage.getItem("token");
@@ -12,7 +12,7 @@ export const FetchComments = ({ itemId }) => {
   // fetches all comments for specific item
   const fetchComments = async () => {
     const response = await fetch(
-      `https://itransition-capstone.herokuapp.com/items/${itemId}/comments`,
+      `${window.remote_url}/items/${itemId}/comments`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -29,7 +29,7 @@ export const FetchComments = ({ itemId }) => {
   // deletes single comment of specific item
   const deleteComment = async (commentId) => {
     const response = await fetch(
-      `https://itransition-capstone.herokuapp.com/items/${itemId}/comments/${commentId}`,
+      `${window.remote_url}/items/${itemId}/comments/${commentId}`,
       {
         method: "Delete",
         headers: {

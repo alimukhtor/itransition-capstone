@@ -285,3 +285,13 @@
   margin-bottom: 10px;
   gap: 8px;
 }
+
+/* tags style */
+.tagInputFieldClass{
+  padding: 5px;
+  border: 1px solid grey;
+  width: 300px;
+}
+.tagInputClass{
+  margin-top: 10px;
+}

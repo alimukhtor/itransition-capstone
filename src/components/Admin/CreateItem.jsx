@@ -1,28 +1,27 @@
 import { useEffect, useState } from "react";
 import { Alert, Button, Form, Modal } from "react-bootstrap";
-import { AddCustomFields } from "./AddCustomFields";
 import { TiTick } from "react-icons/ti";
 import { ImCancelCircle } from "react-icons/im";
 import { BiBookAdd } from "react-icons/bi";
+import { AddCustomFields } from "./AddCustomFields";
 import { CustomFields } from "./CustomFields";
-import ReactMarkdown from 'react-markdown'
+import { TagsInput } from "./TagsInput";
 
-const CreateCollection = (props) => {
-  const markdown = `Just a link: https://reactjs.com.`
-  const token = localStorage.getItem("token");
-  const userId = localStorage.getItem("userId");
+export const CreateItem = (props) => {
   const [image, setImage] = useState(null);
   const [isSelected, setIsSelected] = useState(false);
-  const [isCollectionCreated, setIsCollectionCreated] = useState(false);
+  const [isItemCreated, setIsItemCreated] = useState(false);
+  const token = window.localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
   const [requestData, setRequestData] = useState({
     name: "",
     topic: "",
     description: "",
+    collections: props.collectionId,
     owner: userId,
     customFields: [],
   });
 
-  console.log("requestData",requestData);
   // handles controlled inputs and sets object keys and values
   const handleInput = (fieldName, value) => {
     setRequestData({
@@ -45,10 +44,10 @@ const CreateCollection = (props) => {
       setCustomFieldValues("");
     }
   };
-  // creates collection with uploading img and custom fields
-  const createCollection = async (e) => {
-    e.preventDefault();
-    const response = await fetch(`${window.remote_url}/collections`, {
+
+  // creates item for specific collection
+  const createItem = async () => {
+    const response = await fetch(`${window.remote_url}/items`, {
       method: "POST",
       body: JSON.stringify(requestData),
       headers: {
@@ -58,12 +57,12 @@ const CreateCollection = (props) => {
     });
     if (response.ok) {
       try {
-        setIsCollectionCreated(true);
-        const data = await response.json();
+        setIsItemCreated(true);
+        const newItem = await response.json();
         if (image) {
           const fd = new FormData();
           fd.append("image", image);
-          await fetch(`${window.remote_url}/collections/${data._id}`, {
+          await fetch(`${window.remote_url}/items/${newItem._id}`, {
             method: "POST",
             body: fd,
             headers: {
@@ -92,7 +91,7 @@ const CreateCollection = (props) => {
       <Modal.Header>
         <Modal.Title id="contained-modal-title-vcenter" className="text-center">
           <BiBookAdd className="mb-1 text-info" />
-          Create Collection
+          Create Item
         </Modal.Title>
         <ImCancelCircle
           onClick={props.onHide}
@@ -102,10 +101,10 @@ const CreateCollection = (props) => {
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleResetForm}>
-          {isCollectionCreated ? (
+          {isItemCreated ? (
             <Alert variant="success">
               <TiTick />
-              Collection successfully created
+              Item successfully created
             </Alert>
           ) : null}
           <Form.Group>
@@ -120,7 +119,6 @@ const CreateCollection = (props) => {
               }}
             />
           </Form.Group>
-          <ReactMarkdown children={requestData.description} />
           <Form.Group>
             <Form.Label>Description</Form.Label>
             <Form.Control
@@ -157,6 +155,8 @@ const CreateCollection = (props) => {
               }}
             />
           </Form.Group>
+          <Form.Label className="mt-2">Enter tag</Form.Label>
+          <TagsInput items={props.items} />
           {isSelected ? (
             <CustomFields fields={requestData.customFields} />
           ) : null}
@@ -168,7 +168,7 @@ const CreateCollection = (props) => {
             variant="success"
             type="submit"
             className="mt-3 rounded-pill text-center"
-            onClick={createCollection}
+            onClick={createItem}
           >
             Submit
           </Button>
@@ -177,5 +177,3 @@ const CreateCollection = (props) => {
     </Modal>
   );
 };
-
-export default CreateCollection;
