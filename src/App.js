@@ -1,18 +1,19 @@
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { createContext, useState } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { Navbar, Nav, Button, Form } from "react-bootstrap";
 import { RiLeafFill } from "react-icons/ri";
 import { BiUserCircle } from "react-icons/bi";
 import ReactSwitch from "react-switch";
-import Registration from "./components/Registration";
-import Login from "./components/Login";
+import Registration from "./components/Registration/Registration";
+import Login from "./components/Registration/Login";
 import AdminPage from "./components/Admin/AdminPage";
-import SingleCollection from "./components/Admin/SingleCollections";
-import SingleItem from "./components/Admin/SingleItem";
+import SingleCollection from "./components/Admin/collections/SingleCollections";
+import SingleItem from "./components/Admin/items/SingleItem";
 import { UserProfile } from "./components/Admin/UserProfile";
+import { HomePage } from "./components/HomePage";
 export const ThemeContext = createContext(null);
 
 // deployed app url
@@ -24,7 +25,8 @@ function App() {
   const [smShow, setSmShow] = useState(false);
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
   const [loggedInUserData, setLoggedInUserData] = useState([]);
-
+  const [userNotAllowed, setUserNotAllowed] = useState(false);
+  const navigate = useNavigate();
   const toggleTheme = () => {
     setTheme((curr) => (curr === "light" ? "dark" : "light"));
   };
@@ -47,7 +49,10 @@ function App() {
           variant="dark"
           className="navbar d-flex justify-content space-between"
         >
-          <Navbar.Brand>
+          <Navbar.Brand
+            onClick={() => navigate("/adminPage")}
+            style={{ cursor: "pointer" }}
+          >
             ITRANSITION
             <RiLeafFill className="mb-2 ml-1" />
           </Navbar.Brand>
@@ -90,22 +95,56 @@ function App() {
               </div>
             ) : (
               <Link to="/login">
-                <Button variant="info" className="rounded-pill">Login</Button>
+                <Button variant="info" className="rounded-pill">
+                  Login
+                </Button>
               </Link>
             )}
-            <UserProfile smShow={smShow} setSmShow={setSmShow} setIsUserLoggedIn={setIsUserLoggedIn}/>
+            <UserProfile
+              smShow={smShow}
+              setSmShow={setSmShow}
+              setIsUserLoggedIn={setIsUserLoggedIn}
+            />
           </Nav>
         </Navbar>
         <Routes>
           <Route
+            path="/"
+            element={
+              <HomePage
+                setUserNotAllowed={setUserNotAllowed}
+                userNotAllowed={userNotAllowed}
+              />
+            }
+          />
+          <Route
             path="/adminPage"
-            element={<AdminPage setLoggedInUserData={setLoggedInUserData} />}
+            element={
+              <AdminPage
+                setLoggedInUserData={setLoggedInUserData}
+                setUserNotAllowed={setUserNotAllowed}
+                userNotAllowed={userNotAllowed}
+              />
+            }
           />
           <Route
             path="/adminPage/singleCollection/:collectionId"
-            element={<SingleCollection />}
+            element={
+              <SingleCollection
+                setUserNotAllowed={setUserNotAllowed}
+                userNotAllowed={userNotAllowed}
+              />
+            }
           />
-          <Route path="/singleItem/:id" element={<SingleItem />} />
+          <Route
+            path="/singleItem/:id"
+            element={
+              <SingleItem
+                setUserNotAllowed={setUserNotAllowed}
+                userNotAllowed={userNotAllowed}
+              />
+            }
+          />
           <Route path="/register" element={<Registration />} />
           <Route
             path="/login"

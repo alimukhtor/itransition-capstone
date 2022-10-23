@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Form } from "react-bootstrap";
 import { WithContext as ReactTags } from "react-tag-input";
 import { render } from "react-router-dom";
-import "../../App.css";
+import "../../../App.css";
 export const TagsInput = (props) => {
   const [tags, setTags] = useState([]);
   const suggestions = props.items.map((item) => {

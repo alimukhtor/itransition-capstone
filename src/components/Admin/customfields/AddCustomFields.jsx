@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Alert, Button, Form } from "react-bootstrap";
 import { MdAdd } from "react-icons/md";
 import { AiFillWarning } from "react-icons/ai";
-import "../../App.css";
+import "../../../App.css";
 
 const LIMIT_CUSTOM_FIELDS = 3;
 

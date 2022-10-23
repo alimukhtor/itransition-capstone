@@ -1,22 +1,23 @@
 import { useState } from "react";
 import { Alert, Button, Form, Modal } from "react-bootstrap";
-import { AddCustomFields } from "./AddCustomFields";
 import { TiTick } from "react-icons/ti";
 import { ImCancelCircle } from "react-icons/im";
 import { BiBookAdd } from "react-icons/bi";
-import { CustomFields } from "./CustomFields";
-import ReactMarkdown from "react-markdown";
+import { AddCustomFields } from "../customfields/AddCustomFields";
+import { CustomFields } from "../customfields/CustomFields";
+import { TagsInput } from "./TagsInput";
 
-const CreateCollection = (props) => {
-  const token = localStorage.getItem("token");
-  const userId = localStorage.getItem("userId");
+export const CreateItem = (props) => {
   const [image, setImage] = useState(null);
   const [isSelected, setIsSelected] = useState(false);
-  const [isCollectionCreated, setIsCollectionCreated] = useState(false);
+  const [isItemCreated, setIsItemCreated] = useState(false);
+  const token = window.localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
   const [requestData, setRequestData] = useState({
     name: "",
     topic: "",
     description: "",
+    collections: props.collectionId,
     owner: userId,
     customFields: [],
   });
@@ -43,46 +44,43 @@ const CreateCollection = (props) => {
       setCustomFieldValues("");
     }
   };
-  // creates collection with uploading img and custom fields
-  const createCollection = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await fetch(`${window.remote_url}/collections`, {
-        method: "POST",
-        body: JSON.stringify(requestData),
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-      });
-      if (response.ok) {
-        try {
-          setIsCollectionCreated(true);
-          const data = await response.json();
-          if (image) {
-            const fd = new FormData();
-            fd.append("image", image);
-            await fetch(`${window.remote_url}/collections/${data._id}`, {
-              method: "POST",
-              body: fd,
-              headers: {
-                Authorization: "Bearer " + token,
-              },
-            });
-          }
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
-  // resets form input values after submit
-  const handleResetForm = (e) => {
-    e.preventDefault();
-    e.target.reset();
+  // creates item for specific collection
+  const createItem = async (e) => {
+    e.preventDefault()
+    const response = await fetch(`${window.remote_url}/items`, {
+      method: "POST",
+      body: JSON.stringify(requestData),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+    });
+    if (response.ok) {
+      try {
+        setIsItemCreated(true);
+        setTimeout(() => {
+          props.setModalShow(false);
+          setIsItemCreated(false);
+        }, 2000);
+        setRequestData('')
+        const newItem = await response.json();
+        console.log("newItem",newItem);
+        if (image) {
+          const fd = new FormData();
+          fd.append("image", image);
+          await fetch(`${window.remote_url}/items/${newItem._id}`, {
+            method: "POST",
+            body: fd,
+            headers: {
+              Authorization: "Bearer " + token,
+            },
+          });
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
   };
   return (
     <Modal
@@ -94,7 +92,7 @@ const CreateCollection = (props) => {
       <Modal.Header>
         <Modal.Title id="contained-modal-title-vcenter" className="text-center">
           <BiBookAdd className="mb-1 text-info" />
-          Create Collection
+          Create Item
         </Modal.Title>
         <ImCancelCircle
           onClick={props.onHide}
@@ -103,11 +101,11 @@ const CreateCollection = (props) => {
         />
       </Modal.Header>
       <Modal.Body>
-        <Form onSubmit={handleResetForm}>
-          {isCollectionCreated ? (
+        <Form>
+          {isItemCreated ? (
             <Alert variant="success">
               <TiTick />
-              Collection successfully created
+              Item successfully created
             </Alert>
           ) : null}
           <Form.Group>
@@ -158,6 +156,8 @@ const CreateCollection = (props) => {
               }}
             />
           </Form.Group>
+          <Form.Label className="mt-2">Enter tag</Form.Label>
+          <TagsInput items={props.items} />
           {isSelected ? (
             <CustomFields fields={requestData.customFields} />
           ) : null}
@@ -169,7 +169,7 @@ const CreateCollection = (props) => {
             variant="success"
             type="submit"
             className="mt-3 rounded-pill text-center"
-            onClick={createCollection}
+            onClick={createItem}
           >
             Submit
           </Button>
@@ -178,5 +178,3 @@ const CreateCollection = (props) => {
     </Modal>
   );
 };
-
-export default CreateCollection;

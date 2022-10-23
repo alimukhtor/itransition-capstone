@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Col, Container, Form, Row } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
-import "../../App.css";
+import "../../../App.css";
 const SingleItem = () => {
   const [item, setItem] = useState([]);
   const [comments, setComments] = useState([]);
@@ -12,15 +12,7 @@ const SingleItem = () => {
     fetchItemDetails();
   }, []);
   const fetchItemDetails = async () => {
-    const response = await fetch(
-      `${window.remote_url}/items/${id}`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-      }
-    );
+    const response = await fetch(`${window.remote_url}/items/${id}`);
     const data = await response.json();
     setItem(data);
   };
@@ -29,19 +21,15 @@ const SingleItem = () => {
   }, []);
 
   const fetchComments = async () => {
-    const response = await fetch(
-      `${window.remote_url}/items/${id}/comments`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-      }
-    );
+    const response = await fetch(`${window.remote_url}/items/${id}/comments`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+    });
     if (response.ok) {
       const data = await response.json();
       setComments(data);
-      console.log("COMMENTS", data);
     }
   };
   return (
@@ -52,14 +40,20 @@ const SingleItem = () => {
         </Col>
         <Col md={5} className="section-3">
           <Form>
-            <strong><h2>{item.name}</h2></strong>
+            <strong>
+              <h2>{item.name}</h2>
+            </strong>
             <h3>{item.topic}</h3>
             <p>{item.description}</p>
-            <strong><h4 className="text-left mt-4">Comments</h4></strong>
+            <strong>
+              <h4 className="text-left mt-4">Comments</h4>
+            </strong>
             {comments.map((comment) => (
               <div className="author">
                 <div className="author-detail">
-                  <span><FaUserCircle /></span>
+                  <span>
+                    <FaUserCircle />
+                  </span>
                   {comment.owner.map((user) => (
                     <p>{user.username}</p>
                   ))}

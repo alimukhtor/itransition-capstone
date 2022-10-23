@@ -132,6 +132,7 @@
 }
 
 .card_body {
+  text-align: center;
   position: relative;
 }
 
@@ -220,18 +221,34 @@
 
 .item-section{
   display: flex;
-  justify-content: space-around;
+  flex-direction: column;
 }
 
-.item-section div {
+.item_btns{
+  display: flex;
+  margin-top: 5px;
+  justify-content: space-between;
+}
+
+.item_btns button:first-child{
+  border-radius: 15px;
+  background-color: red;
+  border: none;
+}
+
+.item_btns button:last-child{
+  border-radius: 15px;
+  background-color: #5e76bf;
+  border: none;
+}
+
+.item-section div:first-child{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  column-gap: 20px;
   font-size: 25px;
-  width: 50px;
-}
-
-.item-section div:hover {
-  border-radius: 10px;
-  background-color: rgb(190, 190, 190);
-  color: #fff;
+  cursor: pointer;
 }
 
 .comment-toast {

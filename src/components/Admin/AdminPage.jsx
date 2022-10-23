@@ -6,9 +6,14 @@ import { FiUsers } from "react-icons/fi";
 import { useEffect } from "react";
 import { useState } from "react";
 import UserList from "./UserList";
-import CreateCollection from "./CreateCollection";
-import Collections from "./Collections";
-const AdminPage = ({ setLoggedInUserData }) => {
+import CreateCollection from "./collections/CreateCollection";
+import Collections from "./collections/Collections";
+import { MyCollections } from "./collections/MyCollections";
+const AdminPage = ({
+  setLoggedInUserData,
+  setUserNotAllowed,
+  userNotAllowed,
+}) => {
   const [users, setUsers] = useState([]);
   const [userRole, setUserRole] = useState("");
   const [modalShow, setModalShow] = useState(false);
@@ -17,15 +22,17 @@ const AdminPage = ({ setLoggedInUserData }) => {
     fetchUsers();
   }, []);
   const fetchUsers = async () => {
-    const response = await fetch(`${window.remote_url}/users/allUsers`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + token,
-      },
-    });
-    const data = await response.json();
-    setUsers(data);
+    if(userRole === 'admin'){
+      const response = await fetch(`${window.remote_url}/users/allUsers`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+      });
+      const data = await response.json();
+      setUsers(data);
+    }
   };
 
   // function to show modal
@@ -45,7 +52,6 @@ const AdminPage = ({ setLoggedInUserData }) => {
     });
     if (response.ok) {
       const user = await response.json();
-      console.log("USER INFO", user);
       setLoggedInUserData(user);
       if (user.role === "admin") {
         setUserRole("Admin");
@@ -65,17 +71,27 @@ const AdminPage = ({ setLoggedInUserData }) => {
           )}
           <Nav variant="pills" className="flex-column">
             <Nav.Item>
-              <Nav.Link eventKey="first" className="text-light">
-                <BsCollection
-                  className="mb-1 mx-2"
-                  tabidstyle={{ fontSize: "20px" }}
-                />
-                Collections
-              </Nav.Link>
+              {userRole === "Admin" ? (
+                <Nav.Link eventKey="first" className="text-light">
+                  <BsCollection
+                    className="mb-1 mx-2"
+                    tabidstyle={{ fontSize: "20px" }}
+                  />
+                  Collections
+                </Nav.Link>
+              ) : (
+                <Nav.Link eventKey="second" className="text-light">
+                  <BsCollection
+                    className="mb-1 mx-2"
+                    tabidstyle={{ fontSize: "20px" }}
+                  />
+                  My Collections
+                </Nav.Link>
+              )}
             </Nav.Item>
             <Nav.Item>
               <Nav.Link
-                eventKey="second"
+                eventKey="fourth"
                 className="text-light"
                 onClick={showModal}
               >
@@ -84,25 +100,39 @@ const AdminPage = ({ setLoggedInUserData }) => {
               </Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link eventKey="third" className="text-light">
-                <FiUsers className="mx-1" style={{ fontSize: "20px" }} />
-                Users
-              </Nav.Link>
+              {userRole === "Admin" ? (
+                <Nav.Link eventKey="third" className="text-light">
+                  <FiUsers className="mx-1" style={{ fontSize: "20px" }} />
+                  Users
+                </Nav.Link>
+              ) : null}
             </Nav.Item>
           </Nav>
           <CreateCollection
             show={modalShow}
             onHide={() => setModalShow(false)}
+            setModalShow={setModalShow}
           />
         </Col>
         <Col sm={10} className="main-page">
           <Tab.Content>
+            {userRole === "Admin" ? (
+            <>
             <Tab.Pane eventKey="first">
-              <Collections />
-            </Tab.Pane>
-            <Tab.Pane eventKey="third">
-              <UserList users={users} setUsers={setUsers} />
-            </Tab.Pane>
+                <Collections
+                  setUserNotAllowed={setUserNotAllowed}
+                  userNotAllowed={userNotAllowed}
+                />
+              </Tab.Pane>
+              <Tab.Pane eventKey="third">
+                <UserList users={users} setUsers={setUsers} userRole={userRole} />
+              </Tab.Pane>
+              </>
+            ) : (
+              <Tab.Pane eventKey="second">
+                <MyCollections />
+              </Tab.Pane>
+            )}
           </Tab.Content>
         </Col>
       </Tab.Container>
