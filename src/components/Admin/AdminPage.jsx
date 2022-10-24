@@ -8,11 +8,13 @@ import { useState } from "react";
 import UserList from "./UserList";
 import CreateCollection from "./collections/CreateCollection";
 import Collections from "./collections/Collections";
-import { MyCollections } from "./collections/MyCollections";
+import { MyCollections } from "./users/MyCollections";
 const AdminPage = ({
   setLoggedInUserData,
   setUserNotAllowed,
   userNotAllowed,
+  userPermission,
+  ToastContainer,
 }) => {
   const [users, setUsers] = useState([]);
   const [userRole, setUserRole] = useState("");
@@ -22,7 +24,7 @@ const AdminPage = ({
     fetchUsers();
   }, []);
   const fetchUsers = async () => {
-    if(userRole === 'admin'){
+    if (userRole === "Admin") {
       const response = await fetch(`${window.remote_url}/users/allUsers`, {
         method: "GET",
         headers: {
@@ -65,9 +67,9 @@ const AdminPage = ({
       <Tab.Container id="left-tabs-example" defaultActiveKey="first">
         <Col className="sidebar">
           {userRole === "Admin" ? (
-            <h2 className="text-info">Welcome to {userRole} Page</h2>
+            <h2 className="text-info">Welcome to Admin Page</h2>
           ) : (
-            <h2 className="text-info">Welcome to {userRole} Page</h2>
+            <h2 className="text-info">Welcome to Users Page</h2>
           )}
           <Nav variant="pills" className="flex-column">
             <Nav.Item>
@@ -117,16 +119,22 @@ const AdminPage = ({
         <Col sm={10} className="main-page">
           <Tab.Content>
             {userRole === "Admin" ? (
-            <>
-            <Tab.Pane eventKey="first">
-                <Collections
-                  setUserNotAllowed={setUserNotAllowed}
-                  userNotAllowed={userNotAllowed}
-                />
-              </Tab.Pane>
-              <Tab.Pane eventKey="third">
-                <UserList users={users} setUsers={setUsers} userRole={userRole} />
-              </Tab.Pane>
+              <>
+                <Tab.Pane eventKey="first">
+                  <Collections
+                    setUserNotAllowed={setUserNotAllowed}
+                    userNotAllowed={userNotAllowed}
+                    userPermission={userPermission}
+                    ToastContainer={ToastContainer}
+                  />
+                </Tab.Pane>
+                <Tab.Pane eventKey="third">
+                  <UserList
+                    users={users}
+                    setUsers={setUsers}
+                    userRole={userRole}
+                  />
+                </Tab.Pane>
               </>
             ) : (
               <Tab.Pane eventKey="second">

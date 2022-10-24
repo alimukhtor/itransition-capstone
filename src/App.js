@@ -1,5 +1,6 @@
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "react-toastify/dist/ReactToastify.css";
 import { createContext, useState } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -14,6 +15,8 @@ import SingleCollection from "./components/Admin/collections/SingleCollections";
 import SingleItem from "./components/Admin/items/SingleItem";
 import { UserProfile } from "./components/Admin/UserProfile";
 import { HomePage } from "./components/HomePage";
+// import { UpdateSingleCollection } from "./UpdateSingleCollection";
+import { ToastContainer, toast } from "react-toastify";
 export const ThemeContext = createContext(null);
 
 // deployed app url
@@ -27,6 +30,13 @@ function App() {
   const [loggedInUserData, setLoggedInUserData] = useState([]);
   const [userNotAllowed, setUserNotAllowed] = useState(false);
   const navigate = useNavigate();
+
+  const userPermission = () => {
+    toast.error("You are not allowed. Please register first", {
+      position: toast.POSITION.TOP_CENTER,
+    });
+  };
+
   const toggleTheme = () => {
     setTheme((curr) => (curr === "light" ? "dark" : "light"));
   };
@@ -114,6 +124,8 @@ function App() {
               <HomePage
                 setUserNotAllowed={setUserNotAllowed}
                 userNotAllowed={userNotAllowed}
+                userPermission={userPermission}
+                ToastContainer={ToastContainer}
               />
             }
           />
@@ -124,15 +136,19 @@ function App() {
                 setLoggedInUserData={setLoggedInUserData}
                 setUserNotAllowed={setUserNotAllowed}
                 userNotAllowed={userNotAllowed}
+                userPermission={userPermission}
+                ToastContainer={ToastContainer}
               />
             }
           />
           <Route
-            path="/adminPage/singleCollection/:collectionId"
+            path="/singleCollection/:collectionId"
             element={
               <SingleCollection
                 setUserNotAllowed={setUserNotAllowed}
                 userNotAllowed={userNotAllowed}
+                userPermission={userPermission}
+                ToastContainer={ToastContainer}
               />
             }
           />

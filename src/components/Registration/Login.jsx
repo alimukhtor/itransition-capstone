@@ -43,7 +43,6 @@ const Login = ({setIsUserLoggedIn}) => {
           },
         });
         const data = await response.json();
-        console.log(data);
         const { accessToken } = data;
         localStorage.setItem("token", accessToken);
         localStorage.setItem("userId", data.user._id);

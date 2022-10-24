@@ -160,6 +160,22 @@
   background-color: #5e76bf;
 }
 
+.edit-collection{
+  position: absolute;
+  font-size: 20px;
+  cursor: pointer;
+  right: 10px;
+  top: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: 40px;
+}
+
+.edit-collection:hover{
+  background-color: #3f8ea6;
+  transition: ease-out 0.3s;
+  
+}
 .title {
   font-size: 20px !important;
   font-weight: 500;
@@ -268,29 +284,29 @@
   color: #5e76bf;
 }
 
-.owner{
+.comment-owner{
   display: grid;
   grid-template-columns: 1fr 2fr 1fr;
   margin: 10px;
 }
 
-.owner span:last-child{
+.comment-owner span:last-child{
   color: red;
   font-size: 20px;
 }
 
-.owner:hover span:last-child{
+.comment-owner:hover span:last-child{
   color: red;
   font-size: 30px;
   transition: ease-out 0.5s;
 }
 
-.owner:hover{
+.comment-owner:hover{
   border-radius: 15px;
   background-color: rgb(190, 190, 190);;
 }
 
-.owner_info p:first-child{
+.comment-owner_info p:first-child{
   text-align: left;
 }
 

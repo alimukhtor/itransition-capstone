@@ -47,25 +47,25 @@ export const CreateItem = (props) => {
 
   // creates item for specific collection
   const createItem = async (e) => {
-    e.preventDefault()
-    const response = await fetch(`${window.remote_url}/items`, {
-      method: "POST",
-      body: JSON.stringify(requestData),
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + token,
-      },
-    });
-    if (response.ok) {
-      try {
+    try {
+      e.preventDefault();
+      const response = await fetch(`${window.remote_url}/items`, {
+        method: "POST",
+        body: JSON.stringify(requestData),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+      });
+      if (response.ok) {
         setIsItemCreated(true);
         setTimeout(() => {
           props.setModalShow(false);
           setIsItemCreated(false);
         }, 2000);
-        setRequestData('')
+        setRequestData("");
         const newItem = await response.json();
-        console.log("newItem",newItem);
+        console.log("newItem", newItem);
         if (image) {
           const fd = new FormData();
           fd.append("image", image);
@@ -77,9 +77,9 @@ export const CreateItem = (props) => {
             },
           });
         }
-      } catch (error) {
-        console.log(error);
       }
+    } catch (error) {
+      console.log(error);
     }
   };
   return (

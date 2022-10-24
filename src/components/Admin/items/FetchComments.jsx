@@ -49,7 +49,7 @@ export const FetchComments = ({
   return (
     <>
       {comments.map((comment, i) => (
-        <div className="owner" key={i}>
+        <div className="comment-owner" key={i}>
           <span>
             <FaUserCircle />
           </span>

@@ -1,7 +1,6 @@
 import "../../../App.css";
 import { useEffect, useState } from "react";
 import {
-  Alert,
   Button,
   Card,
   Col,
@@ -10,7 +9,7 @@ import {
   Row,
   Toast,
 } from "react-bootstrap";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { GoComment } from "react-icons/go";
 import { AiFillWarning } from "react-icons/ai";
 import { FiThumbsUp } from "react-icons/fi";
@@ -18,7 +17,12 @@ import { FiPlusCircle } from "react-icons/fi";
 import { FetchComments } from "../items/FetchComments";
 import { CreateItem } from "../items/CreateItem";
 
-const SingleCollection = ({userNotAllowed, setUserNotAllowed}) => {
+const SingleCollection = ({
+  userNotAllowed,
+  setUserNotAllowed,
+  userPermission,
+  ToastContainer,
+}) => {
   const [items, setItems] = useState([]);
   const [text, setText] = useState("");
   const [itemNotFound, setItemNotFound] = useState(false);
@@ -37,7 +41,7 @@ const SingleCollection = ({userNotAllowed, setUserNotAllowed}) => {
   // fetches single collection by id
   const fetchSingleCollection = async () => {
     const response = await fetch(
-      `${window.remote_url}/collections/${collectionId}`
+      `http://localhost:3030/collections/${collectionId}`
     );
     const data = await response.json();
     setItems(data.items);
@@ -57,8 +61,8 @@ const SingleCollection = ({userNotAllowed, setUserNotAllowed}) => {
     if (response.ok) {
       const restItems = items.filter((c) => c._id !== itemId);
       setItems(restItems);
-    }else if(response.status === 401){
-      setUserNotAllowed(true)
+    } else if (response.status === 401) {
+      setUserNotAllowed(true);
     }
   };
   // posts comment for specific item
@@ -86,11 +90,7 @@ const SingleCollection = ({userNotAllowed, setUserNotAllowed}) => {
 
   return (
     <Container fluid>
-      {userNotAllowed ? (
-        <Alert variant="danger" className="text-center">
-          <AiFillWarning style={{ fontSize: "25px" }} /> You are not allowed. Please register first <Link to="/register">here</Link>
-        </Alert>
-      ) : null}
+      {userNotAllowed ? <ToastContainer/> : null}
       <Row className="p-3">
         <Button
           onClick={() => setModalShow(true)}
@@ -126,7 +126,7 @@ const SingleCollection = ({userNotAllowed, setUserNotAllowed}) => {
                     </span>
                   </div>
                   <div className="item_btns">
-                    <button onClick={() => deleteItem(item._id)}>delete</button>
+                    <button onClick={() => userNotAllowed ? userPermission() : deleteItem(item._id)}>delete</button>
                     <button onClick={() => navigate(`/singleItem/${item._id}`)}>
                       view
                     </button>
@@ -146,7 +146,7 @@ const SingleCollection = ({userNotAllowed, setUserNotAllowed}) => {
                     size="sm"
                     type="text"
                     className="rounded-pill"
-                    placeholder="Leave a comment..."
+                    placeholder="Leave your thoughts here..."
                   />
                   <FetchComments
                     itemId={item._id}
