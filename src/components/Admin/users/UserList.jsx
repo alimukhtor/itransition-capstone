@@ -10,7 +10,7 @@ const UserList = ({ users, setUsers }) => {
   const [onlyAdmin, setOnlyAdmin] = useState(false);
   const [isChecked, setisChecked] = useState([]);
   const token = window.localStorage.getItem("token");
-
+  
   // selects single row
   const handlecheckbox = (e) => {
     const { value, checked } = e.target;

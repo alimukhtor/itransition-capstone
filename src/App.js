@@ -1,7 +1,7 @@
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "react-toastify/dist/ReactToastify.css";
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { Navbar, Nav, Button, Form } from "react-bootstrap";
@@ -15,7 +15,6 @@ import SingleCollection from "./components/Admin/collections/SingleCollections";
 import SingleItem from "./components/Admin/items/SingleItem";
 import { UserProfile } from "./components/Admin/UserProfile";
 import { HomePage } from "./components/HomePage";
-// import { UpdateSingleCollection } from "./UpdateSingleCollection";
 import { ToastContainer, toast } from "react-toastify";
 export const ThemeContext = createContext(null);
 
@@ -26,11 +25,21 @@ function App() {
   const [theme, setTheme] = useState("dark");
   const [query, setQuery] = useState("");
   const [smShow, setSmShow] = useState(false);
+  const [username, setUsername] = useState('')
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
-  const [loggedInUserData, setLoggedInUserData] = useState([]);
   const [userNotAllowed, setUserNotAllowed] = useState(false);
+  const [collections, setCollections] = useState([]);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const username = localStorage.getItem('Username')
+    if(username) {
+      setIsUserLoggedIn(true)
+      setUsername(username)
+    }
+  }, [])
+
+  // toast for unauthorized users
   const userPermission = () => {
     toast.error("You are not allowed. Please register first", {
       position: toast.POSITION.TOP_CENTER,
@@ -41,6 +50,7 @@ function App() {
     setTheme((curr) => (curr === "light" ? "dark" : "light"));
   };
 
+  // searche engine to display anything in the collection 
   const handleSearch = async () => {
     try {
       const response = await fetch(
@@ -101,12 +111,12 @@ function App() {
                   style={{ fontSize: "30px" }}
                   onClick={() => setSmShow(true)}
                 />
-                <p className="mr-3">{loggedInUserData.username}</p>
+                <p className="mr-3">{username}</p>
               </div>
             ) : (
               <Link to="/login">
                 <Button variant="info" className="rounded-pill">
-                  Login
+                  Log in
                 </Button>
               </Link>
             )}
@@ -126,6 +136,8 @@ function App() {
                 userNotAllowed={userNotAllowed}
                 userPermission={userPermission}
                 ToastContainer={ToastContainer}
+                setCollections={setCollections}
+                collections={collections}
               />
             }
           />
@@ -133,11 +145,13 @@ function App() {
             path="/adminPage"
             element={
               <AdminPage
-                setLoggedInUserData={setLoggedInUserData}
                 setUserNotAllowed={setUserNotAllowed}
                 userNotAllowed={userNotAllowed}
                 userPermission={userPermission}
                 ToastContainer={ToastContainer}
+                isUserLoggedIn={isUserLoggedIn}
+                setCollections={setCollections}
+                collections={collections}
               />
             }
           />
@@ -164,7 +178,7 @@ function App() {
           <Route path="/register" element={<Registration />} />
           <Route
             path="/login"
-            element={<Login setIsUserLoggedIn={setIsUserLoggedIn} />}
+            element={<Login setIsUserLoggedIn={setIsUserLoggedIn} setUsername={setUsername} />}
           />
         </Routes>
       </div>

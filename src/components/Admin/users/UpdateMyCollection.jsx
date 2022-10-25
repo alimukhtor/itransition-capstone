@@ -10,8 +10,8 @@ export const UpdateMyCollection = ({
 }) => {
   const token = window.localStorage.getItem("token");
 
+  console.log("singleCollection", singleCollection);
   const updateSingleCollection = async (id) => {
-    console.log("singleCollection", id);
     const response = await fetch(`http://localhost:3030/collections/${id}`, {
       method: "PUT",
       body: JSON.stringify({ ...singleCollection }),

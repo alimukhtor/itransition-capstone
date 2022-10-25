@@ -6,6 +6,7 @@ export const UpdateSingleCollection = ({
   handleCloseModal,
   setSingleCollection,
   singleCollection,
+  fetchAllCollections
 }) => {
   const token = window.localStorage.getItem("token");
   const updateSingleCollection = async (id) => {
@@ -19,8 +20,7 @@ export const UpdateSingleCollection = ({
       },
     });
     if (response.ok) {
-      const updatedCollection = await response.json();
-      //   setSingleCollection(updatedCollection)
+      fetchAllCollections()
       alert("Updated");
     }
   };
@@ -44,7 +44,7 @@ export const UpdateSingleCollection = ({
               type="text"
               className="rounded-pill"
               placeholder="Name"
-              value={singleCollection.name}
+              value={singleCollection?.name}
               onChange={(e) =>
                 setSingleCollection({
                   ...singleCollection,
@@ -59,7 +59,7 @@ export const UpdateSingleCollection = ({
               type="textarea"
               className="rounded-pill"
               placeholder="Description"
-              value={singleCollection.description}
+              value={singleCollection?.description}
               onChange={(e) =>
                 setSingleCollection({
                   ...singleCollection,
@@ -74,7 +74,7 @@ export const UpdateSingleCollection = ({
               type="text"
               className="rounded-pill"
               placeholder="Topic"
-              value={singleCollection.topic}
+              value={singleCollection?.topic}
               onChange={(e) =>
                 setSingleCollection({
                   ...singleCollection,

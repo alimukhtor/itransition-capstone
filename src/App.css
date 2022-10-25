@@ -2,6 +2,8 @@
   margin: 0;
   padding: 0;
   height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 #light {
@@ -85,21 +87,25 @@
 /* HOME PAGE STYLES HERE */
 
 .main {
-  padding: 10px;
+  
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
+  height: 100%;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+
 }
 
 .main-page {
-  height: 100vh;
+  height: 100%;
 }
 
 /* SIDE BAR  */
 
 .sidebar {
-  height: 100vh;
+  height: 100%;
   box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px;
 }
 

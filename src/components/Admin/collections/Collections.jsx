@@ -5,14 +5,18 @@ import { useNavigate } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
 import { GrEdit } from "react-icons/gr";
 import { UpdateSingleCollection } from "./UpdateSingleCollection";
+import { ToastContainer, toast } from "react-toastify";
 
 const Collections = ({
   setUserNotAllowed,
   userNotAllowed,
   userPermission,
   ToastContainer,
+  collections,
+  setCollections,
+  fetchAllCollections
 }) => {
-  const [collections, setCollections] = useState([]);
+  
   const [singleCollection, setSingleCollection] = useState(null);
   const token = window.localStorage.getItem("token");
   const userId = window.localStorage.getItem("userId");
@@ -21,19 +25,11 @@ const Collections = ({
   const handleCloseModal = () => setShowModal(false);
   const handleShowModal = () => setShowModal(true);
 
-  // gets all colections
-  useEffect(() => {
-    const fetchAllCollections = async () => {
-      const response = await fetch(
-        `http://localhost:3030/collections/allCollections`
-      );
-      if (response.ok) {
-        const data = await response.json();
-        setCollections(data);
-      }
-    };
-    fetchAllCollections();
-  }, []);
+  const successMsg = () => {
+    toast.success("Deleted successfully", {
+      position: toast.POSITION.TOP_CENTER,
+    });
+  };
 
   // deletes single collection by id
   const deleteCollection = async (id) => {
@@ -63,13 +59,14 @@ const Collections = ({
     );
     if (response.ok) {
       const collection = await response.json();
+      console.log("collection",collection);
       setSingleCollection(collection);
     }
   };
 
   return (
     <>
-      {userNotAllowed ? <ToastContainer /> : null}
+      {userNotAllowed ? <ToastContainer /> : <ToastContainer/>}
       <Row>
         {collections.map((collection) => (
           <Col xs={12} md={6} lg={3} key={collection._id} className="p-4">
@@ -86,12 +83,13 @@ const Collections = ({
                 >
                   <GrEdit />
                 </span>
-                {/* <UpdateSingleCollection
+                <UpdateSingleCollection
                   showModal={showModal}
                   handleCloseModal={handleCloseModal}
                   setSingleCollection={setSingleCollection}
                   singleCollection={singleCollection}
-                /> */}
+                  fetchAllCollections={fetchAllCollections}
+                />
                 <Card.Title className="title">{collection.name}</Card.Title>
                 <Card.Text className="text">{collection.description}</Card.Text>
                 <div className="d-flex justify-content-center">
@@ -119,9 +117,9 @@ const Collections = ({
                       type="submit"
                       className="card_btn"
                       onClick={() =>
-                        userNotAllowed
+                        {userNotAllowed
                           ? userPermission()
-                          : deleteCollection(collection._id)
+                          : deleteCollection(collection._id); successMsg()}
                       }
                     >
                       delete

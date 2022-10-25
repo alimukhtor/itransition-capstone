@@ -1,13 +1,12 @@
 import "../../../App.css";
-import { useEffect, useState } from "react";
-import { Button, Card, Col, Row } from "react-bootstrap";
+import { useState } from "react";
+import { Card, Col, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { GrEdit } from "react-icons/gr";
 import { UpdateMyCollection } from "./UpdateMyCollection";
 import { ToastContainer, toast } from "react-toastify";
 
-export const MyCollections = () => {
-  const [myCollections, setMyCollections] = useState([]);
+export const MyCollections = ({userCollections, setUserCollections}) => {
   const [singleCollection, setSingleCollection] = useState();
   const [isCollectionDeleted, setIsCollectionDeleted] = useState(false);
   const token = window.localStorage.getItem("token");
@@ -20,24 +19,6 @@ export const MyCollections = () => {
     toast.success("Deleted successfully", {
       position: toast.POSITION.TOP_CENTER,
     });
-  };
-
-  useEffect(() => {
-    getMyCollections();
-  }, []);
-
-  // gets logged in user collections
-  const getMyCollections = async () => {
-    const response = await fetch(`${window.remote_url}/users/me/stories`, {
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    });
-    if (response.ok) {
-      const collection = await response.json();
-      console.log(collection);
-      setMyCollections(collection);
-    }
   };
 
   const getSingleCollection = async (id) => {
@@ -61,15 +42,15 @@ export const MyCollections = () => {
     );
     if (response.ok) {
       setIsCollectionDeleted(true);
-      const restCollections = myCollections.filter((c) => c._id !== id);
-      setMyCollections(restCollections);
+      const restCollections = userCollections.filter((c) => c._id !== id);
+      setUserCollections(restCollections);
     }
   };
   return (
     <>
       {isCollectionDeleted ? <ToastContainer /> : null}
       <Row>
-        {myCollections.map((collection) => (
+        {userCollections.map((collection) => (
           <Col xs={12} md={6} lg={3} key={collection._id} className="p-4">
             <Card className="card border-0 h-100">
               <Card.Img src={collection.image} className="card_img" />

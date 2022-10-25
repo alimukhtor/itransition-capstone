@@ -17,7 +17,14 @@ const CreateCollection = (props) => {
     topic: "",
     description: "",
     owner: userId,
-    customFields: [],
+    // customFieldsDescription: [{
+    //   title: 'License Plate',
+    //   type: 'text'
+    // }],
+    customFields: [{
+      label: 'License Plate',
+      value: 'FX123GX'
+    }],
   });
 
   // handles controlled inputs and sets object keys and values
@@ -55,27 +62,24 @@ const CreateCollection = (props) => {
         },
       });
       if (response.ok) {
-        try {
-          setIsCollectionCreated(true);
-          setTimeout(() => {
-            props.setModalShow(false);
-            setIsCollectionCreated(false);
-          }, 2000);
-          setRequestData("");
-          const data = await response.json();
-          if (image) {
-            const fd = new FormData();
-            fd.append("image", image);
-            await fetch(`${window.remote_url}/collections/${data._id}`, {
-              method: "POST",
-              body: fd,
-              headers: {
-                Authorization: "Bearer " + token,
-              },
-            });
-          }
-        } catch (error) {
-          console.log(error);
+        setIsCollectionCreated(true);
+        setTimeout(() => {
+          props.setModalShow(false);
+          setIsCollectionCreated(false);
+        }, 2000);
+        setRequestData("");
+        const data = await response.json();
+        // props.collections()
+        if (image) {
+          const fd = new FormData();
+          fd.append("image", image);
+          await fetch(`${window.remote_url}/collections/${data._id}`, {
+            method: "POST",
+            body: fd,
+            headers: {
+              Authorization: "Bearer " + token,
+            },
+          });
         }
       }
     } catch (error) {
