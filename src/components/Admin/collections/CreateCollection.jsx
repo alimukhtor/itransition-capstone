@@ -17,14 +17,18 @@ const CreateCollection = (props) => {
     topic: "",
     description: "",
     owner: userId,
-    // customFieldsDescription: [{
-    //   title: 'License Plate',
-    //   type: 'text'
-    // }],
-    customFields: [{
-      label: 'License Plate',
-      value: 'FX123GX'
-    }],
+    customFieldsDescription: [
+      // {
+      //   title:"",
+      //   type:""
+      // }
+    ],
+    customFields: [
+      //   {
+      //   label: 'License Plate',
+      //   value: 'FX123GX'
+      // }
+    ],
   });
 
   // handles controlled inputs and sets object keys and values
@@ -37,18 +41,36 @@ const CreateCollection = (props) => {
 
   // adds custom fields with specific title and type of inputs form
   const handleAddCustomField = (newFields, setCustomFieldValues) => {
-    const { customFields } = requestData;
-    const newCustomFields = [...customFields];
+    console.log("asd", newFields);
+    const { customFieldsDescription } = requestData;
+    const newCustomFields = [...customFieldsDescription];
     newCustomFields.push(newFields);
     if (newCustomFields) {
       setIsSelected(true);
       setRequestData({
         ...requestData,
-        customFields: newCustomFields,
+        customFieldsDescription: newCustomFields,
       });
       setCustomFieldValues("");
     }
   };
+
+  // adds custom field values with specific title and type of inputs form
+  const handleAddCustomFieldValue = (fieldsValue, setInputValues) => {
+    console.log("fieldsValue", fieldsValue);
+    // const { customFields } = requestData;
+    // const newCustomFieldsValue = [...customFields];
+    // newCustomFieldsValue.push(fieldsValue);
+    // if (newCustomFieldsValue) {
+    //   setIsSelected(true);
+    //   setRequestData({
+    //     ...requestData,
+    //     customFields: newCustomFieldsValue,
+    //   });
+    //   setInputValues("");
+    // }
+  };
+
   // creates collection with uploading img and custom fields
   const createCollection = async (e) => {
     e.preventDefault();
@@ -69,7 +91,7 @@ const CreateCollection = (props) => {
         }, 2000);
         setRequestData("");
         const data = await response.json();
-        // props.collections()
+        console.log("NEW COL", data);
         if (image) {
           const fd = new FormData();
           fd.append("image", image);
@@ -80,6 +102,7 @@ const CreateCollection = (props) => {
               Authorization: "Bearer " + token,
             },
           });
+          props.fetchAllCollections();
         }
       }
     } catch (error) {
@@ -167,7 +190,10 @@ const CreateCollection = (props) => {
             />
           </Form.Group>
           {isSelected ? (
-            <CustomFields fields={requestData.customFields} />
+            <CustomFields
+              fields={requestData.customFieldsDescription}
+              handleAddCustomFieldValue={handleAddCustomFieldValue}
+            />
           ) : null}
           <AddCustomFields
             handleAddCustomField={handleAddCustomField}

@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Alert, Button, Form } from "react-bootstrap";
-import { MdAdd } from "react-icons/md";
 import { AiFillWarning } from "react-icons/ai";
 import "../../../App.css";
 
@@ -37,14 +36,15 @@ export const AddCustomFields = ({ handleAddCustomField, fields }) => {
 
   return (
     <div>
-      <span
-        className="btn"
+      <Button
+        variant="info"
+        className="btn mt-2"
         onClick={() => {
           setShowFormInputs(true);
         }}
       >
-        <MdAdd style={{ fontSize: "25px" }} />
-      </span>
+        +
+      </Button>
       {showFormInputs && (
         <Form>
           {customInputTypeLimit ? (

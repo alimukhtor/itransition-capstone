@@ -25,19 +25,21 @@ function App() {
   const [theme, setTheme] = useState("dark");
   const [query, setQuery] = useState("");
   const [smShow, setSmShow] = useState(false);
-  const [username, setUsername] = useState('')
+  const [loggedinUser, setLoggedinUser] = useState([]);
+  const [username, setUsername] = useState("");
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
   const [userNotAllowed, setUserNotAllowed] = useState(false);
   const [collections, setCollections] = useState([]);
   const navigate = useNavigate();
 
+  const token = localStorage.getItem("token");
   useEffect(() => {
-    const username = localStorage.getItem('Username')
-    if(username) {
-      setIsUserLoggedIn(true)
-      setUsername(username)
+    const username = localStorage.getItem("Username");
+    if (username) {
+      setIsUserLoggedIn(true);
+      setUsername(username);
     }
-  }, [])
+  }, []);
 
   // toast for unauthorized users
   const userPermission = () => {
@@ -50,7 +52,7 @@ function App() {
     setTheme((curr) => (curr === "light" ? "dark" : "light"));
   };
 
-  // searche engine to display anything in the collection 
+  // searche engine to display anything in the collection
   const handleSearch = async () => {
     try {
       const response = await fetch(
@@ -62,6 +64,19 @@ function App() {
     }
   };
 
+  // get user /me route
+  const getUserInfo = async () => {
+    const response = await fetch(`${window.remote_url}/users/me`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+    });
+    if (response.ok) {
+      const user = await response.json();
+      setLoggedinUser(user);
+    }
+  };
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
       <div className="App" id={theme}>
@@ -109,7 +124,10 @@ function App() {
               <div className="d-flex mt-1">
                 <BiUserCircle
                   style={{ fontSize: "30px" }}
-                  onClick={() => setSmShow(true)}
+                  onClick={() => {
+                    getUserInfo();
+                    setSmShow(true);
+                  }}
                 />
                 <p className="mr-3">{username}</p>
               </div>
@@ -124,6 +142,7 @@ function App() {
               smShow={smShow}
               setSmShow={setSmShow}
               setIsUserLoggedIn={setIsUserLoggedIn}
+              loggedinUser={loggedinUser}
             />
           </Nav>
         </Navbar>
@@ -163,6 +182,7 @@ function App() {
                 userNotAllowed={userNotAllowed}
                 userPermission={userPermission}
                 ToastContainer={ToastContainer}
+                isUserLoggedIn={isUserLoggedIn}
               />
             }
           />
@@ -178,7 +198,12 @@ function App() {
           <Route path="/register" element={<Registration />} />
           <Route
             path="/login"
-            element={<Login setIsUserLoggedIn={setIsUserLoggedIn} setUsername={setUsername} />}
+            element={
+              <Login
+                setIsUserLoggedIn={setIsUserLoggedIn}
+                setUsername={setUsername}
+              />
+            }
           />
         </Routes>
       </div>

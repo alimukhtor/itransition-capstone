@@ -7,6 +7,8 @@ export const FetchComments = ({
   setShowCommentSection,
   showCommentSection,
   setUserNotAllowed,
+  userNotAllowed,
+  userPermission,
 }) => {
   const [comments, setComments] = useState([]);
   const token = localStorage.getItem("token");
@@ -22,8 +24,8 @@ export const FetchComments = ({
     if (response.ok) {
       const data = await response.json();
       setComments(data);
-    }else if(response.status === 401){
-      setUserNotAllowed(true)
+    } else if (response.status === 401) {
+      setUserNotAllowed(true);
     }
   };
 
@@ -43,6 +45,8 @@ export const FetchComments = ({
       const filteredComment = comments.filter((c) => c._id !== commentId);
       setShowCommentSection(!showCommentSection);
       setComments(filteredComment);
+    } else if (response.status === 401) {
+      setUserNotAllowed(true);
     }
   };
 

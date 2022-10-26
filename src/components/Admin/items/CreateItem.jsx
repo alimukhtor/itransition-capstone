@@ -76,6 +76,7 @@ export const CreateItem = (props) => {
               Authorization: "Bearer " + token,
             },
           });
+          props.fetchSingleCollection()
         }
       }
     } catch (error) {

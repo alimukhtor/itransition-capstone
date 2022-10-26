@@ -6,14 +6,18 @@ import "../../../App.css";
 const SingleItem = () => {
   const [item, setItem] = useState([]);
   const [comments, setComments] = useState([]);
+  const [noComment, setNoComment] = useState(false);
   const { id } = useParams();
   const token = localStorage.getItem("token");
   useEffect(() => {
     fetchItemDetails();
   }, []);
+  
   const fetchItemDetails = async () => {
     const response = await fetch(`${window.remote_url}/items/${id}`);
     const data = await response.json();
+    if (data.comments.length === 0) setNoComment(true);
+    console.log("DETAIL", data);
     setItem(data);
   };
   useEffect(() => {
@@ -45,9 +49,15 @@ const SingleItem = () => {
             </strong>
             <h3>{item.topic}</h3>
             <p>{item.description}</p>
-            <strong>
-              <h4 className="text-left mt-4">Comments</h4>
-            </strong>
+            {noComment ? (
+              <strong>
+                <h4 className="text-center mt-4">No Comments</h4>
+              </strong>
+            ) : (
+              <strong>
+                <h4 className="text-center mt-4">Comments</h4>
+              </strong>
+            )}
             {comments.map((comment) => (
               <div className="author">
                 <div className="author-detail">

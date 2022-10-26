@@ -22,7 +22,7 @@ export const MyCollections = ({userCollections, setUserCollections}) => {
   };
 
   const getSingleCollection = async (id) => {
-    const response = await fetch(`http://localhost:3030/collections/${id}`);
+    const response = await fetch(`${window.remote_url}/collections/${id}`);
     if (response.ok) {
       const collection = await response.json();
       setSingleCollection(collection);

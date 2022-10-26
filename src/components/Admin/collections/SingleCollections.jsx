@@ -8,32 +8,42 @@ import {
   Form,
   Row,
   Toast,
+  Alert,
 } from "react-bootstrap";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { GoComment } from "react-icons/go";
 import { AiFillWarning } from "react-icons/ai";
-import { FiThumbsUp } from "react-icons/fi";
+import { AiOutlineLike } from "react-icons/ai";
+import { AiFillLike } from "react-icons/ai";
 import { FiPlusCircle } from "react-icons/fi";
 import { FetchComments } from "../items/FetchComments";
 import { CreateItem } from "../items/CreateItem";
+import { GrEdit } from "react-icons/gr";
+import { UpdateSingleItem } from "../items/UpdateSingleItem";
 
 const SingleCollection = ({
   userNotAllowed,
   setUserNotAllowed,
   userPermission,
   ToastContainer,
+  isUserLoggedIn,
 }) => {
   const [items, setItems] = useState([]);
+  const [singleItem, setSingleItem] = useState(null);
   const [text, setText] = useState("");
   const [itemNotFound, setItemNotFound] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [showCommentSection, setShowCommentSection] = useState(true);
   const [modalShow, setModalShow] = useState(false);
+  const [showUpdateItemModal, setShowUpdateItemModal] = useState(false);
+  const handleCloseUpdateItemModal = () => setShowUpdateItemModal(false);
+  const handleShowUpdateItemModal = () => setShowUpdateItemModal(true);
+
   const navigate = useNavigate();
   const toggleShowComment = () => setShowCommentSection(!showCommentSection);
   const { collectionId } = useParams();
   const token = window.localStorage.getItem("token");
-
+  const userId = window.localStorage.getItem("userId");
   useEffect(() => {
     fetchSingleCollection();
   }, []);
@@ -41,7 +51,7 @@ const SingleCollection = ({
   // fetches single collection by id
   const fetchSingleCollection = async () => {
     const response = await fetch(
-      `http://localhost:3030/collections/${collectionId}`
+      `${window.remote_url}/collections/${collectionId}`
     );
     const data = await response.json();
     setItems(data.items);
@@ -65,6 +75,27 @@ const SingleCollection = ({
       setUserNotAllowed(true);
     }
   };
+
+  // adds like by authorized user
+  const addLike = async (itemId) => {
+    const response = await fetch(
+      `${window.remote_url}/items/${itemId}/add-like`,
+      {
+        method: "POST",
+        body: JSON.stringify({ userId }),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+      }
+    );
+    if (response.ok) {
+      setIsLiked(true);
+    } else {
+      setIsLiked(false);
+    }
+  };
+
   // posts comment for specific item
   const postComment = async (event, id) => {
     if (event.key === "Enter") {
@@ -88,23 +119,46 @@ const SingleCollection = ({
     }
   };
 
+  const getSingleItem = async (selectedItemId) => {
+    const response = await fetch(
+      `${window.remote_url}/items/${selectedItemId}`
+    );
+    if (response.ok) {
+      const item = await response.json();
+      setSingleItem(item);
+    }
+  };
+
   return (
     <Container fluid>
-      {userNotAllowed ? <ToastContainer/> : null}
+      {userNotAllowed ? (
+        <Alert variant="danger" className="rounded-pill text-center">
+          <AiFillWarning />
+          You are not allowed. Please register <Link to="/register">here</Link>
+        </Alert>
+      ) : null}
       <Row className="p-3">
-        <Button
-          onClick={() => setModalShow(true)}
-          variant="success"
-          className="ml-auto rounded-pill"
-        >
-          <FiPlusCircle style={{ fontSize: "25px" }} /> Create item
-        </Button>
+        {isUserLoggedIn ? (
+          <Button
+            onClick={() => setModalShow(true)}
+            variant="success"
+            className="ml-auto rounded-pill"
+          >
+            <FiPlusCircle style={{ fontSize: "25px" }} /> Create item
+          </Button>
+        ) : null}
       </Row>
-      <Row className="p-5">
+      <Row className="p-5 justify-content-center text-center">
         {itemNotFound ? (
-          <h1 className="text-info">
-            Collection does not have items currently{" "}
+          <h1 className="text-info d-flex">
             <AiFillWarning className="text-danger" />
+            Collection does not have item.{" "}
+            {isUserLoggedIn ? (
+              <>
+                <p className="mr-2">Let's create</p>
+                <Link onClick={() => setModalShow(true)}>here</Link>
+              </>
+            ) : null}
           </h1>
         ) : null}
 
@@ -113,20 +167,40 @@ const SingleCollection = ({
             <Card className="card border-0 h-100">
               <Card.Img variant="top" src={item.image} className="card_img" />
               <Card.Body className="card_body">
-                <span class="tag tag-teal">{item.topic}</span>
+                <span className="tag tag-teal">{item.topic}</span>
+                <span
+                  className="edit-collection"
+                  onClick={() => {
+                    handleShowUpdateItemModal();
+                    getSingleItem(item._id);
+                  }}
+                >
+                  <GrEdit />
+                </span>
+                <UpdateSingleItem
+                  showUpdateItemModal={showUpdateItemModal}
+                  setShowUpdateItemModal={setShowUpdateItemModal}
+                  handleCloseUpdateItemModal={handleCloseUpdateItemModal}
+                  singleItem={singleItem}
+                  setSingleItem={setSingleItem}
+                  fetchSingleCollection={fetchSingleCollection}
+                  setUserNotAllowed={setUserNotAllowed}
+                  userNotAllowed={userNotAllowed}
+                  userPermission={userPermission}
+                />
                 <Card.Title className="title">{item.name}</Card.Title>
                 <Card.Text className="text">{item.description}</Card.Text>
                 <div className="item-section">
                   <div>
-                    <span>
-                      <FiThumbsUp />
+                    <span onClick={() => addLike(item._id)}>
+                      {isLiked ? <AiFillLike className="text-danger"/> : <AiOutlineLike />}
                     </span>
                     <span>
                       <GoComment onClick={toggleShowComment} />
                     </span>
                   </div>
                   <div className="item_btns">
-                    <button onClick={() => userNotAllowed ? userPermission() : deleteItem(item._id)}>delete</button>
+                    <button onClick={() => deleteItem(item._id)}>delete</button>
                     <button onClick={() => navigate(`/singleItem/${item._id}`)}>
                       view
                     </button>
@@ -154,6 +228,7 @@ const SingleCollection = ({
                     showCommentSection={showCommentSection}
                     userNotAllowed={userNotAllowed}
                     setUserNotAllowed={setUserNotAllowed}
+                    userPermission={userPermission}
                   />
                 </Toast.Body>
               </Toast>
@@ -167,6 +242,7 @@ const SingleCollection = ({
           setModalShow={setModalShow}
           items={items}
           setItems={setItems}
+          fetchSingleCollection={fetchSingleCollection}
         />
       </Row>
     </Container>

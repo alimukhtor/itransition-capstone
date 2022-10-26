@@ -45,7 +45,7 @@
 /*  REGISTER STYLE HERE */
 
 .main-login {
-  margin-top: 300px;
+  margin-top: 200px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -87,7 +87,6 @@
 /* HOME PAGE STYLES HERE */
 
 .main {
-  
   display: flex;
   justify-content: center;
   align-items: center;
@@ -98,13 +97,19 @@
 
 }
 
+body{
+  overflow: hidden;
+}
+
 .main-page {
   height: 100%;
+  overflow-y: scroll;
 }
 
 /* SIDE BAR  */
 
 .sidebar {
+  overflow-y: hidden;
   height: 100%;
   box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px;
 }
@@ -273,6 +278,26 @@
   cursor: pointer;
 }
 
+.item-section div:first-child span:first-child{
+  padding: 3px;
+  width: 60px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  border: 1px solid none;
+  background-color: rgb(204, 197, 197);
+}
+
+.item-section div:first-child span:last-child{
+  padding: 3px;
+  width: 60px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  border: 1px solid none;
+  background-color: rgb(204, 197, 197);
+}
+
 .comment-toast {
   flex-basis: auto !important;
   width: 100%;
@@ -287,6 +312,7 @@
 }
 
 .section-3 {
+  text-align: center;
   color: #5e76bf;
 }
 

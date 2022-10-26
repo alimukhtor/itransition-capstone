@@ -3,6 +3,7 @@ import { Col, Nav, Row, Tab } from "react-bootstrap";
 import { FiPlusCircle } from "react-icons/fi";
 import { BsCollection } from "react-icons/bs";
 import { FiUsers } from "react-icons/fi";
+import { AiFillWarning } from "react-icons/ai";
 import { useEffect } from "react";
 import { useState } from "react";
 import UserList from "./users/UserList";
@@ -10,6 +11,7 @@ import CreateCollection from "./collections/CreateCollection";
 import Collections from "./collections/Collections";
 import { MyCollections } from "./users/MyCollections";
 import { ToastContainer } from "react-toastify";
+import { Link } from "react-router-dom";
 
 const AdminPage = ({
   setUserNotAllowed,
@@ -18,11 +20,12 @@ const AdminPage = ({
   ToastContainer,
   isUserLoggedIn,
   collections,
-  setCollections
+  setCollections,
 }) => {
   const [users, setUsers] = useState([]);
   const [userCollections, setUserCollections] = useState([]);
   const [userRole, setUserRole] = useState("");
+  const [collectionNotFound, setCollectionNotFound] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const token = window.localStorage.getItem("token");
 
@@ -35,15 +38,23 @@ const AdminPage = ({
     });
     if (response.ok) {
       const collection = await response.json();
+      if (collection.length === 0) {
+        setCollectionNotFound(true);
+      }
+      console.log("Empty", collection);
       console.log(collection);
       setUserCollections(collection);
     }
   };
 
+  useEffect(() => {
+    fetchAllCollections();
+  }, []);
+
   // gets all collections from db
   const fetchAllCollections = async () => {
     const response = await fetch(
-      `http://localhost:3030/collections/allCollections`
+      `${window.remote_url}/collections/allCollections`
     );
     if (response.ok) {
       const data = await response.json();
@@ -102,11 +113,7 @@ const AdminPage = ({
             <Nav variant="pills" className="flex-column">
               <Nav.Item>
                 {userRole === "Admin" ? (
-                  <Nav.Link
-                    eventKey="first"
-                    className="text-light"
-                    onClick={fetchAllCollections}
-                  >
+                  <Nav.Link eventKey="first" className="text-light">
                     <BsCollection
                       className="mb-1 mx-2"
                       tabidstyle={{ fontSize: "20px" }}
@@ -143,6 +150,7 @@ const AdminPage = ({
                 setModalShow={setModalShow}
                 setCollections={setCollections}
                 collections={collections}
+                fetchAllCollections={fetchAllCollections}
               />
               <Nav.Item>
                 {userRole === "Admin" ? (
@@ -159,6 +167,12 @@ const AdminPage = ({
             </Nav>
           </Col>
           <Col sm={10} className="main-page">
+            {collectionNotFound ? (
+              <h3 className="d-flex justify-content-center text-danger mt-4">
+                <AiFillWarning className="text-danger mt-1" /> You do not have
+                collections yet. Create <Link><p className="ml-1" onClick={showModal}>here</p></Link>
+              </h3>
+            ) : null}
             <Tab.Content>
               {userRole === "Admin" ? (
                 <>

@@ -1,5 +1,5 @@
 import "../../../App.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Card, Col, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
@@ -14,9 +14,8 @@ const Collections = ({
   ToastContainer,
   collections,
   setCollections,
-  fetchAllCollections
+  fetchAllCollections,
 }) => {
-  
   const [singleCollection, setSingleCollection] = useState(null);
   const token = window.localStorage.getItem("token");
   const userId = window.localStorage.getItem("userId");
@@ -55,18 +54,17 @@ const Collections = ({
   // gets single collection by id
   const getSingleCollection = async (selectedCollectionId) => {
     const response = await fetch(
-      `http://localhost:3030/collections/${selectedCollectionId}`
+      `${window.remote_url}/collections/${selectedCollectionId}`
     );
     if (response.ok) {
       const collection = await response.json();
-      console.log("collection",collection);
       setSingleCollection(collection);
     }
   };
 
   return (
     <>
-      {userNotAllowed ? <ToastContainer /> : <ToastContainer/>}
+      <ToastContainer />
       <Row>
         {collections.map((collection) => (
           <Col xs={12} md={6} lg={3} key={collection._id} className="p-4">
@@ -85,10 +83,14 @@ const Collections = ({
                 </span>
                 <UpdateSingleCollection
                   showModal={showModal}
+                  setShowModal={setShowModal}
                   handleCloseModal={handleCloseModal}
                   setSingleCollection={setSingleCollection}
                   singleCollection={singleCollection}
                   fetchAllCollections={fetchAllCollections}
+                  setUserNotAllowed={setUserNotAllowed}
+                  userNotAllowed={userNotAllowed}
+                  userPermission={userPermission}
                 />
                 <Card.Title className="title">{collection.name}</Card.Title>
                 <Card.Text className="text">{collection.description}</Card.Text>
@@ -98,7 +100,7 @@ const Collections = ({
                       <FaUserCircle />
                     </span>
                     <div className="user-info">
-                      <h5>{collection.owner.username}</h5>
+                      <h5>{collection.owner?.username}</h5>
                     </div>
                   </div>
                   <div className="card_btn">
@@ -116,11 +118,11 @@ const Collections = ({
                       variant="danger"
                       type="submit"
                       className="card_btn"
-                      onClick={() =>
-                        {userNotAllowed
+                      onClick={() => {
+                        userNotAllowed
                           ? userPermission()
-                          : deleteCollection(collection._id); successMsg()}
-                      }
+                          : deleteCollection(collection._id);
+                      }}
                     >
                       delete
                     </button>

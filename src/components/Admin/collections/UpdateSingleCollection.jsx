@@ -1,17 +1,25 @@
-import { Button, Form, Modal } from "react-bootstrap";
+import { Alert, Button, Form, Modal } from "react-bootstrap";
 import { ImCancelCircle } from "react-icons/im";
 import { GrUpdate } from "react-icons/gr";
+import { TiTick } from "react-icons/ti";
+import { useState } from "react";
+import { AiFillWarning } from "react-icons/ai";
+import { Link } from "react-router-dom";
 export const UpdateSingleCollection = ({
   showModal,
   handleCloseModal,
   setSingleCollection,
   singleCollection,
-  fetchAllCollections
+  fetchAllCollections,
+  setUserNotAllowed,
+  userPermission,
+  userNotAllowed,
+  setShowModal,
 }) => {
+  const [isCollectionUpdated, setCollectionUpdated] = useState(false);
   const token = window.localStorage.getItem("token");
   const updateSingleCollection = async (id) => {
-    console.log("singleCollection", id);
-    const response = await fetch(`http://localhost:3030/collections/${id}`, {
+    const response = await fetch(`${window.remote_url}/collections/${id}`, {
       method: "PUT",
       body: JSON.stringify(singleCollection),
       headers: {
@@ -20,8 +28,20 @@ export const UpdateSingleCollection = ({
       },
     });
     if (response.ok) {
-      fetchAllCollections()
-      alert("Updated");
+      setCollectionUpdated(true);
+      setUserNotAllowed(false);
+      fetchAllCollections();
+      setTimeout(() => {
+        setCollectionUpdated(false);
+        setShowModal(false);
+      }, 2000);
+    } else if (response.status === 401) {
+      setUserNotAllowed(true);
+      setTimeout(() => {
+        setCollectionUpdated(false);
+        setUserNotAllowed(false);
+        setShowModal(false);
+      }, 3000);
     }
   };
   return (
@@ -38,6 +58,17 @@ export const UpdateSingleCollection = ({
       </Modal.Header>
       <Modal.Body>
         <Form>
+          {isCollectionUpdated ? (
+            <Alert variant="success" className="rounded-pill">
+              <TiTick />
+              Collection successfully updated
+            </Alert>
+          ) : userNotAllowed ? (
+            <Alert variant="danger" className="rounded-pill">
+              <AiFillWarning /> You are not allowed. Please register{" "}
+              <Link to="/register">here</Link>
+            </Alert>
+          ) : null}
           <Form.Group>
             <Form.Label>Name</Form.Label>
             <Form.Control
@@ -89,7 +120,9 @@ export const UpdateSingleCollection = ({
         <Button
           variant="primary"
           className="rounded-pill"
-          onClick={()=> {updateSingleCollection(singleCollection._id)}}
+          onClick={() => {
+            updateSingleCollection(singleCollection._id);
+          }}
         >
           Save Changes
         </Button>
