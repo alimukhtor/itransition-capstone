@@ -21,6 +21,8 @@ const AdminPage = ({
   isUserLoggedIn,
   collections,
   setCollections,
+  fetchAllCollections,
+  t
 }) => {
   const [users, setUsers] = useState([]);
   const [userCollections, setUserCollections] = useState([]);
@@ -41,26 +43,10 @@ const AdminPage = ({
       if (collection.length === 0) {
         setCollectionNotFound(true);
       }
-      console.log("Empty", collection);
-      console.log(collection);
       setUserCollections(collection);
     }
   };
 
-  useEffect(() => {
-    fetchAllCollections();
-  }, []);
-
-  // gets all collections from db
-  const fetchAllCollections = async () => {
-    const response = await fetch(
-      `${window.remote_url}/collections/allCollections`
-    );
-    if (response.ok) {
-      const data = await response.json();
-      setCollections(data);
-    }
-  };
 
   // gets all users from db
   const fetchUsers = async () => {
@@ -106,7 +92,7 @@ const AdminPage = ({
         <Tab.Container id="left-tabs-example" defaultActiveKey="first">
           <Col className="sidebar">
             {userRole === "Admin" ? (
-              <h4 className="text-info">Welcome to Admin Page</h4>
+              <h4 className="text-info">{t("welcome")}</h4>
             ) : (
               <h4 className="text-info">Welcome to Users Page</h4>
             )}
@@ -118,7 +104,7 @@ const AdminPage = ({
                       className="mb-1 mx-2"
                       tabidstyle={{ fontSize: "20px" }}
                     />
-                    Collections
+                    {t("SideBarBtns.Collections")}
                   </Nav.Link>
                 ) : (
                   <Nav.Link
@@ -130,7 +116,7 @@ const AdminPage = ({
                       className="mb-1 mx-2"
                       tabidstyle={{ fontSize: "20px" }}
                     />
-                    My Collections
+                    {t("SideBarBtns.Mycollection")}
                   </Nav.Link>
                 )}
               </Nav.Item>
@@ -141,7 +127,7 @@ const AdminPage = ({
                   onClick={showModal}
                 >
                   <FiPlusCircle className="mx-1" style={{ fontSize: "20px" }} />
-                  Create collection
+                  {t("SideBarBtns.CreateCollection")}
                 </Nav.Link>
               </Nav.Item>
               <CreateCollection
@@ -160,7 +146,7 @@ const AdminPage = ({
                     onClick={fetchUsers}
                   >
                     <FiUsers className="mx-1" style={{ fontSize: "20px" }} />
-                    Users
+                    {t("SideBarBtns.Users")}
                   </Nav.Link>
                 ) : null}
               </Nav.Item>

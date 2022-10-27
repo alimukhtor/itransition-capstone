@@ -6,16 +6,17 @@ export const UserProfile = ({
   setSmShow,
   setIsUserLoggedIn,
   loggedinUser,
+  fetchAllCollections
 }) => {
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
   const logOutUser = () => {
     localStorage.clear(token);
+    fetchAllCollections()
     navigate("/");
     setSmShow(false);
     setIsUserLoggedIn(false);
   };
-  console.log(loggedinUser);
   return (
     <Modal
       size="sm"
@@ -52,7 +53,7 @@ export const UserProfile = ({
             >
               Log out
             </Button>
-            <Button variant="success" type="submit" className="rounded-pill">
+            <Button variant="success" type="submit" className="rounded-pill" disabled={true}>
               Submit
             </Button>
           </div>

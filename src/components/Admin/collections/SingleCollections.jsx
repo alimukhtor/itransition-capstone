@@ -79,9 +79,9 @@ const SingleCollection = ({
   // adds like by authorized user
   const addLike = async (itemId) => {
     const response = await fetch(
-      `${window.remote_url}/items/${itemId}/add-like`,
+      `${window.remote_url}/items/${itemId}/like`,
       {
-        method: "POST",
+        method: "PUT",
         body: JSON.stringify({ userId }),
         headers: {
           "Content-Type": "application/json",
@@ -89,6 +89,8 @@ const SingleCollection = ({
         },
       }
     );
+    const data = await response
+    console.log(data);
     if (response.ok) {
       setIsLiked(true);
     } else {

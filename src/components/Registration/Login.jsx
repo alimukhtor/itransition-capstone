@@ -3,9 +3,6 @@ import { Alert, Button, Col, Container, Form, Row } from "react-bootstrap";
 import { MdCancel } from "react-icons/md";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 import { ImSad } from "react-icons/im";
-import { FcGoogle } from "react-icons/fc";
-import { FaFacebook } from "react-icons/fa";
-import { FaTwitter } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
@@ -126,19 +123,6 @@ const Login = ({ setIsUserLoggedIn, setUsername }) => {
               >
                 Log in
               </Button>
-              <span>
-                ______________________Or continue with______________________
-              </span>
-              <div
-                className="d-flex justify-content-center"
-                style={{ fontSize: "35px", cursor: "pointer" }}
-              >
-                <a href="http://localhost:3030/users/googleLogin">
-                  <FcGoogle />
-                </a>
-                <a><FaFacebook className="mx-4" /></a>
-                <a><FaTwitter className="text-info" /></a>
-              </div>
             </Form>
           </Col>
         </Row>

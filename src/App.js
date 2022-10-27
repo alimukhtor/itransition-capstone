@@ -1,12 +1,13 @@
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "react-toastify/dist/ReactToastify.css";
-import { createContext, useEffect, useState } from "react";
+import "/node_modules/flag-icons/css/flag-icons.min.css";
+import { createContext, useEffect, useState, Suspense } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { Navbar, Nav, Button, Form } from "react-bootstrap";
-import { RiLeafFill } from "react-icons/ri";
+import { Navbar, Nav, Button, Form, Dropdown } from "react-bootstrap";
 import { BiUserCircle } from "react-icons/bi";
+import { BsGlobe } from "react-icons/bs";
 import ReactSwitch from "react-switch";
 import Registration from "./components/Registration/Registration";
 import Login from "./components/Registration/Login";
@@ -16,12 +17,30 @@ import SingleItem from "./components/Admin/items/SingleItem";
 import { UserProfile } from "./components/Admin/UserProfile";
 import { HomePage } from "./components/HomePage";
 import { ToastContainer, toast } from "react-toastify";
+import i18n from "i18next";
+import { useTranslation, initReactI18next } from "react-i18next";
+import { translationsEn } from "./components/Admin/Lang/en/en";
+import { translationsUz } from "./components/Admin/Lang/uz/uz";
 export const ThemeContext = createContext(null);
 
+i18n.use(initReactI18next).init({
+  resources: {
+    en: { translation: translationsEn },
+    uz: { translation: translationsUz },
+  },
+  lng: "en",
+  fallbackLng: "en",
+  interpolation: { escapeValue: false },
+});
+
+const onChange = (eventKey) => {
+  i18n.changeLanguage(eventKey);
+};
 // deployed app url
 window.remote_url = "https://itransition-capstone.herokuapp.com";
 
 function App() {
+  const { t } = useTranslation();
   const [theme, setTheme] = useState("dark");
   const [query, setQuery] = useState("");
   const [smShow, setSmShow] = useState(false);
@@ -64,6 +83,21 @@ function App() {
     }
   };
 
+  useEffect(() => {
+    fetchAllCollections();
+  }, []);
+
+  // gets all collections from db
+  const fetchAllCollections = async () => {
+    const response = await fetch(
+      `${window.remote_url}/collections/allCollections`
+    );
+    if (response.ok) {
+      const data = await response.json();
+      setCollections(data);
+    }
+  };
+
   // get user /me route
   const getUserInfo = async () => {
     const response = await fetch(`${window.remote_url}/users/me`, {
@@ -79,134 +113,162 @@ function App() {
   };
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
-      <div className="App" id={theme}>
-        <Navbar
-          variant="dark"
-          className="navbar d-flex justify-content space-between"
-        >
-          <Navbar.Brand
-            onClick={() => navigate("/adminPage")}
-            style={{ cursor: "pointer" }}
-          >
-            ITRANSITION
-            <RiLeafFill className="mb-2 ml-1" />
-          </Navbar.Brand>
-          <div className="">
-            <Form className="d-flex">
-              <Form.Control
-                type="search"
-                placeholder="Search everything"
-                className="mr-1 rounded-pill"
-                aria-label="Search"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-              />
-              <Button
-                variant="outline-success"
-                className="rounded-pill"
-                onClick={handleSearch}
+      <Suspense fallback="loading">
+        <div className="App" id={theme}>
+          <Navbar variant="dark" className="navbar">
+            <Navbar.Brand
+              onClick={() => navigate("/adminPage")}
+              style={{ cursor: "pointer" }}
+              className="d-flex"
+            >
+              ITRANSITION
+              <Dropdown
+                className="lang-dropdown mt-n1 ml-2"
+                onSelect={onChange}
               >
-                Search
-              </Button>
-            </Form>
-          </div>
-          <Nav className="ml-auto">
-            <div className="navbar-btns">
-              <label> {theme === "light" ? "Light" : "Dark"}</label>
-              <ReactSwitch onChange={toggleTheme} checked={theme === "dark"} />
-            </div>
-            <Link to="/register">
-              <Button variant="info" className="rounded-pill mx-2">
-                Register
-              </Button>
-            </Link>
-            {isUserLoggedIn ? (
-              <div className="d-flex mt-1">
-                <BiUserCircle
-                  style={{ fontSize: "30px" }}
-                  onClick={() => {
-                    getUserInfo();
-                    setSmShow(true);
-                  }}
+                <Dropdown.Toggle variant="" className="text-light">
+                  <BsGlobe className="text-info" style={{ fontSize: "20px" }} />
+                </Dropdown.Toggle>
+                <Dropdown.Menu onChange={(e) => console.log(e.target.value)}>
+                  <Dropdown.Item href="#/action-1" eventKey="eng">
+                    <span className="fi fi-gb"></span> Eng
+                  </Dropdown.Item>
+                  <Dropdown.Item href="#/action-2" eventKey="uz">
+                    <span className="fi fi-uz"></span> Uz
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </Navbar.Brand>
+            <div>
+              <Form className="d-flex">
+                <Form.Control
+                  type="search"
+                  placeholder={`${t("Search.placeholder")}`}
+                  className="mr-1 rounded-pill"
+                  aria-label="Search"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
                 />
-                <p className="mr-3">{username}</p>
+                <Button
+                  variant="outline-success"
+                  className="rounded-pill"
+                  onClick={handleSearch}
+                >
+                  {t("Search.search")}
+                </Button>
+              </Form>
+            </div>
+            <Nav>
+              <div className="navbar-btns">
+                <label>
+                  {" "}
+                  {theme === "light"
+                    ? `${t("SiteMode.Light")}`
+                    : `${t("SiteMode.Dark")}`}
+                </label>
+                <ReactSwitch
+                  onChange={toggleTheme}
+                  checked={theme === "dark"}
+                />
               </div>
-            ) : (
-              <Link to="/login">
-                <Button variant="info" className="rounded-pill">
-                  Log in
+              <Link to="/register">
+                <Button variant="" className="mx-2 text-light">
+                  {t("Navbar.Register")}
                 </Button>
               </Link>
-            )}
-            <UserProfile
-              smShow={smShow}
-              setSmShow={setSmShow}
-              setIsUserLoggedIn={setIsUserLoggedIn}
-              loggedinUser={loggedinUser}
-            />
-          </Nav>
-        </Navbar>
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <HomePage
-                setUserNotAllowed={setUserNotAllowed}
-                userNotAllowed={userNotAllowed}
-                userPermission={userPermission}
-                ToastContainer={ToastContainer}
-                setCollections={setCollections}
-                collections={collections}
-              />
-            }
-          />
-          <Route
-            path="/adminPage"
-            element={
-              <AdminPage
-                setUserNotAllowed={setUserNotAllowed}
-                userNotAllowed={userNotAllowed}
-                userPermission={userPermission}
-                ToastContainer={ToastContainer}
-                isUserLoggedIn={isUserLoggedIn}
-                setCollections={setCollections}
-                collections={collections}
-              />
-            }
-          />
-          <Route
-            path="/singleCollection/:collectionId"
-            element={
-              <SingleCollection
-                setUserNotAllowed={setUserNotAllowed}
-                userNotAllowed={userNotAllowed}
-                userPermission={userPermission}
-                ToastContainer={ToastContainer}
-                isUserLoggedIn={isUserLoggedIn}
-              />
-            }
-          />
-          <Route
-            path="/singleItem/:id"
-            element={
-              <SingleItem
-                setUserNotAllowed={setUserNotAllowed}
-                userNotAllowed={userNotAllowed}
-              />
-            }
-          />
-          <Route path="/register" element={<Registration />} />
-          <Route
-            path="/login"
-            element={
-              <Login
+              {isUserLoggedIn ? (
+                <div className="d-flex mt-1">
+                  <BiUserCircle
+                    style={{ fontSize: "30px", cursor: "pointer" }}
+                    onClick={() => {
+                      getUserInfo();
+                      setSmShow(true);
+                    }}
+                  />
+                  <p className="mr-3" style={{ cursor: "pointer" }}>
+                    {username}
+                  </p>
+                </div>
+              ) : (
+                <Link to="/login">
+                  <Button variant="" className="text-light">
+                    {t("Navbar.Login")}
+                  </Button>
+                </Link>
+              )}
+              <UserProfile
+                smShow={smShow}
+                setSmShow={setSmShow}
                 setIsUserLoggedIn={setIsUserLoggedIn}
-                setUsername={setUsername}
+                loggedinUser={loggedinUser}
+                fetchAllCollections={fetchAllCollections}
               />
-            }
-          />
-        </Routes>
-      </div>
+            </Nav>
+          </Navbar>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <HomePage
+                  setUserNotAllowed={setUserNotAllowed}
+                  userNotAllowed={userNotAllowed}
+                  userPermission={userPermission}
+                  ToastContainer={ToastContainer}
+                  setCollections={setCollections}
+                  collections={collections}
+                />
+              }
+            />
+            <Route
+              path="/adminPage"
+              element={
+                <AdminPage
+                  t={t}
+                  setUserNotAllowed={setUserNotAllowed}
+                  userNotAllowed={userNotAllowed}
+                  userPermission={userPermission}
+                  ToastContainer={ToastContainer}
+                  isUserLoggedIn={isUserLoggedIn}
+                  setCollections={setCollections}
+                  collections={collections}
+                  fetchAllCollections={fetchAllCollections}
+                />
+              }
+            />
+            <Route
+              path="/singleCollection/:collectionId"
+              element={
+                <SingleCollection
+                  setUserNotAllowed={setUserNotAllowed}
+                  userNotAllowed={userNotAllowed}
+                  userPermission={userPermission}
+                  ToastContainer={ToastContainer}
+                  isUserLoggedIn={isUserLoggedIn}
+                />
+              }
+            />
+            <Route
+              path="/singleItem/:id"
+              element={
+                <SingleItem
+                  setUserNotAllowed={setUserNotAllowed}
+                  userNotAllowed={userNotAllowed}
+                />
+              }
+            />
+            <Route path="/register" element={<Registration />} />
+            <Route
+              path="/login"
+              element={
+                <Login
+                  setIsUserLoggedIn={setIsUserLoggedIn}
+                  setUsername={setUsername}
+                />
+              }
+            />
+          </Routes>
+        </div>
+      </Suspense>
     </ThemeContext.Provider>
   );
 }

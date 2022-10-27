@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { Alert, Button, Col, Container, Form, Row, Spinner } from "react-bootstrap";
 import { MdCancel } from "react-icons/md";
+import { FcGoogle } from "react-icons/fc";
+import { FaFacebook } from "react-icons/fa";
+import { FaTwitter } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 const Registration = () => {
   const navigate = useNavigate();
@@ -93,6 +96,19 @@ const Registration = () => {
             >
               Sign Up
             </Button>
+            <span>
+                ______________________Or continue with______________________
+              </span>
+              <div
+                className="d-flex justify-content-center"
+                style={{ fontSize: "35px", cursor: "pointer" }}
+              >
+                <a href="${window.remote_url}/users/googleLogin">
+                  <FcGoogle />
+                </a>
+                <a><FaFacebook className="mx-4" /></a>
+                <a><FaTwitter className="text-info" /></a>
+              </div>
             <p className="mt-3">Already have an account? <Link to="/login">Sign in</Link></p>
           </Form>
         </Col>

@@ -76,7 +76,7 @@ export const CreateItem = (props) => {
               Authorization: "Bearer " + token,
             },
           });
-          props.fetchSingleCollection()
+          props.fetchSingleCollection();
         }
       }
     } catch (error) {
@@ -145,6 +145,8 @@ export const CreateItem = (props) => {
               }}
             />
           </Form.Group>
+          <Form.Label className="mb-n5 mt-1">Enter tag</Form.Label>
+          <TagsInput items={props.items} />
           <Form.Group>
             <Form.Label>Upload an image</Form.Label>
             <Form.Control
@@ -157,8 +159,6 @@ export const CreateItem = (props) => {
               }}
             />
           </Form.Group>
-          <Form.Label className="mt-2">Enter tag</Form.Label>
-          <TagsInput items={props.items} />
           {isSelected ? (
             <CustomFields fields={requestData.customFields} />
           ) : null}

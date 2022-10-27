@@ -5,7 +5,10 @@ import "../../../App.css";
 
 const LIMIT_CUSTOM_FIELDS = 3;
 
-export const AddCustomFields = ({ handleAddCustomField, fields }) => {
+export const AddCustomFields = ({
+  handleAddCustomField,
+  fields,
+}) => {
   const [showFormInputs, setShowFormInputs] = useState(false);
   const [customInputTypeLimit, setCustomInputTypeLimit] = useState(false);
   const [inputType, setInputType] = useState("");
@@ -21,7 +24,6 @@ export const AddCustomFields = ({ handleAddCustomField, fields }) => {
       [fieldName]: value,
     });
   };
-
   // finds repeted input types and sets validation
   const handleChangeInputType = (e) => {
     const key = e.target.value;

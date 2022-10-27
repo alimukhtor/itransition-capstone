@@ -27,8 +27,8 @@
 }
 
 .navbar {
-  display: flex;
-  justify-content: space-between;
+  display: flex !important;
+  justify-content: space-between !important;
   background-color: #292938;
   box-shadow: rgba(0, 0, 0, 0.3) 0px 6px 30px;
 }
@@ -41,6 +41,9 @@
   margin-right: 5px;
 }
 
+.lang-dropdown{
+  background-color: #30303f;
+}
 
 /*  REGISTER STYLE HERE */
 
