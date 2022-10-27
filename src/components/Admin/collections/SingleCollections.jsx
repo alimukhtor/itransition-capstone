@@ -29,6 +29,7 @@ const SingleCollection = ({
   isUserLoggedIn,
 }) => {
   const [items, setItems] = useState([]);
+  const [tags, setTags] = useState([]);
   const [singleItem, setSingleItem] = useState(null);
   const [text, setText] = useState("");
   const [itemNotFound, setItemNotFound] = useState(false);
@@ -245,6 +246,8 @@ const SingleCollection = ({
           items={items}
           setItems={setItems}
           fetchSingleCollection={fetchSingleCollection}
+          setInputTag={setTags}
+          inputTag={tags}
         />
       </Row>
     </Container>

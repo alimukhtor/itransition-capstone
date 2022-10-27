@@ -19,6 +19,7 @@ export const CreateItem = (props) => {
     description: "",
     collections: props.collectionId,
     owner: userId,
+    tags: [props.tags],
     customFields: [],
   });
 
@@ -49,7 +50,7 @@ export const CreateItem = (props) => {
   const createItem = async (e) => {
     try {
       e.preventDefault();
-      const response = await fetch(`${window.remote_url}/items`, {
+      const response = await fetch(`http://localhost:3030/items`, {
         method: "POST",
         body: JSON.stringify(requestData),
         headers: {
@@ -146,7 +147,13 @@ export const CreateItem = (props) => {
             />
           </Form.Group>
           <Form.Label className="mb-n5 mt-1">Enter tag</Form.Label>
-          <TagsInput items={props.items} />
+          <TagsInput
+            items={props.items}
+            setInputTag={props.setInputTag}
+            inputTag={props.inputTag}
+            requestData={requestData}
+            setRequestData={setRequestData} 
+          />
           <Form.Group>
             <Form.Label>Upload an image</Form.Label>
             <Form.Control

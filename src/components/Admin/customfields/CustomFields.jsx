@@ -36,7 +36,6 @@ export const CustomFields = ({ fields, handleAddCustomFieldValue }) => {
               />
             </>
           )}
-          <Button onClick={()=> handleAddCustomFieldValue(inputValues)}>Add custom fields</Button>
         </Form.Group>
       ))}
     </>
