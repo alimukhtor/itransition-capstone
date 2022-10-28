@@ -20,13 +20,15 @@ import { FetchComments } from "../items/FetchComments";
 import { CreateItem } from "../items/CreateItem";
 import { GrEdit } from "react-icons/gr";
 import { UpdateSingleItem } from "../items/UpdateSingleItem";
-
+export const customFields = [];
 const SingleCollection = ({
   userNotAllowed,
   setUserNotAllowed,
   userPermission,
   ToastContainer,
   isUserLoggedIn,
+  setCustomFields,
+  customFields,
 }) => {
   const [items, setItems] = useState([]);
   const [tags, setTags] = useState([]);
@@ -79,18 +81,15 @@ const SingleCollection = ({
 
   // adds like by authorized user
   const addLike = async (itemId) => {
-    const response = await fetch(
-      `${window.remote_url}/items/${itemId}/like`,
-      {
-        method: "PUT",
-        body: JSON.stringify({ userId }),
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-      }
-    );
-    const data = await response
+    const response = await fetch(`${window.remote_url}/items/${itemId}/like`, {
+      method: "PUT",
+      body: JSON.stringify({ userId }),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+    });
+    const data = await response;
     console.log(data);
     if (response.ok) {
       setIsLiked(true);
@@ -163,81 +162,95 @@ const SingleCollection = ({
               </>
             ) : null}
           </h1>
-        ) : null}
-
-        {items.map((item) => (
-          <Col xs={12} md={4} lg={2} key={item._id}>
-            <Card className="card border-0 h-100">
-              <Card.Img variant="top" src={item.image} className="card_img" />
-              <Card.Body className="card_body">
-                <span className="tag tag-teal">{item.topic}</span>
-                <span
-                  className="edit-collection"
-                  onClick={() => {
-                    handleShowUpdateItemModal();
-                    getSingleItem(item._id);
-                  }}
-                >
-                  <GrEdit />
-                </span>
-                <UpdateSingleItem
-                  showUpdateItemModal={showUpdateItemModal}
-                  setShowUpdateItemModal={setShowUpdateItemModal}
-                  handleCloseUpdateItemModal={handleCloseUpdateItemModal}
-                  singleItem={singleItem}
-                  setSingleItem={setSingleItem}
-                  fetchSingleCollection={fetchSingleCollection}
-                  setUserNotAllowed={setUserNotAllowed}
-                  userNotAllowed={userNotAllowed}
-                  userPermission={userPermission}
-                />
-                <Card.Title className="title">{item.name}</Card.Title>
-                <Card.Text className="text">{item.description}</Card.Text>
-                <div className="item-section">
-                  <div>
-                    <span onClick={() => addLike(item._id)}>
-                      {isLiked ? <AiFillLike className="text-danger"/> : <AiOutlineLike />}
-                    </span>
-                    <span>
-                      <GoComment onClick={toggleShowComment} />
-                    </span>
-                  </div>
-                  <div className="item_btns">
-                    <button onClick={() => deleteItem(item._id)}>delete</button>
-                    <button onClick={() => navigate(`/singleItem/${item._id}`)}>
-                      view
-                    </button>
-                  </div>
-                </div>
-              </Card.Body>
-              <Toast
-                show={!showCommentSection}
-                onClose={toggleShowComment}
-                className="comment-toast"
-              >
-                <Toast.Body>
-                  <Form.Control
-                    value={text}
-                    onChange={(e) => setText(e.target.value)}
-                    onKeyDown={(e) => postComment(e, item._id)}
-                    size="sm"
-                    type="text"
-                    className="rounded-pill"
-                    placeholder="Leave your thoughts here..."
+        ) : (
+          <>
+            {items.map((item) => (
+              <Col xs={12} md={4} lg={2} key={item._id}>
+                <Card className="card border-0 h-100">
+                  <Card.Img
+                    variant="top"
+                    src={item.image}
+                    className="card_img"
                   />
-                  <FetchComments
-                    itemId={item._id}
-                    setShowCommentSection={setShowCommentSection}
-                    showCommentSection={showCommentSection}
-                    userNotAllowed={userNotAllowed}
-                    setUserNotAllowed={setUserNotAllowed}
-                    userPermission={userPermission}
-                  />
-                </Toast.Body>
-              </Toast>
-            </Card>
-          </Col>
-        ))}
+                  <Card.Body className="card_body">
+                    <span className="tag tag-teal">{item.topic}</span>
+                    <span
+                      className="edit-collection"
+                      onClick={() => {
+                        handleShowUpdateItemModal();
+                        getSingleItem(item._id);
+                      }}
+                    >
+                      <GrEdit />
+                    </span>
+                    <UpdateSingleItem
+                      showUpdateItemModal={showUpdateItemModal}
+                      setShowUpdateItemModal={setShowUpdateItemModal}
+                      handleCloseUpdateItemModal={handleCloseUpdateItemModal}
+                      singleItem={singleItem}
+                      setSingleItem={setSingleItem}
+                      fetchSingleCollection={fetchSingleCollection}
+                      setUserNotAllowed={setUserNotAllowed}
+                      userNotAllowed={userNotAllowed}
+                      userPermission={userPermission}
+                    />
+                    <Card.Title className="title">{item.name}</Card.Title>
+                    <Card.Text className="text">{item.description}</Card.Text>
+                    <div className="item-section">
+                      <div>
+                        <span onClick={() => addLike(item._id)}>
+                          {isLiked ? (
+                            <AiFillLike className="text-danger" />
+                          ) : (
+                            <AiOutlineLike />
+                          )}
+                        </span>
+                        <span>
+                          <GoComment onClick={toggleShowComment} />
+                        </span>
+                      </div>
+                      <div className="item_btns">
+                        <button onClick={() => deleteItem(item._id)}>
+                          delete
+                        </button>
+                        <button
+                          onClick={() => navigate(`/singleItem/${item._id}`)}
+                        >
+                          view
+                        </button>
+                      </div>
+                    </div>
+                  </Card.Body>
+                  <Toast
+                    show={!showCommentSection}
+                    onClose={toggleShowComment}
+                    className="comment-toast"
+                  >
+                    <Toast.Body>
+                      <Form.Control
+                        value={text}
+                        onChange={(e) => setText(e.target.value)}
+                        onKeyDown={(e) => postComment(e, item._id)}
+                        size="sm"
+                        type="text"
+                        className="rounded-pill"
+                        placeholder="Leave your thoughts here..."
+                      />
+                      <FetchComments
+                        itemId={item._id}
+                        setShowCommentSection={setShowCommentSection}
+                        showCommentSection={showCommentSection}
+                        userNotAllowed={userNotAllowed}
+                        setUserNotAllowed={setUserNotAllowed}
+                        userPermission={userPermission}
+                      />
+                    </Toast.Body>
+                  </Toast>
+                </Card>
+              </Col>
+            ))}
+          </>
+        )}
         <CreateItem
           show={modalShow}
           onHide={() => setModalShow(false)}
@@ -248,6 +261,7 @@ const SingleCollection = ({
           fetchSingleCollection={fetchSingleCollection}
           setInputTag={setTags}
           inputTag={tags}
+          customFields={customFields}
         />
       </Row>
     </Container>

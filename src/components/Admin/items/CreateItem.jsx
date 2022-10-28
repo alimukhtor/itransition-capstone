@@ -13,7 +13,7 @@ export const CreateItem = (props) => {
   const [isItemCreated, setIsItemCreated] = useState(false);
   const token = window.localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
-  const [requestData, setRequestData] = useState({
+  const [newItemData, setNewItemData] = useState({
     name: "",
     topic: "",
     description: "",
@@ -25,24 +25,25 @@ export const CreateItem = (props) => {
 
   // handles controlled inputs and sets object keys and values
   const handleInput = (fieldName, value) => {
-    setRequestData({
-      ...requestData,
+    setNewItemData({
+      ...newItemData,
       [fieldName]: value,
     });
   };
 
-  // adds custom fields with specific title and type of inputs form
-  const handleAddCustomField = (newFields, setCustomFieldValues) => {
-    const { customFields } = requestData;
-    const newCustomFields = [...customFields];
-    newCustomFields.push(newFields);
-    if (newCustomFields) {
+  // adds custom field values with specific title and type of inputs form
+  const handleAddCustomFieldValue = (inputValues, setInputValues) => {
+    console.log("fieldsValue", inputValues);
+    const { customFields } = newItemData;
+    const newCustomFieldsValue = [...customFields];
+    newCustomFieldsValue.push(inputValues);
+    if (newCustomFieldsValue) {
       setIsSelected(true);
-      setRequestData({
-        ...requestData,
-        customFields: newCustomFields,
+      setNewItemData({
+        ...newItemData,
+        customFields: newCustomFieldsValue,
       });
-      setCustomFieldValues("");
+      setInputValues("");
     }
   };
 
@@ -50,9 +51,9 @@ export const CreateItem = (props) => {
   const createItem = async (e) => {
     try {
       e.preventDefault();
-      const response = await fetch(`http://localhost:3030/items`, {
+      const response = await fetch(`${window.remote_url}/items`, {
         method: "POST",
-        body: JSON.stringify(requestData),
+        body: JSON.stringify(newItemData),
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,
@@ -64,7 +65,7 @@ export const CreateItem = (props) => {
           props.setModalShow(false);
           setIsItemCreated(false);
         }, 2000);
-        setRequestData("");
+        setNewItemData("");
         const newItem = await response.json();
         console.log("newItem", newItem);
         if (image) {
@@ -116,7 +117,7 @@ export const CreateItem = (props) => {
               type="text"
               className="rounded-pill"
               placeholder="Name"
-              value={requestData.name}
+              value={newItemData.name}
               onChange={(e) => {
                 handleInput("name", e.target.value);
               }}
@@ -128,7 +129,7 @@ export const CreateItem = (props) => {
               type="textarea"
               className="rounded-pill"
               placeholder="Description"
-              value={requestData.description}
+              value={newItemData.description}
               onChange={(e) => {
                 handleInput("description", e.target.value);
               }}
@@ -140,7 +141,7 @@ export const CreateItem = (props) => {
               type="text"
               className="rounded-pill"
               placeholder="Topic"
-              value={requestData.topic}
+              value={newItemData.topic}
               onChange={(e) => {
                 handleInput("topic", e.target.value);
               }}
@@ -151,8 +152,8 @@ export const CreateItem = (props) => {
             items={props.items}
             setInputTag={props.setInputTag}
             inputTag={props.inputTag}
-            requestData={requestData}
-            setRequestData={setRequestData} 
+            requestData={newItemData}
+            setRequestData={setNewItemData}
           />
           <Form.Group>
             <Form.Label>Upload an image</Form.Label>
@@ -160,18 +161,15 @@ export const CreateItem = (props) => {
               type="file"
               className="rounded-pill"
               alt="file-upload"
-              value={requestData.image}
+              value={newItemData.image}
               onChange={(event) => {
                 setImage(event.target.files[0]);
               }}
             />
           </Form.Group>
-          {isSelected ? (
-            <CustomFields fields={requestData.customFields} />
-          ) : null}
-          <AddCustomFields
-            handleAddCustomField={handleAddCustomField}
-            fields={requestData.customFields}
+          <CustomFields
+            fields={props.customFields}
+            handleAddCustomFieldValue={handleAddCustomFieldValue}
           />
           <Button
             variant="success"

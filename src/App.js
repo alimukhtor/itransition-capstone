@@ -40,10 +40,12 @@ const onChange = (eventKey) => {
 window.remote_url = "https://itransition-capstone.herokuapp.com";
 
 function App() {
+  const [ customFields, setCustomFields] = useState([])
   const { t } = useTranslation();
   const [theme, setTheme] = useState("dark");
-  const [query, setQuery] = useState("");
-  const [smShow, setSmShow] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQueryNotFound, setSearchQueryNotFound] = useState(false)
+  const [userProfileModal, setUserProfileModal] = useState(false);
   const [loggedinUser, setLoggedinUser] = useState([]);
   const [username, setUsername] = useState("");
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
@@ -75,9 +77,13 @@ function App() {
   const handleSearch = async () => {
     try {
       const response = await fetch(
-        `${window.remote_url}/collections/search?title=${query}`
+        `${window.remote_url}/items/search?title=${searchQuery}`
       );
       const data = await response.json();
+      if(data.length === 0){
+        setSearchQueryNotFound(true)
+      }
+      console.log("SERACHED RES",data);
     } catch (error) {
       console.log(error);
     }
@@ -116,12 +122,8 @@ function App() {
       <Suspense fallback="loading">
         <div className="App" id={theme}>
           <Navbar variant="dark" className="navbar">
-            <Navbar.Brand
-              onClick={() => navigate("/adminPage")}
-              style={{ cursor: "pointer" }}
-              className="d-flex"
-            >
-              ITRANSITION
+            <Navbar.Brand style={{ cursor: "pointer" }} className="d-flex">
+              <span onClick={() => navigate("/adminPage")}>ITRANSITION</span>
               <Dropdown
                 className="lang-dropdown mt-n1 ml-2"
                 onSelect={onChange}
@@ -146,8 +148,8 @@ function App() {
                   placeholder={`${t("Search.placeholder")}`}
                   className="mr-1 rounded-pill"
                   aria-label="Search"
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                 />
                 <Button
                   variant="outline-success"
@@ -182,7 +184,7 @@ function App() {
                     style={{ fontSize: "30px", cursor: "pointer" }}
                     onClick={() => {
                       getUserInfo();
-                      setSmShow(true);
+                      setUserProfileModal(true);
                     }}
                   />
                   <p className="mr-3" style={{ cursor: "pointer" }}>
@@ -197,8 +199,8 @@ function App() {
                 </Link>
               )}
               <UserProfile
-                smShow={smShow}
-                setSmShow={setSmShow}
+                smShow={userProfileModal}
+                setSmShow={setUserProfileModal}
                 setIsUserLoggedIn={setIsUserLoggedIn}
                 loggedinUser={loggedinUser}
                 fetchAllCollections={fetchAllCollections}
@@ -216,6 +218,7 @@ function App() {
                   ToastContainer={ToastContainer}
                   setCollections={setCollections}
                   collections={collections}
+                  searchQueryNotFound={searchQueryNotFound}
                 />
               }
             />
@@ -232,6 +235,8 @@ function App() {
                   setCollections={setCollections}
                   collections={collections}
                   fetchAllCollections={fetchAllCollections}
+                  setCustomFields={setCustomFields}
+                  customFields={customFields}
                 />
               }
             />
@@ -244,6 +249,8 @@ function App() {
                   userPermission={userPermission}
                   ToastContainer={ToastContainer}
                   isUserLoggedIn={isUserLoggedIn}
+                  customFields={customFields}
+                  setCustomFields={setCustomFields}
                 />
               }
             />

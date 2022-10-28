@@ -4,7 +4,6 @@ import { AddCustomFields } from "../customfields/AddCustomFields";
 import { TiTick } from "react-icons/ti";
 import { ImCancelCircle } from "react-icons/im";
 import { BiBookAdd } from "react-icons/bi";
-import { CustomFields } from "../customfields/CustomFields";
 
 const CreateCollection = (props) => {
   const token = localStorage.getItem("token");
@@ -17,20 +16,15 @@ const CreateCollection = (props) => {
     topic: "",
     description: "",
     owner: userId,
-    customFieldsDescription: [
+    // customFieldsDescription: [
       // {
       //   title:"",
       //   type:""
       // }
-    ],
-    customFields: [
-      //   {
-      //   label: 'License Plate',
-      //   value: 'FX123GX'
-      // }
-    ],
+    // ],
   });
-
+  
+  
   // handles controlled inputs and sets object keys and values
   const handleInput = (fieldName, value) => {
     setRequestData({
@@ -41,34 +35,13 @@ const CreateCollection = (props) => {
 
   // adds custom fields with specific title and type of inputs form
   const handleAddCustomField = (newFields, setCustomFieldValues) => {
-    console.log("asd", newFields);
-    const { customFieldsDescription } = requestData;
-    const newCustomFields = [...customFieldsDescription];
+    const newCustomFields = [...props.customFields];
     newCustomFields.push(newFields);
     if (newCustomFields) {
       setIsSelected(true);
-      setRequestData({
-        ...requestData,
-        customFieldsDescription: newCustomFields,
-      });
+      props.setCustomFields(newCustomFields);
       setCustomFieldValues("");
     }
-  };
-
-  // adds custom field values with specific title and type of inputs form
-  const handleAddCustomFieldValue = (fieldsValue, setInputValues) => {
-    console.log("fieldsValue", fieldsValue);
-    // const { customFields } = requestData;
-    // const newCustomFieldsValue = [...customFields];
-    // newCustomFieldsValue.push(fieldsValue);
-    // if (newCustomFieldsValue) {
-    //   setIsSelected(true);
-    //   setRequestData({
-    //     ...requestData,
-    //     customFields: newCustomFieldsValue,
-    //   });
-    //   setInputValues("");
-    // }
   };
 
   // creates collection with uploading img and custom fields
@@ -190,14 +163,18 @@ const CreateCollection = (props) => {
             />
           </Form.Group>
           {isSelected ? (
-            <CustomFields
-              fields={requestData.customFieldsDescription}
-              handleAddCustomFieldValue={handleAddCustomFieldValue}
-            />
-          ) : null}
+            <Alert variant="success">
+              <TiTick />
+              Custom field added
+            </Alert>
+          ) : // <CustomFields
+          //   fields={requestData.customFieldsDescription}
+          //   handleAddCustomFieldValue={handleAddCustomFieldValue}
+          // />
+          null}
           <AddCustomFields
             handleAddCustomField={handleAddCustomField}
-            fields={requestData.customFields}
+            fields={props.customFields}
           />
           <Button
             variant="success"

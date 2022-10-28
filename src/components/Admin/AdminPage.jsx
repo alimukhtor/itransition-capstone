@@ -22,6 +22,8 @@ const AdminPage = ({
   collections,
   setCollections,
   fetchAllCollections,
+  customFields,
+  setCustomFields,
   t
 }) => {
   const [users, setUsers] = useState([]);
@@ -137,6 +139,8 @@ const AdminPage = ({
                 setCollections={setCollections}
                 collections={collections}
                 fetchAllCollections={fetchAllCollections}
+                customFields={customFields}
+                setCustomFields={setCustomFields}
               />
               <Nav.Item>
                 {userRole === "Admin" ? (
