@@ -6,6 +6,7 @@ import { FaUserCircle } from "react-icons/fa";
 import { GrEdit } from "react-icons/gr";
 import { UpdateSingleCollection } from "./UpdateSingleCollection";
 import { ToastContainer, toast } from "react-toastify";
+import ReactMarkdown from "react-markdown";
 
 const Collections = ({
   setUserNotAllowed,
@@ -93,7 +94,12 @@ const Collections = ({
                   userPermission={userPermission}
                 />
                 <Card.Title className="title">{collection.name}</Card.Title>
-                <Card.Text className="text">{collection.description}</Card.Text>
+                <Card.Text className="text">
+                  {" "}
+                  <ReactMarkdown>
+                    {collection.description}
+                  </ReactMarkdown>
+                </Card.Text>
                 <div className="d-flex justify-content-center">
                   <div className="user">
                     <span>

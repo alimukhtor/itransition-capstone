@@ -46,7 +46,6 @@ const SingleCollection = ({
   const toggleShowComment = () => setShowCommentSection(!showCommentSection);
   const { collectionId } = useParams();
   const token = window.localStorage.getItem("token");
-  const userId = window.localStorage.getItem("userId");
   useEffect(() => {
     fetchSingleCollection();
   }, []);

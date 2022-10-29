@@ -4,11 +4,14 @@ import { AddCustomFields } from "../customfields/AddCustomFields";
 import { TiTick } from "react-icons/ti";
 import { ImCancelCircle } from "react-icons/im";
 import { BiBookAdd } from "react-icons/bi";
+import ReactMarkdown from "react-markdown";
+import "../../../App.css";
 
 const CreateCollection = (props) => {
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
   const [image, setImage] = useState(null);
+  const [markdownCheck, setMarkdownCheck] = useState(false);
   const [isSelected, setIsSelected] = useState(false);
   const [isCollectionCreated, setIsCollectionCreated] = useState(false);
   const [requestData, setRequestData] = useState({
@@ -16,12 +19,6 @@ const CreateCollection = (props) => {
     topic: "",
     description: "",
     owner: userId,
-    // customFieldsDescription: [
-    // {
-    //   title:"",
-    //   type:""
-    // }
-    // ],
   });
 
   // handles controlled inputs and sets object keys and values
@@ -125,21 +122,34 @@ const CreateCollection = (props) => {
               }}
             />
           </Form.Group>
+          <Form.Group className="mt-2">
+            <Form.Check
+              type="checkbox"
+              label="Support Markdown"
+              value={markdownCheck}
+              onChange={(e) => setMarkdownCheck(e.target.checked)}
+            />
+          </Form.Group>
           <Form.Group>
-            <Form.Label>Description</Form.Label>
             <Form.Control
-              type="textarea"
-              className="rounded-pill"
-              placeholder="Description"
+              as="textarea"
+              rows={3}
+              className="my-2"
               value={requestData.description}
               onChange={(e) => {
                 handleInput("description", e.target.value);
               }}
             />
           </Form.Group>
+          {markdownCheck ? (
+            <ReactMarkdown className="markdown">
+              {requestData.description}
+            </ReactMarkdown>
+          ) : null}
           <Form.Group>
             <Form.Label>Topic</Form.Label>
             <Form.Control
+              autoFocus
               type="text"
               className="rounded-pill"
               placeholder="Topic"

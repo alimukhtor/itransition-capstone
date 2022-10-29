@@ -1,4 +1,4 @@
-import { Card, Container, Form, Row, Toast } from "react-bootstrap";
+import { Card, Col, Container, Form, Row, Toast } from "react-bootstrap";
 import Collections from "./Admin/collections/Collections";
 import { GoComment } from "react-icons/go";
 import { AiOutlineLike } from "react-icons/ai";
@@ -21,7 +21,8 @@ export const HomePage = ({
       <Row>
         {searchQueryFound ? (
           searchedResult.map((item) => (
-            <Card className="card border-0 h-100">
+            <Col xs={12} md={6} lg={2} key={item._id} className="p-4">
+            <Card className="card">
               <Card.Img variant="top" src={item.image} className="card_img" />
               <Card.Body className="card_body">
                 <Card.Title className="title">{item.name}</Card.Title>
@@ -43,6 +44,7 @@ export const HomePage = ({
                 </div>
               </Card.Body>
             </Card>
+            </Col>
           ))
         ) : (
           <Collections
