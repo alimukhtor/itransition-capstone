@@ -1,8 +1,8 @@
+import "../../../App.css";
 import { useState } from "react";
 import { Alert, Button, Form } from "react-bootstrap";
 import { AiFillWarning } from "react-icons/ai";
-import "../../../App.css";
-
+import { FiPlusCircle } from "react-icons/fi";
 const LIMIT_CUSTOM_FIELDS = 3;
 
 export const AddCustomFields = ({
@@ -40,12 +40,12 @@ export const AddCustomFields = ({
     <div>
       <Button
         variant="info"
-        className="btn mt-2"
+        className="btn mt-2 rounded-pill"
         onClick={() => {
           setShowFormInputs(true);
         }}
       >
-        +
+        <FiPlusCircle/> Add custom field
       </Button>
       {showFormInputs && (
         <Form>

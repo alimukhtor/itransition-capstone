@@ -1,9 +1,17 @@
 import { useState } from "react";
-import { Alert, Button, Col, Container, Form, Row, Spinner } from "react-bootstrap";
+import {
+  Alert,
+  Button,
+  Col,
+  Container,
+  Form,
+  Row,
+  Spinner,
+} from "react-bootstrap";
 import { MdCancel } from "react-icons/md";
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebook } from "react-icons/fa";
-import { FaTwitter } from "react-icons/fa";
+import { BsGithub } from "react-icons/bs";
 import { Link, useNavigate } from "react-router-dom";
 const Registration = () => {
   const navigate = useNavigate();
@@ -35,12 +43,11 @@ const Registration = () => {
     if (response.status === 409) {
       setEmailExist(true);
     } else if (response.status === 204) {
-      setIsRegistered(true)
-      setTimeout(()=> {
+      setIsRegistered(true);
+      setTimeout(() => {
         navigate("/login");
-
-      }, 1000)
-    } 
+      }, 1000);
+    }
   };
   return (
     <Container>
@@ -52,11 +59,10 @@ const Registration = () => {
             </Alert>
           ) : isRegistered ? (
             <Alert variant="danger" className="rounded-pill mb-5">
-              <Spinner animation="grow" variant="success" /> Successfully registered!
-              Wait a sec!
+              <Spinner animation="grow" variant="success" /> Successfully
+              registered! Wait a sec!
             </Alert>
-          ) : null
-          }
+          ) : null}
           <Form className="form" onSubmit={handleSubmit}>
             <h3>Create an account</h3>
             <Form.Group className="form-group">
@@ -97,19 +103,25 @@ const Registration = () => {
               Sign Up
             </Button>
             <span>
-                ______________________Or continue with______________________
-              </span>
-              <div
-                className="d-flex justify-content-center"
-                style={{ fontSize: "35px", cursor: "pointer" }}
-              >
-                <a href="${window.remote_url}/users/googleLogin">
-                  <FcGoogle />
-                </a>
-                <a><FaFacebook className="mx-4" /></a>
-                <a><FaTwitter className="text-info" /></a>
-              </div>
-            <p className="mt-3">Already have an account? <Link to="/login">Sign in</Link></p>
+              ______________________Or continue with______________________
+            </span>
+            <div
+              className="d-flex justify-content-center"
+              style={{ fontSize: "35px", cursor: "pointer" }}
+            >
+              <a href={`${window.remote_url}/users/googleLogin`}>
+                <FcGoogle />
+              </a>
+              <a href={`${window.remote_url}/users/facebookLogin`}>
+                <FaFacebook className="mx-4 text-primary" />
+              </a>
+              <a href={`${window.remote_url}/users/githubLogin`}>
+                <BsGithub className="text-light" />
+              </a>
+            </div>
+            <p className="mt-3">
+              Already have an account? <Link to="/login">Sign in</Link>
+            </p>
           </Form>
         </Col>
       </Row>

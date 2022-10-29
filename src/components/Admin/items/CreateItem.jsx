@@ -123,30 +123,6 @@ export const CreateItem = (props) => {
               }}
             />
           </Form.Group>
-          <Form.Group>
-            <Form.Label>Description</Form.Label>
-            <Form.Control
-              type="textarea"
-              className="rounded-pill"
-              placeholder="Description"
-              value={newItemData.description}
-              onChange={(e) => {
-                handleInput("description", e.target.value);
-              }}
-            />
-          </Form.Group>
-          <Form.Group>
-            <Form.Label>Topic</Form.Label>
-            <Form.Control
-              type="text"
-              className="rounded-pill"
-              placeholder="Topic"
-              value={newItemData.topic}
-              onChange={(e) => {
-                handleInput("topic", e.target.value);
-              }}
-            />
-          </Form.Group>
           <Form.Label className="mb-n5 mt-1">Enter tag</Form.Label>
           <TagsInput
             items={props.items}
@@ -167,18 +143,22 @@ export const CreateItem = (props) => {
               }}
             />
           </Form.Group>
-          <CustomFields
-            fields={props.customFields}
-            handleAddCustomFieldValue={handleAddCustomFieldValue}
-          />
-          <Button
-            variant="success"
-            type="submit"
-            className="mt-3 rounded-pill text-center"
-            onClick={createItem}
-          >
-            Submit
-          </Button>
+          <div className="d-flex flex-column">
+            {props.customFields.length !== 0  ? (
+              <CustomFields
+                fields={props.customFields}
+                handleAddCustomFieldValue={handleAddCustomFieldValue}
+              />
+            ) : null}
+            <Button
+              variant="success"
+              type="submit"
+              className="mt-3 rounded-pill text-center"
+              onClick={createItem}
+            >
+              Create
+            </Button>
+          </div>
         </Form>
       </Modal.Body>
     </Modal>

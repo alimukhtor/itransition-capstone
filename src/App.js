@@ -38,22 +38,23 @@ const onChange = (eventKey) => {
 };
 // deployed app url
 window.remote_url = "https://itransition-capstone.herokuapp.com";
-
 function App() {
-  const [ customFields, setCustomFields] = useState([])
+  const [customFields, setCustomFields] = useState([]);
   const { t } = useTranslation();
   const [theme, setTheme] = useState("dark");
   const [searchQuery, setSearchQuery] = useState("");
-  const [searchQueryNotFound, setSearchQueryNotFound] = useState(false)
+  const [searchQueryFound, setSearchQueryFound] = useState(false);
+  const [searchedResult, setSearchedResult] = useState([]);
   const [userProfileModal, setUserProfileModal] = useState(false);
   const [loggedinUser, setLoggedinUser] = useState([]);
   const [username, setUsername] = useState("");
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
   const [userNotAllowed, setUserNotAllowed] = useState(false);
   const [collections, setCollections] = useState([]);
-  const navigate = useNavigate();
 
+  const navigate = useNavigate();
   const token = localStorage.getItem("token");
+
   useEffect(() => {
     const username = localStorage.getItem("Username");
     if (username) {
@@ -62,6 +63,10 @@ function App() {
     }
   }, []);
 
+  useEffect(() => {
+    fetchAllCollections();
+  }, []);
+  
   // toast for unauthorized users
   const userPermission = () => {
     toast.error("You are not allowed. Please register first", {
@@ -79,19 +84,18 @@ function App() {
       const response = await fetch(
         `${window.remote_url}/items/search?title=${searchQuery}`
       );
-      const data = await response.json();
-      if(data.length === 0){
-        setSearchQueryNotFound(true)
+      if (response.ok) {
+        setSearchQueryFound(true);
+        const data = await response.json();
+        setSearchedResult(data);
+        if (data.length === 0) {
+          setSearchQueryFound(false);
+        }
       }
-      console.log("SERACHED RES",data);
     } catch (error) {
       console.log(error);
     }
   };
-
-  useEffect(() => {
-    fetchAllCollections();
-  }, []);
 
   // gets all collections from db
   const fetchAllCollections = async () => {
@@ -218,7 +222,8 @@ function App() {
                   ToastContainer={ToastContainer}
                   setCollections={setCollections}
                   collections={collections}
-                  searchQueryNotFound={searchQueryNotFound}
+                  searchQueryFound={searchQueryFound}
+                  searchedResult={searchedResult}
                 />
               }
             />

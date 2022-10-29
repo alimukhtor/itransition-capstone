@@ -24,7 +24,7 @@ const AdminPage = ({
   fetchAllCollections,
   customFields,
   setCustomFields,
-  t
+  t,
 }) => {
   const [users, setUsers] = useState([]);
   const [userCollections, setUserCollections] = useState([]);
@@ -48,7 +48,6 @@ const AdminPage = ({
       setUserCollections(collection);
     }
   };
-
 
   // gets all users from db
   const fetchUsers = async () => {
@@ -160,7 +159,12 @@ const AdminPage = ({
             {collectionNotFound ? (
               <h3 className="d-flex justify-content-center text-danger mt-4">
                 <AiFillWarning className="text-danger mt-1" /> You do not have
-                collections yet. Create <Link><p className="ml-1" onClick={showModal}>here</p></Link>
+                collections yet. Create{" "}
+                <Link>
+                  <p className="ml-1" onClick={showModal}>
+                    here
+                  </p>
+                </Link>
               </h3>
             ) : null}
             <Tab.Content>

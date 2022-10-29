@@ -1,4 +1,4 @@
-.App{
+.App {
   margin: 0;
   padding: 0;
   height: 100vh;
@@ -41,7 +41,7 @@
   margin-right: 5px;
 }
 
-.lang-dropdown{
+.lang-dropdown {
   background-color: #30303f;
 }
 
@@ -97,12 +97,11 @@
   height: 100%;
   margin-left: 0 !important;
   margin-right: 0 !important;
-
 }
-/* 
-body{
+
+body {
   overflow: hidden;
-} */
+}
 
 .main-page {
   height: 100%;
@@ -132,9 +131,14 @@ body{
 
 /* COLLECTIONS STYLE */
 
-.card {
+#light .card {
   border: none;
-  transition: box-shadow 0.2s;
+  transition: ease-out 0.6s;
+}
+
+#dark .card {
+  border: none;
+  transition: box-shadow 0.9s;
 }
 
 .card:hover {
@@ -148,6 +152,7 @@ body{
 .card_body {
   text-align: center;
   position: relative;
+  background-color: #f6f4f0;
 }
 
 .card_img {
@@ -174,7 +179,7 @@ body{
   background-color: #5e76bf;
 }
 
-.edit-collection{
+.edit-collection {
   position: absolute;
   font-size: 20px;
   cursor: pointer;
@@ -185,10 +190,9 @@ body{
   border-radius: 40px;
 }
 
-.edit-collection:hover{
+.edit-collection:hover {
   background-color: #3f8ea6;
   transition: ease-out 0.3s;
-  
 }
 .title {
   font-size: 20px !important;
@@ -228,7 +232,7 @@ body{
   gap: 10px;
 }
 
-.card_btn button:first-child{
+.card_btn button:first-child {
   margin-top: 12px;
   margin-left: auto;
   border-radius: 15px;
@@ -238,7 +242,7 @@ body{
   height: 30px;
 }
 
-.card_btn button:last-child{
+.card_btn button:last-child {
   margin-top: 12px;
   margin-left: auto;
   border-radius: 15px;
@@ -249,30 +253,30 @@ body{
 }
 /* ITEMS STYLE */
 
-.item-section{
+.item-section {
   display: flex;
   flex-direction: column;
 }
 
-.item_btns{
+.item_btns {
   display: flex;
   margin-top: 5px;
   justify-content: space-between;
 }
 
-.item_btns button:first-child{
+.item_btns button:first-child {
   border-radius: 15px;
   background-color: red;
   border: none;
 }
 
-.item_btns button:last-child{
+.item_btns button:last-child {
   border-radius: 15px;
   background-color: #5e76bf;
   border: none;
 }
 
-.item-section div:first-child{
+.item-section div:first-child {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -281,7 +285,7 @@ body{
   cursor: pointer;
 }
 
-.item-section div:first-child span:first-child{
+.item-section div:first-child span:first-child {
   padding: 3px;
   width: 60px;
   border-radius: 8px;
@@ -291,7 +295,7 @@ body{
   background-color: rgb(204, 197, 197);
 }
 
-.item-section div:first-child span:last-child{
+.item-section div:first-child span:last-child {
   padding: 3px;
   width: 60px;
   border-radius: 8px;
@@ -304,7 +308,6 @@ body{
 .comment-toast {
   flex-basis: auto !important;
   width: 100%;
-  
 }
 
 /* SINGLE ITEM STYLE */
@@ -319,35 +322,35 @@ body{
   color: #5e76bf;
 }
 
-.comment-owner{
+.comment-owner {
   display: grid;
   grid-template-columns: 1fr 2fr 1fr;
   margin: 10px;
 }
 
-.comment-owner span:last-child{
+.comment-owner span:last-child {
   color: red;
   font-size: 20px;
 }
 
-.comment-owner:hover span:last-child{
+.comment-owner:hover span:last-child {
   color: red;
   font-size: 30px;
   transition: ease-out 0.5s;
 }
 
-.comment-owner:hover{
+.comment-owner:hover {
   border-radius: 15px;
-  background-color: rgb(190, 190, 190);;
+  background-color: rgb(190, 190, 190);
 }
 
-.comment-owner_info p:first-child{
+.comment-owner_info p:first-child {
   text-align: left;
 }
 
 /* USER LIST STYLE */
 
-.toolbar-btns{
+.toolbar-btns {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
@@ -356,11 +359,11 @@ body{
 }
 
 /* tags style */
-.tagInputFieldClass{
+.tagInputFieldClass {
   padding: 5px;
   border: 1px solid grey;
   width: 300px;
 }
-.tagInputClass{
+.tagInputClass {
   margin-top: 10px;
 }

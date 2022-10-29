@@ -17,14 +17,13 @@ const CreateCollection = (props) => {
     description: "",
     owner: userId,
     // customFieldsDescription: [
-      // {
-      //   title:"",
-      //   type:""
-      // }
+    // {
+    //   title:"",
+    //   type:""
+    // }
     // ],
   });
-  
-  
+
   // handles controlled inputs and sets object keys and values
   const handleInput = (fieldName, value) => {
     setRequestData({
@@ -109,7 +108,7 @@ const CreateCollection = (props) => {
       <Modal.Body>
         <Form onSubmit={handleResetForm}>
           {isCollectionCreated ? (
-            <Alert variant="success">
+            <Alert variant="success" className="rounded-pill">
               <TiTick />
               Collection successfully created
             </Alert>
@@ -163,15 +162,11 @@ const CreateCollection = (props) => {
             />
           </Form.Group>
           {isSelected ? (
-            <Alert variant="success">
+            <Alert variant="success" className="rounded-pill mt-2">
               <TiTick />
-              Custom field added
+              Added successfully
             </Alert>
-          ) : // <CustomFields
-          //   fields={requestData.customFieldsDescription}
-          //   handleAddCustomFieldValue={handleAddCustomFieldValue}
-          // />
-          null}
+          ) : null}
           <AddCustomFields
             handleAddCustomField={handleAddCustomField}
             fields={props.customFields}
@@ -182,7 +177,7 @@ const CreateCollection = (props) => {
             className="mt-3 rounded-pill text-center"
             onClick={createCollection}
           >
-            Submit
+            Create
           </Button>
         </Form>
       </Modal.Body>

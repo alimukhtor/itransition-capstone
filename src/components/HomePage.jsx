@@ -1,7 +1,9 @@
-import { Alert, Container, Row } from "react-bootstrap";
+import { Card, Container, Form, Row, Toast } from "react-bootstrap";
 import Collections from "./Admin/collections/Collections";
-import { MdCancel } from "react-icons/md";
-import { ImSad } from "react-icons/im";
+import { GoComment } from "react-icons/go";
+import { AiOutlineLike } from "react-icons/ai";
+import { useNavigate } from "react-router-dom";
+import { FetchComments } from "./Admin/items/FetchComments";
 export const HomePage = ({
   setUserNotAllowed,
   userNotAllowed,
@@ -9,15 +11,39 @@ export const HomePage = ({
   ToastContainer,
   collections,
   setCollections,
-  searchQueryNotFound,
+  searchQueryFound,
+  searchedResult,
 }) => {
+
+  const navigate = useNavigate()
   return (
     <Container fluid>
       <Row>
-        {searchQueryNotFound ? (
-          <Alert variant="danger" className="rounded-pill mb-5">
-            <MdCancel /> Item not not found <ImSad />
-          </Alert>
+        {searchQueryFound ? (
+          searchedResult.map((item) => (
+            <Card className="card border-0 h-100">
+              <Card.Img variant="top" src={item.image} className="card_img" />
+              <Card.Body className="card_body">
+                <Card.Title className="title">{item.name}</Card.Title>
+                <div className="item-section">
+                  <div>
+                    <span>
+                      <AiOutlineLike />
+                    </span>
+                    <span>
+                      <GoComment />
+                    </span>
+                  </div>
+                  <div className="item_btns">
+                    <button disabled={true}>delete</button>
+                    <button onClick={() => navigate(`/singleItem/${item._id}`)}>
+                      view
+                    </button>
+                  </div>
+                </div>
+              </Card.Body>
+            </Card>
+          ))
         ) : (
           <Collections
             setUserNotAllowed={setUserNotAllowed}

@@ -12,8 +12,8 @@ import {
 } from "react-bootstrap";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { GoComment } from "react-icons/go";
-import { AiFillWarning } from "react-icons/ai";
 import { AiOutlineLike } from "react-icons/ai";
+import { AiFillWarning } from "react-icons/ai";
 import { AiFillLike } from "react-icons/ai";
 import { FiPlusCircle } from "react-icons/fi";
 import { FetchComments } from "../items/FetchComments";
@@ -81,19 +81,34 @@ const SingleCollection = ({
 
   // adds like by authorized user
   const addLike = async (itemId) => {
-    const response = await fetch(`${window.remote_url}/items/${itemId}/like`, {
-      method: "PUT",
-      body: JSON.stringify({ userId }),
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + token,
-      },
-    });
-    const data = await response;
-    console.log(data);
+    const response = await fetch(
+      `${window.remote_url}/items/${itemId}/add-like`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+      }
+    );
     if (response.ok) {
       setIsLiked(true);
-    } else {
+    }
+  };
+
+  // removes like by authorized user
+  const removeLike = async (itemId) => {
+    const response = await fetch(
+      `${window.remote_url}/items/${itemId}/remove-like`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+      }
+    );
+    if (response.ok) {
       setIsLiked(false);
     }
   };
@@ -150,17 +165,14 @@ const SingleCollection = ({
           </Button>
         ) : null}
       </Row>
+      <strong>
+        <h1 className="text-info">Items</h1>
+      </strong>
       <Row className="p-5 justify-content-center text-center">
         {itemNotFound ? (
           <h1 className="text-info d-flex">
-            <AiFillWarning className="text-danger" />
-            Collection does not have item.{" "}
-            {isUserLoggedIn ? (
-              <>
-                <p className="mr-2">Let's create</p>
-                <Link onClick={() => setModalShow(true)}>here</Link>
-              </>
-            ) : null}
+            <AiFillWarning className="text-danger mt-2" />
+            Collection does not have item yet!
           </h1>
         ) : (
           <>
@@ -173,7 +185,6 @@ const SingleCollection = ({
                     className="card_img"
                   />
                   <Card.Body className="card_body">
-                    <span className="tag tag-teal">{item.topic}</span>
                     <span
                       className="edit-collection"
                       onClick={() => {
@@ -195,10 +206,13 @@ const SingleCollection = ({
                       userPermission={userPermission}
                     />
                     <Card.Title className="title">{item.name}</Card.Title>
-                    <Card.Text className="text">{item.description}</Card.Text>
                     <div className="item-section">
                       <div>
-                        <span onClick={() => addLike(item._id)}>
+                        <span
+                          onClick={() =>
+                            isLiked ? removeLike(item._id) : addLike(item._id) 
+                          }
+                        >
                           {isLiked ? (
                             <AiFillLike className="text-danger" />
                           ) : (

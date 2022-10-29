@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button, Form } from "react-bootstrap";
-
+import { CgPushChevronUpR } from "react-icons/cg";
 export const CustomFields = ({ fields, handleAddCustomFieldValue }) => {
   const [inputValues, setInputValues] = useState({
     textarea: "",
@@ -9,12 +9,9 @@ export const CustomFields = ({ fields, handleAddCustomFieldValue }) => {
     checked: false,
     date: "",
   });
-  // i should save the values of your custom inputs here
-  // i should save them in an array
-  //
-
-   // handles controlled inputs and sets object keys and values
-   const handleInput = (fieldName, value) => {
+  
+  // handles controlled inputs and sets object keys and values
+  const handleInput = (fieldName, value) => {
     setInputValues({
       ...inputValues,
       [fieldName]: value,
@@ -25,62 +22,89 @@ export const CustomFields = ({ fields, handleAddCustomFieldValue }) => {
     <>
       {fields?.map((field, i) => (
         <Form.Group key={i}>
-          {field.type === "textarea" ? (
-            <>
-              <Form.Label>{field.title}</Form.Label>
-              <Form.Control
-                as="textarea"
-                rows={3}
-                type={field.type}
-                value={inputValues.textarea}
-                onChange={(e) => {handleInput("textarea", e.target.value)}}
-              />
-            </>
-          ) : field.type === "checkbox" ? (
-            <>
-              <Form.Label>{field.title}</Form.Label>
-              <Form.Control
-                type={field.type}
-                className="rounded-pill"
-                checked={inputValues.checked}
-                onChange={(e) => {handleInput("checked", e.target.checked)}}
-              />
-            </>
-          ) : field.type === "date" ? (
-            <>
-              <Form.Label>{field.title}</Form.Label>
-              <Form.Control
-                type={field.type}
-                className="rounded-pill"
-                value={inputValues.date}
-                onChange={(e) => {handleInput("date", e.target.value)}}
-              />
-            </>
-          ) : field.type === "number" ? (
-            <>
-              <Form.Label>{field.title}</Form.Label>
-              <Form.Control
-                type={field.type}
-                className="rounded-pill"
-                value={inputValues.number}
-                onChange={(e) => {handleInput("number", e.target.value)}}
-              />
-            </>
-          ) : (
-            <>
-              <Form.Label>{field.title}</Form.Label>
-              <Form.Control
-                type={field.type}
-                className="rounded-pill"
-                value={inputValues.text}
-                onChange={(e) => {handleInput("text", e.target.value)}}
-              />
-            </>
-          )}
+          {(() => {
+            switch (field.type) {
+              case "textarea":
+                return (
+                  <>
+                    <Form.Label>{field.title}</Form.Label>
+                    <Form.Control
+                      as="textarea"
+                      rows={3}
+                      type={field.type}
+                      value={inputValues.textarea}
+                      onChange={(e) => {
+                        handleInput("textarea", e.target.value);
+                      }}
+                    />
+                  </>
+                );
+              case "checkbox":
+                return (
+                  <>
+                    <Form.Label>{field.title}</Form.Label>
+                    <Form.Control
+                      type={field.type}
+                      className="rounded-pill"
+                      checked={inputValues.checked}
+                      onChange={(e) => {
+                        handleInput("checked", e.target.checked);
+                      }}
+                    />
+                  </>
+                );
+              case "date":
+                return (
+                  <>
+                    <Form.Label>{field.title}</Form.Label>
+                    <Form.Control
+                      type={field.type}
+                      className="rounded-pill"
+                      value={inputValues.date}
+                      onChange={(e) => {
+                        handleInput("date", e.target.value);
+                      }}
+                    />
+                  </>
+                );
+              case "number":
+                return (
+                  <>
+                    <Form.Label>{field.title}</Form.Label>
+                    <Form.Control
+                      type={field.type}
+                      className="rounded-pill"
+                      value={inputValues.number}
+                      onChange={(e) => {
+                        handleInput("number", e.target.value);
+                      }}
+                    />
+                  </>
+                );
+              default:
+                return (
+                  <>
+                    <Form.Label>{field.title}</Form.Label>
+                    <Form.Control
+                      type={field.type}
+                      className="rounded-pill"
+                      value={inputValues.text}
+                      onChange={(e) => {
+                        handleInput("text", e.target.value);
+                      }}
+                    />
+                  </>
+                );
+            }
+          })()}
         </Form.Group>
       ))}
-      <Button onClick={() => handleAddCustomFieldValue(inputValues, setInputValues)}>
-        Add
+      <Button
+        variant="info"
+        className="rounded-pill mt-2"
+        onClick={() => handleAddCustomFieldValue(inputValues, setInputValues)}
+      >
+        <CgPushChevronUpR /> Push custom fields
       </Button>
     </>
   );

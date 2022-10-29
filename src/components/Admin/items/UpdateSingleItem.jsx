@@ -11,7 +11,6 @@ export const UpdateSingleItem = ({
   fetchSingleCollection,
   userNotAllowed,
   setUserNotAllowed,
-  userPermission,
 }) => {
   const token = window.localStorage.getItem("token");
   const updateSingleItem = async (id) => {
@@ -60,36 +59,6 @@ export const UpdateSingleItem = ({
                 setSingleItem({
                   ...singleItem,
                   name: e.target.value,
-                })
-              }
-            />
-          </Form.Group>
-          <Form.Group>
-            <Form.Label>Description</Form.Label>
-            <Form.Control
-              type="textarea"
-              className="rounded-pill"
-              placeholder="Description"
-              value={singleItem?.description}
-              onChange={(e) =>
-                setSingleItem({
-                  ...singleItem,
-                  description: e.target.value,
-                })
-              }
-            />
-          </Form.Group>
-          <Form.Group>
-            <Form.Label>Topic</Form.Label>
-            <Form.Control
-              type="text"
-              className="rounded-pill"
-              placeholder="Topic"
-              value={singleItem?.topic}
-              onChange={(e) =>
-                setSingleItem({
-                  ...singleItem,
-                  topic: e.target.value,
                 })
               }
             />
