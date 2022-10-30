@@ -145,6 +145,7 @@ const AdminPage = ({
                 fetchAllCollections={fetchAllCollections}
                 customFields={customFields}
                 setCustomFields={setCustomFields}
+                translate={t}
               />
               <Nav.Item>
                 {userRole === "Admin" ? (
@@ -218,6 +219,7 @@ const AdminPage = ({
                         setCollections={setCollections}
                         collections={collections}
                         fetchAllCollections={fetchAllCollections}
+                        translate={t}
                       />
                     </Tab.Pane>
                     <Tab.Pane eventKey="third">
@@ -233,6 +235,8 @@ const AdminPage = ({
                     <MyCollections
                       userCollections={userCollections}
                       setUserCollections={setUserCollections}
+                      getMyCollections={getMyCollections}
+                      translate={t}
                     />
                   </Tab.Pane>
                 )}

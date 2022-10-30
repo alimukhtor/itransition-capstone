@@ -46,7 +46,7 @@ const UserList = ({ users, setUsers }) => {
     if (response.status === 200) {
       const data = await response.json();
       setUsers(users.filter((user) => !data.find((row) => row === user._id)));
-    } else if (response.status === 403) {
+    } else if (response.status === 401) {
       setOnlyAdmin(true);
     }
   };

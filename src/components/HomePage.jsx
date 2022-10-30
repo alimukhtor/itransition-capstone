@@ -12,6 +12,7 @@ export const HomePage = ({
   setCollections,
   searchQueryFound,
   searchedResult,
+  translate
 }) => {
 
   const navigate = useNavigate()
@@ -35,9 +36,9 @@ export const HomePage = ({
                     </span>
                   </div>
                   <div className="item_btns">
-                    <button disabled={true}>delete</button>
+                    <button disabled={true}>{translate("ItemBtn.Delete")}</button>
                     <button onClick={() => navigate(`/singleItem/${item._id}`)}>
-                      view
+                      {translate("ItemBtn.View")}
                     </button>
                   </div>
                 </div>
@@ -53,6 +54,7 @@ export const HomePage = ({
             ToastContainer={ToastContainer}
             setCollections={setCollections}
             collections={collections}
+            translate={translate}
           />
         )}
       </Row>

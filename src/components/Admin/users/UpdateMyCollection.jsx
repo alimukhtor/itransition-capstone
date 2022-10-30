@@ -1,16 +1,20 @@
-import { Button, Form, Modal } from "react-bootstrap";
+import { Alert, Button, Form, Modal } from "react-bootstrap";
 import { ImCancelCircle } from "react-icons/im";
 import { GrUpdate } from "react-icons/gr";
+import { TiTick } from "react-icons/ti";
+import { useState } from "react";
 
 export const UpdateMyCollection = ({
   showModal,
   handleCloseModal,
   singleCollection,
   setSingleCollection,
+  getMyCollections,
+  setShowModal,
+  translate
 }) => {
   const token = window.localStorage.getItem("token");
-
-  console.log("singleCollection", singleCollection);
+  const [isCollectionUpdated, setCollectionUpdated] = useState(false);
   const updateSingleCollection = async (id) => {
     const response = await fetch(`${window.remote_url}/collections/${id}`, {
       method: "PUT",
@@ -21,9 +25,12 @@ export const UpdateMyCollection = ({
       },
     });
     if (response.ok) {
-      const updatedCollection = await response.json();
-      //   setSingleCollection(updatedCollection)
-      alert("Updated");
+      setCollectionUpdated(true);
+      getMyCollections();
+      setTimeout(() => {
+        setCollectionUpdated(false);
+        setShowModal(false);
+      }, 2000);
     }
   };
 
@@ -41,13 +48,19 @@ export const UpdateMyCollection = ({
       </Modal.Header>
       <Modal.Body>
         <Form>
+          {isCollectionUpdated ? (
+            <Alert variant="success" className="rounded-pill">
+              <TiTick />
+              {translate("SuccessMsg")}
+            </Alert>
+          ) : null}
           <Form.Group>
             <Form.Label>Name</Form.Label>
             <Form.Control
               type="text"
               className="rounded-pill"
               placeholder="Name"
-              value={singleCollection.name}
+              value={singleCollection?.name}
               onChange={(e) =>
                 setSingleCollection({
                   ...singleCollection,
@@ -62,7 +75,7 @@ export const UpdateMyCollection = ({
               type="textarea"
               className="rounded-pill"
               placeholder="Description"
-              value={singleCollection.description}
+              value={singleCollection?.description}
               onChange={(e) =>
                 setSingleCollection({
                   ...singleCollection,
@@ -77,7 +90,7 @@ export const UpdateMyCollection = ({
               type="text"
               className="rounded-pill"
               placeholder="Topic"
-              value={singleCollection.topic}
+              value={singleCollection?.topic}
               onChange={(e) =>
                 setSingleCollection({
                   ...singleCollection,

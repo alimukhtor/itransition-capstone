@@ -94,7 +94,7 @@ const CreateCollection = (props) => {
       <Modal.Header>
         <Modal.Title id="contained-modal-title-vcenter" className="text-center">
           <BiBookAdd className="mb-1 text-info" />
-          Create Collection
+          {props.translate("CollectionModal.Title")}
         </Modal.Title>
         <ImCancelCircle
           onClick={props.onHide}
@@ -107,15 +107,14 @@ const CreateCollection = (props) => {
           {isCollectionCreated ? (
             <Alert variant="success" className="rounded-pill">
               <TiTick />
-              Collection successfully created
+              {props.translate("CollectionModal.SuccessMsgCreate")}
             </Alert>
           ) : null}
           <Form.Group>
-            <Form.Label>Name</Form.Label>
+            <Form.Label>{props.translate("CollectionModal.Name")}</Form.Label>
             <Form.Control
               type="text"
               className="rounded-pill"
-              placeholder="Name"
               value={requestData.name}
               onChange={(e) => {
                 handleInput("name", e.target.value);
@@ -125,17 +124,16 @@ const CreateCollection = (props) => {
           <Form.Group className="my-2">
             <Form.Check
               type="checkbox"
-              label="Support Markdown"
+              label={props.translate("CollectionModal.Markdown")}
               value={markdownCheck}
               onChange={(e) => setMarkdownCheck(e.target.checked)}
             />
           </Form.Group>
           <Form.Group>
-            <Form.Label>Description</Form.Label>
+            <Form.Label>{props.translate("CollectionModal.Description")}</Form.Label>
             <Form.Control
               as="textarea"
               rows={3}
-              className=""
               value={requestData.description}
               onChange={(e) => {
                 handleInput("description", e.target.value);
@@ -148,7 +146,7 @@ const CreateCollection = (props) => {
             </ReactMarkdown>
           ) : null}
           <Form.Group>
-            <Form.Label>Topic</Form.Label>
+            <Form.Label>{props.translate("CollectionModal.Topic")}</Form.Label>
             <Form.Control
               as="select"
               className="rounded-pill"
@@ -165,7 +163,7 @@ const CreateCollection = (props) => {
             </Form.Control>
           </Form.Group>
           <Form.Group>
-            <Form.Label>Upload an image</Form.Label>
+            <Form.Label>{props.translate("CollectionModal.UploadImg")}</Form.Label>
             <Form.Control
               type="file"
               className="rounded-pill"
@@ -179,12 +177,13 @@ const CreateCollection = (props) => {
           {isSelected ? (
             <Alert variant="success" className="rounded-pill mt-2">
               <TiTick />
-              Added successfully
+              {props.translate("CollectionModal.SuccessMsgCustomField")}
             </Alert>
           ) : null}
           <AddCustomFields
             handleAddCustomField={handleAddCustomField}
             fields={props.customFields}
+            translate={props.translate}
           />
           <Button
             variant="success"
@@ -192,7 +191,7 @@ const CreateCollection = (props) => {
             className="mt-3 rounded-pill text-center"
             onClick={createCollection}
           >
-            Create
+            {props.translate("CollectionModal.Create")}
           </Button>
         </Form>
       </Modal.Body>

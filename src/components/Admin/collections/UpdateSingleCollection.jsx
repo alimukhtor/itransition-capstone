@@ -15,6 +15,7 @@ export const UpdateSingleCollection = ({
   userPermission,
   userNotAllowed,
   setShowModal,
+  translate
 }) => {
   const [isCollectionUpdated, setCollectionUpdated] = useState(false);
   const token = window.localStorage.getItem("token");
@@ -61,12 +62,12 @@ export const UpdateSingleCollection = ({
           {isCollectionUpdated ? (
             <Alert variant="success" className="rounded-pill">
               <TiTick />
-              Collection successfully updated
+              {translate("SuccessMsg")}
             </Alert>
           ) : userNotAllowed ? (
             <Alert variant="danger" className="rounded-pill">
-              <AiFillWarning /> You are not allowed. Please register{" "}
-              <Link to="/register">here</Link>
+              <AiFillWarning /> {translate("UserPermission")}
+              <Link to="/register">{translate("ClickToRegister")}</Link>
             </Alert>
           ) : null}
           <Form.Group>

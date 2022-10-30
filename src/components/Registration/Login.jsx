@@ -47,6 +47,7 @@ const Login = ({ setIsUserLoggedIn, setUsername }) => {
       const { accessToken } = data;
       localStorage.setItem("token", accessToken);
       localStorage.setItem("userId", data.user._id);
+      localStorage.setItem("Username", data.user.username);
       if (
         (response.status === 200 && data.user.role === "admin") ||
         data.user.role === "user"

@@ -29,6 +29,7 @@ const SingleCollection = ({
   isUserLoggedIn,
   setCustomFields,
   customFields,
+  translate
 }) => {
   const [items, setItems] = useState([]);
   const [tags, setTags] = useState([]);
@@ -46,6 +47,7 @@ const SingleCollection = ({
   const toggleShowComment = () => setShowCommentSection(!showCommentSection);
   const { collectionId } = useParams();
   const token = window.localStorage.getItem("token");
+
   useEffect(() => {
     fetchSingleCollection();
   }, []);
@@ -150,7 +152,7 @@ const SingleCollection = ({
       {userNotAllowed ? (
         <Alert variant="danger" className="rounded-pill text-center">
           <AiFillWarning />
-          You are not allowed. Please register <Link to="/register">here</Link>
+         {translate("UserPermission")} <Link to="/register">here</Link>
         </Alert>
       ) : null}
       <Row className="p-3">
@@ -160,18 +162,18 @@ const SingleCollection = ({
             variant="success"
             className="ml-auto rounded-pill"
           >
-            <FiPlusCircle style={{ fontSize: "25px" }} /> Create item
+            <FiPlusCircle style={{ fontSize: "25px" }} /> {translate("ItemModal.Title")}
           </Button>
         ) : null}
       </Row>
       <strong>
-        <h1 className="text-info">Items</h1>
+        <h1 className="text-info">{translate("ItemSectionTitle")}</h1>
       </strong>
       <Row className="p-5 justify-content-center text-center">
         {itemNotFound ? (
           <h1 className="text-info d-flex">
             <AiFillWarning className="text-danger mt-2" />
-            Collection does not have item yet!
+            {translate("NoItem")}
           </h1>
         ) : (
           <>
@@ -204,7 +206,7 @@ const SingleCollection = ({
                       userNotAllowed={userNotAllowed}
                       userPermission={userPermission}
                     />
-                    <Card.Title className="title">{item.name}</Card.Title>
+                    <Card.Title className="title mt-2">{item.name}</Card.Title>
                     <div className="item-section">
                       <div>
                         <span
@@ -224,12 +226,12 @@ const SingleCollection = ({
                       </div>
                       <div className="item_btns">
                         <button onClick={() => deleteItem(item._id)}>
-                          delete
+                        {translate("ItemBtn.Delete")}
                         </button>
                         <button
                           onClick={() => navigate(`/singleItem/${item._id}`)}
                         >
-                          view
+                          {translate("ItemBtn.View")}
                         </button>
                       </div>
                     </div>
@@ -275,6 +277,7 @@ const SingleCollection = ({
           setInputTag={setTags}
           inputTag={tags}
           customFields={customFields}
+          translate={translate}
         />
       </Row>
     </Container>

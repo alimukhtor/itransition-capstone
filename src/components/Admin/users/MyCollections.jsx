@@ -6,7 +6,12 @@ import { GrEdit } from "react-icons/gr";
 import { UpdateMyCollection } from "./UpdateMyCollection";
 import { ToastContainer, toast } from "react-toastify";
 
-export const MyCollections = ({userCollections, setUserCollections}) => {
+export const MyCollections = ({
+  userCollections,
+  setUserCollections,
+  getMyCollections,
+  translate
+}) => {
   const [singleCollection, setSingleCollection] = useState();
   const [isCollectionDeleted, setIsCollectionDeleted] = useState(false);
   const token = window.localStorage.getItem("token");
@@ -65,12 +70,16 @@ export const MyCollections = ({userCollections, setUserCollections}) => {
                 >
                   <GrEdit />
                 </span>
-                {/* <UpdateMyCollection showModal={showModal}
+                <UpdateMyCollection
+                  showModal={showModal}
+                  setShowModal={setShowModal}
                   handleCloseModal={handleCloseModal}
                   setSingleCollection={setSingleCollection}
                   singleCollection={singleCollection}
-                  /> */}
-                <Card.Title className="title">{collection.name}</Card.Title>
+                  getMyCollections={getMyCollections}
+                  translate={translate}
+                />
+                <Card.Title className="title mt-2">{collection.name}</Card.Title>
                 <Card.Text className="text">{collection.description}</Card.Text>
                 <div className="d-flex justify-content-center">
                   <div className="card_btn">

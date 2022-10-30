@@ -8,6 +8,7 @@ const LIMIT_CUSTOM_FIELDS = 3;
 export const AddCustomFields = ({
   handleAddCustomField,
   fields,
+  translate
 }) => {
   const [showFormInputs, setShowFormInputs] = useState(false);
   const [customInputTypeLimit, setCustomInputTypeLimit] = useState(false);
@@ -45,7 +46,7 @@ export const AddCustomFields = ({
           setShowFormInputs(true);
         }}
       >
-        <FiPlusCircle/> Add custom field
+        <FiPlusCircle/> {translate("CollectionModal.AddCustomField")}
       </Button>
       {showFormInputs && (
         <Form>

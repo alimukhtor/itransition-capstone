@@ -16,6 +16,7 @@ const Collections = ({
   collections,
   setCollections,
   fetchAllCollections,
+  translate
 }) => {
   const [singleCollection, setSingleCollection] = useState(null);
   const token = window.localStorage.getItem("token");
@@ -65,7 +66,7 @@ const Collections = ({
 
   return (
     <>
-      <ToastContainer />
+      { userNotAllowed ? <ToastContainer /> : null}
       <Row>
         {collections.map((collection) => (
           <Col xs={12} md={6} lg={3} key={collection._id} className="p-4">
@@ -92,6 +93,7 @@ const Collections = ({
                   setUserNotAllowed={setUserNotAllowed}
                   userNotAllowed={userNotAllowed}
                   userPermission={userPermission}
+                  translate={translate}
                 />
                 <Card.Title className="title">{collection.name}</Card.Title>
                 <Card.Text className="text">
@@ -118,7 +120,7 @@ const Collections = ({
                         navigate(`/singleCollection/${collection._id}`)
                       }
                     >
-                      view
+                      {translate("CollectionBtn.View")}
                     </button>
                     <button
                       variant="danger"
@@ -130,7 +132,7 @@ const Collections = ({
                           : deleteCollection(collection._id);
                       }}
                     >
-                      delete
+                      {translate("CollectionBtn.Delete")}
                     </button>
                   </div>
                 </div>

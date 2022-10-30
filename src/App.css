@@ -255,7 +255,7 @@ body {
   border-radius: 15px;
   background-color: #5e76bf;
   border: none;
-  width: 60px;
+  width: auto;
   height: 30px;
 }
 
@@ -265,7 +265,7 @@ body {
   border-radius: 15px;
   background-color: red;
   border: none;
-  width: 60px;
+  width: auto;
   height: 30px;
 }
 

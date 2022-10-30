@@ -69,7 +69,7 @@ function App() {
   
   // toast for unauthorized users
   const userPermission = () => {
-    toast.error("You are not allowed. Please register first", {
+    toast.error(t("UserPermission"), {
       position: toast.POSITION.TOP_CENTER,
     });
   };
@@ -224,6 +224,7 @@ function App() {
                   collections={collections}
                   searchQueryFound={searchQueryFound}
                   searchedResult={searchedResult}
+                  translate={t}
                 />
               }
             />
@@ -258,6 +259,7 @@ function App() {
                   isUserLoggedIn={isUserLoggedIn}
                   customFields={customFields}
                   setCustomFields={setCustomFields}
+                  translate={t}
                 />
               }
             />

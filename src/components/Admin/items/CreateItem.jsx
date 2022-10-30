@@ -3,7 +3,6 @@ import { Alert, Button, Form, Modal } from "react-bootstrap";
 import { TiTick } from "react-icons/ti";
 import { ImCancelCircle } from "react-icons/im";
 import { BiBookAdd } from "react-icons/bi";
-import { AddCustomFields } from "../customfields/AddCustomFields";
 import { CustomFields } from "../customfields/CustomFields";
 import { TagsInput } from "./TagsInput";
 
@@ -33,7 +32,6 @@ export const CreateItem = (props) => {
 
   // adds custom field values with specific title and type of inputs form
   const handleAddCustomFieldValue = (inputValues, setInputValues) => {
-    console.log("fieldsValue", inputValues);
     const { customFields } = newItemData;
     const newCustomFieldsValue = [...customFields];
     newCustomFieldsValue.push(inputValues);
@@ -95,7 +93,7 @@ export const CreateItem = (props) => {
       <Modal.Header>
         <Modal.Title id="contained-modal-title-vcenter" className="text-center">
           <BiBookAdd className="mb-1 text-info" />
-          Create Item
+          {props.translate("ItemModal.Title")}
         </Modal.Title>
         <ImCancelCircle
           onClick={props.onHide}
@@ -108,22 +106,21 @@ export const CreateItem = (props) => {
           {isItemCreated ? (
             <Alert variant="success">
               <TiTick />
-              Item successfully created
+              {props.translate("ItemModal.SuccessMsg")}
             </Alert>
           ) : null}
           <Form.Group>
-            <Form.Label>Name</Form.Label>
+            <Form.Label>{props.translate("ItemModal.Name")}</Form.Label>
             <Form.Control
               type="text"
               className="rounded-pill"
-              placeholder="Name"
               value={newItemData.name}
               onChange={(e) => {
                 handleInput("name", e.target.value);
               }}
             />
           </Form.Group>
-          <Form.Label className="mb-n5 mt-1">Enter tag</Form.Label>
+          <Form.Label className="mb-n5 mt-1">{props.translate("ItemModal.EnterTag")}</Form.Label>
           <TagsInput
             items={props.items}
             setInputTag={props.setInputTag}
@@ -132,7 +129,7 @@ export const CreateItem = (props) => {
             setRequestData={setNewItemData}
           />
           <Form.Group>
-            <Form.Label>Upload an image</Form.Label>
+            <Form.Label>{props.translate("ItemModal.UploadImg")}</Form.Label>
             <Form.Control
               type="file"
               className="rounded-pill"
@@ -156,7 +153,7 @@ export const CreateItem = (props) => {
               className="mt-3 rounded-pill text-center"
               onClick={createItem}
             >
-              Create
+              {props.translate("ItemModal.Create")}
             </Button>
           </div>
         </Form>
