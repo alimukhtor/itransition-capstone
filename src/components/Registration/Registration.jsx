@@ -116,7 +116,7 @@ const Registration = () => {
                 <FaFacebook className="mx-4 text-primary" />
               </a>
               <a href={`${window.remote_url}/users/githubLogin`}>
-                <BsGithub className="text-light" />
+                <BsGithub className="text-info" />
               </a>
             </div>
             <p className="mt-3">

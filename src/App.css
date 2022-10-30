@@ -47,7 +47,7 @@
 
 /*  REGISTER STYLE HERE */
 
-.main-login {
+#dark .main-login {
   margin-top: 200px;
   display: flex;
   justify-content: center;
@@ -55,6 +55,32 @@
   text-align: center;
   background-color: #30303f;
   color: #3f8ea6;
+}
+
+#light .main-login {
+  margin-top: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: #3f8ea6;
+}
+
+#light .form {
+  width: 50vh;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  border: 1px solid #ffffff;
+  box-shadow: 10px 10px 80px #f4f1f2;
+  border-radius: 20px;
+  background-color: #f4f1f2;
+}
+
+#light .btn-submit {
+  background-color: #3f8ea6;
 }
 
 #dark .btn-submit {
@@ -116,17 +142,8 @@ body {
   box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px;
 }
 
-.sidebar-btns {
-  display: flex;
-  flex-direction: column;
-}
-
-.sidebar-btns Button {
-  text-align: center;
-  margin: 5px;
-  color: #30303f;
-  border-radius: 18px;
-  font-size: 18px;
+#light .sidebar-btn {
+  background-color: #6200ed;
 }
 
 /* COLLECTIONS STYLE */
@@ -252,7 +269,7 @@ body {
   height: 30px;
 }
 
-.markdown{
+.markdown {
   margin-top: 5px;
   padding: 30px;
   width: 100%;

@@ -51,7 +51,6 @@ const Login = ({ setIsUserLoggedIn, setUsername }) => {
         (response.status === 200 && data.user.role === "admin") ||
         data.user.role === "user"
       ) {
-        localStorage.setItem("Username", data.user.username);
         setIsUserLoggedIn(true);
         setUsername(data.user.username);
         navigate("/adminPage");

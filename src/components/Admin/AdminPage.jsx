@@ -105,7 +105,7 @@ const AdminPage = ({
             <Nav variant="pills" className="flex-column">
               <Nav.Item>
                 {userRole === "Admin" ? (
-                  <Nav.Link eventKey="first" className="text-light">
+                  <Nav.Link eventKey="first" className="text-light sidebar-btn">
                     <BsCollection
                       className="mb-1 mx-2"
                       tabidstyle={{ fontSize: "20px" }}
@@ -115,7 +115,7 @@ const AdminPage = ({
                 ) : (
                   <Nav.Link
                     eventKey="first"
-                    className="text-light"
+                    className="text-light sidebar-btn my-2"
                     onClick={getMyCollections}
                   >
                     <BsCollection
@@ -126,10 +126,10 @@ const AdminPage = ({
                   </Nav.Link>
                 )}
               </Nav.Item>
-              <Nav.Item>
+              <Nav.Item className="my-2">
                 <Nav.Link
                   eventKey="second"
-                  className="text-light"
+                  className="text-light sidebar-btn"
                   onClick={showModal}
                 >
                   <FiPlusCircle className="mx-1" style={{ fontSize: "20px" }} />
@@ -150,7 +150,7 @@ const AdminPage = ({
                 {userRole === "Admin" ? (
                   <Nav.Link
                     eventKey="third"
-                    className="text-light"
+                    className="text-light sidebar-btn"
                     onClick={fetchUsers}
                   >
                     <FiUsers className="mx-1" style={{ fontSize: "20px" }} />

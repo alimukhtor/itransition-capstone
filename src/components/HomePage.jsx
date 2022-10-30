@@ -1,9 +1,8 @@
-import { Card, Col, Container, Form, Row, Toast } from "react-bootstrap";
+import { Card, Col, Container, Row } from "react-bootstrap";
 import Collections from "./Admin/collections/Collections";
 import { GoComment } from "react-icons/go";
 import { AiOutlineLike } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
-import { FetchComments } from "./Admin/items/FetchComments";
 export const HomePage = ({
   setUserNotAllowed,
   userNotAllowed,
