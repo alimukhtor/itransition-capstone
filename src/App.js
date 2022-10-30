@@ -242,6 +242,8 @@ function App() {
                   fetchAllCollections={fetchAllCollections}
                   setCustomFields={setCustomFields}
                   customFields={customFields}
+                  searchQueryFound={searchQueryFound}
+                  searchedResult={searchedResult}
                 />
               }
             />

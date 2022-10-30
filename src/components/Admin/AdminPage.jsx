@@ -1,9 +1,11 @@
 import "../../App.css";
-import { Col, Nav, Row, Tab } from "react-bootstrap";
+import { Card, Col, Nav, Row, Tab } from "react-bootstrap";
 import { FiPlusCircle } from "react-icons/fi";
 import { BsCollection } from "react-icons/bs";
 import { FiUsers } from "react-icons/fi";
 import { AiFillWarning } from "react-icons/ai";
+import { GoComment } from "react-icons/go";
+import { AiOutlineLike } from "react-icons/ai";
 import { useEffect } from "react";
 import { useState } from "react";
 import UserList from "./users/UserList";
@@ -11,7 +13,7 @@ import CreateCollection from "./collections/CreateCollection";
 import Collections from "./collections/Collections";
 import { MyCollections } from "./users/MyCollections";
 import { ToastContainer } from "react-toastify";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const AdminPage = ({
   setUserNotAllowed,
@@ -24,8 +26,11 @@ const AdminPage = ({
   fetchAllCollections,
   customFields,
   setCustomFields,
+  searchQueryFound,
+  searchedResult,
   t,
 }) => {
+  const navigate = useNavigate();
   const [users, setUsers] = useState([]);
   const [userCollections, setUserCollections] = useState([]);
   const [userRole, setUserRole] = useState("");
@@ -167,37 +172,72 @@ const AdminPage = ({
                 </Link>
               </h3>
             ) : null}
-            <Tab.Content>
-              {userRole === "Admin" ? (
-                <>
+            {searchQueryFound ? (
+              searchedResult.map((item) => (
+                <Col lg={3} key={item._id} className="p-3">
+                  <Card className="card">
+                    <Card.Img
+                      variant="top"
+                      src={item.image}
+                      className="card_img"
+                    />
+                    <Card.Body className="card_body">
+                      <Card.Title className="title">{item.name}</Card.Title>
+                      <div className="item-section">
+                        <div>
+                          <span>
+                            <AiOutlineLike />
+                          </span>
+                          <span>
+                            <GoComment />
+                          </span>
+                        </div>
+                        <div className="item_btns">
+                          <button disabled={true}>delete</button>
+                          <button
+                            onClick={() => navigate(`/singleItem/${item._id}`)}
+                          >
+                            view
+                          </button>
+                        </div>
+                      </div>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              ))
+            ) : (
+              <Tab.Content>
+                {userRole === "Admin" ? (
+                  <>
+                    <Tab.Pane eventKey="first">
+                      <Collections
+                        setUserNotAllowed={setUserNotAllowed}
+                        userNotAllowed={userNotAllowed}
+                        userPermission={userPermission}
+                        ToastContainer={ToastContainer}
+                        setCollections={setCollections}
+                        collections={collections}
+                        fetchAllCollections={fetchAllCollections}
+                      />
+                    </Tab.Pane>
+                    <Tab.Pane eventKey="third">
+                      <UserList
+                        users={users}
+                        setUsers={setUsers}
+                        userRole={userRole}
+                      />
+                    </Tab.Pane>
+                  </>
+                ) : (
                   <Tab.Pane eventKey="first">
-                    <Collections
-                      setUserNotAllowed={setUserNotAllowed}
-                      userNotAllowed={userNotAllowed}
-                      userPermission={userPermission}
-                      ToastContainer={ToastContainer}
-                      setCollections={setCollections}
-                      collections={collections}
-                      fetchAllCollections={fetchAllCollections}
+                    <MyCollections
+                      userCollections={userCollections}
+                      setUserCollections={setUserCollections}
                     />
                   </Tab.Pane>
-                  <Tab.Pane eventKey="third">
-                    <UserList
-                      users={users}
-                      setUsers={setUsers}
-                      userRole={userRole}
-                    />
-                  </Tab.Pane>
-                </>
-              ) : (
-                <Tab.Pane eventKey="first">
-                  <MyCollections
-                    userCollections={userCollections}
-                    setUserCollections={setUserCollections}
-                  />
-                </Tab.Pane>
-              )}
-            </Tab.Content>
+                )}
+              </Tab.Content>
+            )}
           </Col>
         </Tab.Container>
       </Row>

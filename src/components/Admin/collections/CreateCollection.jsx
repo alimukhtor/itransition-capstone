@@ -122,7 +122,7 @@ const CreateCollection = (props) => {
               }}
             />
           </Form.Group>
-          <Form.Group className="mt-2">
+          <Form.Group className="my-2">
             <Form.Check
               type="checkbox"
               label="Support Markdown"
@@ -131,10 +131,11 @@ const CreateCollection = (props) => {
             />
           </Form.Group>
           <Form.Group>
+            <Form.Label>Description</Form.Label>
             <Form.Control
               as="textarea"
               rows={3}
-              className="my-2"
+              className=""
               value={requestData.description}
               onChange={(e) => {
                 handleInput("description", e.target.value);
@@ -149,15 +150,19 @@ const CreateCollection = (props) => {
           <Form.Group>
             <Form.Label>Topic</Form.Label>
             <Form.Control
-              autoFocus
-              type="text"
+              as="select"
               className="rounded-pill"
-              placeholder="Topic"
               value={requestData.topic}
               onChange={(e) => {
                 handleInput("topic", e.target.value);
               }}
-            />
+            >
+              <option>Books</option>
+              <option>Foods</option>
+              <option>Car</option>
+              <option>Signs</option>
+              <option>Silvare</option>
+            </Form.Control>
           </Form.Group>
           <Form.Group>
             <Form.Label>Upload an image</Form.Label>

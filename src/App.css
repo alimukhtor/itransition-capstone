@@ -253,21 +253,17 @@ body {
 }
 
 .markdown{
-  display: flex;
-  align-items: center;
-  text-align: start;
+  margin-top: 5px;
   padding: 30px;
   width: 100%;
   height: 30px;
+  display: flex;
+  align-items: center;
+  text-align: start;
   border-radius: 5px;
   font-size: 20px;
   border: 1px solid grey;
   outline: none;
-}
-
-.markdown code {
-  display: flex;
-  white-space: pre-wrap;
 }
 
 /* ITEMS STYLE */
@@ -333,12 +329,10 @@ body {
 
 /* SINGLE ITEM STYLE */
 
-.section-2 img {
-  width: 100%;
-  height: auto;
-}
-
 .section-3 {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
   text-align: center;
   color: #5e76bf;
 }

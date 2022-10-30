@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
 import "../../../App.css";
 const SingleItem = () => {
-  const [item, setItem] = useState([]);
+  const [item, setItem] = useState();
   const [comments, setComments] = useState([]);
   const [noComment, setNoComment] = useState(false);
   const { id } = useParams();
@@ -12,13 +12,15 @@ const SingleItem = () => {
   useEffect(() => {
     fetchItemDetails();
   }, []);
-  
+
   const fetchItemDetails = async () => {
     const response = await fetch(`${window.remote_url}/items/${id}`);
-    const data = await response.json();
-    if (data.comments.length === 0) setNoComment(true);
-    console.log("DETAIL", data);
-    setItem(data);
+    if(response.ok){
+      const data = await response.json();
+      if (data.comments.length === 0) setNoComment(true);
+      console.log("DETAIL", data);
+      setItem(data);
+    }
   };
   useEffect(() => {
     fetchComments();
@@ -37,44 +39,41 @@ const SingleItem = () => {
     }
   };
   return (
-    <Container className="main-section">
-      <Row className="d-flex justify-content space-between p-5">
-        <Col md={7} className="section-2">
-          <img src={item.image} alt="item-img" />
-        </Col>
-        <Col md={5} className="section-3">
-          <Form>
-            <strong>
-              <h2>{item.name}</h2>
-            </strong>
-            <h3>{item.topic}</h3>
-            <p>{item.description}</p>
-            {noComment ? (
-              <strong>
-                <h4 className="text-center mt-4">No Comments</h4>
-              </strong>
-            ) : (
-              <strong>
-                <h4 className="text-center mt-4">Comments</h4>
-              </strong>
-            )}
-            {comments.map((comment) => (
-              <div className="author">
-                <div className="author-detail">
-                  <span>
-                    <FaUserCircle />
-                  </span>
-                  {comment.owner.map((user) => (
-                    <p>{user.username}</p>
-                  ))}
-                </div>
-                <p>{comment.text}</p>
+    <Row className="p-5">
+      <Col className="section-3">
+        <div>
+          <img src={item?.image} alt="item-img" />
+          <div className="d-flex">
+            {
+              item?.tags.map(tag=> (
+                <p className="mx-1">#{tag?.text}</p>
+              ))
+            }
+          </div>
+        </div>
+        <Form>
+          <h3>{item?.name}</h3>
+          <hr/>
+          <strong><p>About this item</p></strong>
+          {noComment ? (
+            <p className="text-center mt-4">No Comments</p>
+          ) : (
+            <p className="text-center mt-4">Comments</p>
+          )}
+          {comments.map((comment) => (
+            <div className="">
+              <div className="d-flex">
+                <span className="mr-1"><FaUserCircle /></span>
+                {comment.owner.map((user) => (
+                  <p>{user.username}</p>
+                ))}
               </div>
-            ))}
-          </Form>
-        </Col>
-      </Row>
-    </Container>
+              <p>{comment.text}</p>
+            </div>
+          ))}
+        </Form>
+      </Col>
+    </Row>
   );
 };
 export default SingleItem;
