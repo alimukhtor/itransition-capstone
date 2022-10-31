@@ -13,7 +13,7 @@ import CreateCollection from "./collections/CreateCollection";
 import Collections from "./collections/Collections";
 import { MyCollections } from "./users/MyCollections";
 import { ToastContainer } from "react-toastify";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
 const AdminPage = ({
   setUserNotAllowed,
@@ -28,7 +28,7 @@ const AdminPage = ({
   setCustomFields,
   searchQueryFound,
   searchedResult,
-  t,
+  translate,
 }) => {
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
@@ -37,6 +37,15 @@ const AdminPage = ({
   const [collectionNotFound, setCollectionNotFound] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const token = window.localStorage.getItem("token");
+
+  // need to fix token issue
+  const [searchParams] = useSearchParams();
+  window.localStorage.setItem("oauthToken", searchParams.get("accessToken"));
+  // need to fix token issue
+
+  useEffect(() => {
+    getUserInfo();
+  }, []);
 
   // gets logged in user collections
   const getMyCollections = async () => {
@@ -70,10 +79,6 @@ const AdminPage = ({
   // function to show modal
   const showModal = () => setModalShow(true);
 
-  useEffect(() => {
-    getUserInfo();
-  }, []);
-
   // get user /me route
   const getUserInfo = async () => {
     const response = await fetch(`${window.remote_url}/users/me`, {
@@ -98,7 +103,7 @@ const AdminPage = ({
         <Tab.Container id="left-tabs-example" defaultActiveKey="first">
           <Col className="sidebar">
             {userRole === "Admin" ? (
-              <h4 className="text-info">{t("welcome")}</h4>
+              <h4 className="text-info">{translate("welcome")}</h4>
             ) : (
               <h4 className="text-info">Welcome to Users Page</h4>
             )}
@@ -110,7 +115,7 @@ const AdminPage = ({
                       className="mb-1 mx-2"
                       tabidstyle={{ fontSize: "20px" }}
                     />
-                    {t("SideBarBtns.Collections")}
+                    {translate("SideBarBtns.Collections")}
                   </Nav.Link>
                 ) : (
                   <Nav.Link
@@ -122,7 +127,7 @@ const AdminPage = ({
                       className="mb-1 mx-2"
                       tabidstyle={{ fontSize: "20px" }}
                     />
-                    {t("SideBarBtns.Mycollection")}
+                    {translate("SideBarBtns.Mycollection")}
                   </Nav.Link>
                 )}
               </Nav.Item>
@@ -133,7 +138,7 @@ const AdminPage = ({
                   onClick={showModal}
                 >
                   <FiPlusCircle className="mx-1" style={{ fontSize: "20px" }} />
-                  {t("SideBarBtns.CreateCollection")}
+                  {translate("SideBarBtns.CreateCollection")}
                 </Nav.Link>
               </Nav.Item>
               <CreateCollection
@@ -145,7 +150,7 @@ const AdminPage = ({
                 fetchAllCollections={fetchAllCollections}
                 customFields={customFields}
                 setCustomFields={setCustomFields}
-                translate={t}
+                translate={translate}
               />
               <Nav.Item>
                 {userRole === "Admin" ? (
@@ -155,7 +160,7 @@ const AdminPage = ({
                     onClick={fetchUsers}
                   >
                     <FiUsers className="mx-1" style={{ fontSize: "20px" }} />
-                    {t("SideBarBtns.Users")}
+                    {translate("SideBarBtns.Users")}
                   </Nav.Link>
                 ) : null}
               </Nav.Item>
@@ -164,11 +169,11 @@ const AdminPage = ({
           <Col sm={10} className="main-page">
             {collectionNotFound ? (
               <h3 className="d-flex justify-content-center text-danger mt-4">
-                <AiFillWarning className="text-danger mt-1" /> You do not have
-                collections yet. Create{" "}
+                <AiFillWarning className="text-danger mt-1" />{" "}
+                {translate("NoCollection")}
                 <Link>
                   <p className="ml-1" onClick={showModal}>
-                    here
+                    {translate("ClickToRegister")}
                   </p>
                 </Link>
               </h3>
@@ -219,7 +224,7 @@ const AdminPage = ({
                         setCollections={setCollections}
                         collections={collections}
                         fetchAllCollections={fetchAllCollections}
-                        translate={t}
+                        translate={translate}
                       />
                     </Tab.Pane>
                     <Tab.Pane eventKey="third">
@@ -236,7 +241,7 @@ const AdminPage = ({
                       userCollections={userCollections}
                       setUserCollections={setUserCollections}
                       getMyCollections={getMyCollections}
-                      translate={t}
+                      translate={translate}
                     />
                   </Tab.Pane>
                 )}

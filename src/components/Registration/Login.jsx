@@ -5,8 +5,10 @@ import { ImSad } from "react-icons/im";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-
-const Login = ({ setIsUserLoggedIn, setUsername }) => {
+import { useEffect } from "react";
+import { GoogleLogin } from "react-google-login";
+import { gapi } from "gapi-script";
+const Login = ({ setIsUserLoggedIn, setUsername, translate }) => {
   const navigate = useNavigate();
   const [notFound, setNotFound] = useState(false);
   const [isBlocked, setisBlocked] = useState(false);
@@ -17,9 +19,27 @@ const Login = ({ setIsUserLoggedIn, setUsername }) => {
     password: "",
   });
 
+  const clientId =
+    "1027227542113-imio6suc2dkqq5js3tbqr47ic4pllqo7.apps.googleusercontent.com";
+  useEffect(() => {
+    const initClient = () => {
+      gapi.client.init({
+        clientId: clientId,
+        scope: "",
+      });
+    };
+    gapi.load("client:auth2", initClient);
+  });
+
+  const onSuccess = (res) => {
+    console.log("success:", res);
+  };
+  const onFailure = (err) => {
+    console.log("failed:", err);
+  };
   // toast for successfully logged in users
   const successMsgForLoggedinUser = () => {
-    toast.success("Successfully logged in", {
+    toast.success(translate("UserRegistration.SuccessMsgForlogin"), {
       position: toast.POSITION.TOP_CENTER,
     });
   };
@@ -44,13 +64,16 @@ const Login = ({ setIsUserLoggedIn, setUsername }) => {
         },
       });
       const data = await response.json();
+      console.log(data);
       const { accessToken } = data;
       localStorage.setItem("token", accessToken);
       localStorage.setItem("userId", data.user._id);
       localStorage.setItem("Username", data.user.username);
       if (
-        (response.status === 200 && data.user.role === "admin") ||
-        data.user.role === "user"
+        response.status === 200
+        // (
+        // && data.user.role === "admin") ||
+        // data.user.role === "user"
       ) {
         setIsUserLoggedIn(true);
         setUsername(data.user.username);
@@ -76,25 +99,27 @@ const Login = ({ setIsUserLoggedIn, setUsername }) => {
           <Col md={6}>
             {notFound ? (
               <Alert variant="danger" className="rounded-pill mb-5">
-                <MdCancel /> User with this email not found <ImSad />
+                <MdCancel /> {translate("UserRegistration.NotFoundMsg")}
+                <ImSad />
               </Alert>
             ) : isBlocked ? (
               <Alert variant="danger" className="rounded-pill mb-5">
-                <MdCancel /> User account blocked. You cannot log in!
+                <MdCancel /> {translate("UserRegistration.BlockedMsg")}
               </Alert>
             ) : error ? (
               <Alert variant="danger" className="rounded-pill mb-5">
-                <AiOutlineExclamationCircle /> Something really bad happened in
-                server side <ImSad />
+                <AiOutlineExclamationCircle />{" "}
+                {translate("UserRegistration.ServerMsg")} <ImSad />
               </Alert>
             ) : allFieldsRequired ? (
               <Alert variant="danger" className="rounded-pill mb-5">
-                <AiOutlineExclamationCircle /> All fields are required to fill{" "}
+                <AiOutlineExclamationCircle />{" "}
+                {translate("UserRegistration.AllFieldsMsg")}
                 <ImSad />
               </Alert>
             ) : null}
             <Form className="form" onSubmit={handleSubmit}>
-              <h3>Log in!</h3>
+              <h3>{translate("UserRegistration.Login")}</h3>
               <Form.Group className="form-group">
                 <Form.Label>Email</Form.Label>
                 <Form.Control
@@ -106,7 +131,9 @@ const Login = ({ setIsUserLoggedIn, setUsername }) => {
                 />
               </Form.Group>
               <Form.Group className="form-group">
-                <Form.Label>Password</Form.Label>
+                <Form.Label>
+                  {translate("UserRegistration.Password")}
+                </Form.Label>
                 <Form.Control
                   type="password"
                   className="rounded-pill input"
@@ -115,13 +142,21 @@ const Login = ({ setIsUserLoggedIn, setUsername }) => {
                   onChange={handleInput}
                 />
               </Form.Group>
+              {/* <GoogleLogin
+                clientId={clientId}
+                buttonText="Sign in with Google"
+                onSuccess={onSuccess}
+                onFailure={onFailure}
+                cookiePolicy={"single_host_origin"}
+                isSignedIn={true}
+              /> */}
               <Button
                 type="submit"
                 variant="info"
                 className="btn-submit rounded-pill mb-3"
                 onClick={successMsgForLoggedinUser}
               >
-                Log in
+                {translate("UserRegistration.Login")}
               </Button>
             </Form>
           </Col>

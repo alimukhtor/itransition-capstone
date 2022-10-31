@@ -1,25 +1,11 @@
 import "../../../App.css";
 import { useEffect, useState } from "react";
-import {
-  Button,
-  Card,
-  Col,
-  Container,
-  Form,
-  Row,
-  Toast,
-  Alert,
-} from "react-bootstrap";
-import { useParams, useNavigate, Link } from "react-router-dom";
-import { GoComment } from "react-icons/go";
-import { AiOutlineLike } from "react-icons/ai";
+import { Button, Col, Container, Row } from "react-bootstrap";
+import { useParams } from "react-router-dom";
 import { AiFillWarning } from "react-icons/ai";
-import { AiFillLike } from "react-icons/ai";
 import { FiPlusCircle } from "react-icons/fi";
-import { FetchComments } from "../items/FetchComments";
 import { CreateItem } from "../items/CreateItem";
-import { GrEdit } from "react-icons/gr";
-import { UpdateSingleItem } from "../items/UpdateSingleItem";
+import CollectionElement from "./CollectionElement";
 export const customFields = [];
 const SingleCollection = ({
   userNotAllowed,
@@ -27,26 +13,14 @@ const SingleCollection = ({
   userPermission,
   ToastContainer,
   isUserLoggedIn,
-  setCustomFields,
   customFields,
-  translate
+  translate,
 }) => {
   const [items, setItems] = useState([]);
   const [tags, setTags] = useState([]);
-  const [singleItem, setSingleItem] = useState(null);
-  const [text, setText] = useState("");
   const [itemNotFound, setItemNotFound] = useState(false);
-  const [isLiked, setIsLiked] = useState(false);
-  const [showCommentSection, setShowCommentSection] = useState(true);
   const [modalShow, setModalShow] = useState(false);
-  const [showUpdateItemModal, setShowUpdateItemModal] = useState(false);
-  const handleCloseUpdateItemModal = () => setShowUpdateItemModal(false);
-  const handleShowUpdateItemModal = () => setShowUpdateItemModal(true);
-
-  const navigate = useNavigate();
-  const toggleShowComment = () => setShowCommentSection(!showCommentSection);
   const { collectionId } = useParams();
-  const token = window.localStorage.getItem("token");
 
   useEffect(() => {
     fetchSingleCollection();
@@ -64,97 +38,9 @@ const SingleCollection = ({
     }
   };
 
-  // deletes single item
-  const deleteItem = async (itemId) => {
-    const response = await fetch(`${window.remote_url}/items/${itemId}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    });
-    if (response.ok) {
-      const restItems = items.filter((c) => c._id !== itemId);
-      setItems(restItems);
-    } else if (response.status === 401) {
-      setUserNotAllowed(true);
-    }
-  };
-
-  // adds like by authorized user
-  const addLike = async (itemId) => {
-    const response = await fetch(
-      `${window.remote_url}/items/${itemId}/add-like`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-      }
-    );
-    if (response.ok) {
-      setIsLiked(true);
-    }
-  };
-
-  // removes like by authorized user
-  const removeLike = async (itemId) => {
-    const response = await fetch(
-      `${window.remote_url}/items/${itemId}/remove-like`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-      }
-    );
-    if (response.ok) {
-      setIsLiked(false);
-    }
-  };
-
-  // posts comment for specific item
-  const postComment = async (event, id) => {
-    if (event.key === "Enter") {
-      setShowCommentSection(!showCommentSection);
-      const response = await fetch(
-        `${window.remote_url}/items/${id}/comments`,
-        {
-          method: "POST",
-          body: JSON.stringify({ text }),
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + token,
-          },
-        }
-      );
-      if (response.ok) {
-        setText("");
-      } else if (response.status === 401) {
-        setUserNotAllowed(true);
-      }
-    }
-  };
-
-  const getSingleItem = async (selectedItemId) => {
-    const response = await fetch(
-      `${window.remote_url}/items/${selectedItemId}`
-    );
-    if (response.ok) {
-      const item = await response.json();
-      setSingleItem(item);
-    }
-  };
-
   return (
     <Container fluid>
-      {userNotAllowed ? (
-        <Alert variant="danger" className="rounded-pill text-center">
-          <AiFillWarning />
-         {translate("UserPermission")} <Link to="/register">here</Link>
-        </Alert>
-      ) : null}
+      {userNotAllowed ? <ToastContainer /> : null}
       <Row className="p-3">
         {isUserLoggedIn ? (
           <Button
@@ -162,7 +48,8 @@ const SingleCollection = ({
             variant="success"
             className="ml-auto rounded-pill"
           >
-            <FiPlusCircle style={{ fontSize: "25px" }} /> {translate("ItemModal.Title")}
+            <FiPlusCircle style={{ fontSize: "25px" }} />{" "}
+            {translate("ItemModal.Title")}
           </Button>
         ) : null}
       </Row>
@@ -179,89 +66,16 @@ const SingleCollection = ({
           <>
             {items.map((item) => (
               <Col xs={12} md={4} lg={2} key={item._id}>
-                <Card className="card border-0 h-100">
-                  <Card.Img
-                    variant="top"
-                    src={item.image}
-                    className="card_img"
-                  />
-                  <Card.Body className="card_body">
-                    <span
-                      className="edit-collection"
-                      onClick={() => {
-                        handleShowUpdateItemModal();
-                        getSingleItem(item._id);
-                      }}
-                    >
-                      <GrEdit />
-                    </span>
-                    <UpdateSingleItem
-                      showUpdateItemModal={showUpdateItemModal}
-                      setShowUpdateItemModal={setShowUpdateItemModal}
-                      handleCloseUpdateItemModal={handleCloseUpdateItemModal}
-                      singleItem={singleItem}
-                      setSingleItem={setSingleItem}
-                      fetchSingleCollection={fetchSingleCollection}
-                      setUserNotAllowed={setUserNotAllowed}
-                      userNotAllowed={userNotAllowed}
-                      userPermission={userPermission}
-                    />
-                    <Card.Title className="title mt-2">{item.name}</Card.Title>
-                    <div className="item-section">
-                      <div>
-                        <span
-                          onClick={() =>
-                            isLiked ? removeLike(item._id) : addLike(item._id) 
-                          }
-                        >
-                          {isLiked ? (
-                            <AiFillLike className="text-danger" />
-                          ) : (
-                            <AiOutlineLike />
-                          )}
-                        </span>
-                        <span>
-                          <GoComment onClick={toggleShowComment} />
-                        </span>
-                      </div>
-                      <div className="item_btns">
-                        <button onClick={() => deleteItem(item._id)}>
-                        {translate("ItemBtn.Delete")}
-                        </button>
-                        <button
-                          onClick={() => navigate(`/singleItem/${item._id}`)}
-                        >
-                          {translate("ItemBtn.View")}
-                        </button>
-                      </div>
-                    </div>
-                  </Card.Body>
-                  <Toast
-                    show={!showCommentSection}
-                    onClose={toggleShowComment}
-                    className="comment-toast"
-                  >
-                    <Toast.Body>
-                      <Form.Control
-                        value={text}
-                        onChange={(e) => setText(e.target.value)}
-                        onKeyDown={(e) => postComment(e, item._id)}
-                        size="sm"
-                        type="text"
-                        className="rounded-pill"
-                        placeholder="Leave your thoughts here..."
-                      />
-                      <FetchComments
-                        itemId={item._id}
-                        setShowCommentSection={setShowCommentSection}
-                        showCommentSection={showCommentSection}
-                        userNotAllowed={userNotAllowed}
-                        setUserNotAllowed={setUserNotAllowed}
-                        userPermission={userPermission}
-                      />
-                    </Toast.Body>
-                  </Toast>
-                </Card>
+                <CollectionElement
+                  items={items}
+                  setItems={setItems}
+                  setUserNotAllowed={setUserNotAllowed}
+                  item={item}
+                  fetchSingleCollection={fetchSingleCollection}
+                  userNotAllowed={userNotAllowed}
+                  userPermission={userPermission}
+                  translate={translate}
+                />
               </Col>
             ))}
           </>

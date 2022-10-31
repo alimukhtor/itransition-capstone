@@ -21,6 +21,7 @@ import i18n from "i18next";
 import { useTranslation, initReactI18next } from "react-i18next";
 import { translationsEn } from "./components/Admin/Lang/en/en";
 import { translationsUz } from "./components/Admin/Lang/uz/uz";
+
 export const ThemeContext = createContext(null);
 
 i18n.use(initReactI18next).init({
@@ -55,6 +56,28 @@ function App() {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
 
+  // need to fix token issue
+  const oauthToken = localStorage.getItem("oauthToken");
+  useEffect(() => {
+    // check if there's an accessToken in the url
+    const oauthUserInfo = async () => {
+      const response = await fetch(`${window.remote_url}/users/me`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + oauthToken,
+        },
+      });
+      if (response.ok) {
+        const user = await response.json();
+        localStorage.setItem("Username", user.username);
+        setUsername(user.username);
+        setLoggedinUser(user);
+      }
+    };
+    oauthUserInfo();
+  }, []);
+  // need to fix token issue
+
   useEffect(() => {
     const username = localStorage.getItem("Username");
     if (username) {
@@ -66,7 +89,7 @@ function App() {
   useEffect(() => {
     fetchAllCollections();
   }, []);
-  
+
   // toast for unauthorized users
   const userPermission = () => {
     toast.error(t("UserPermission"), {
@@ -175,6 +198,17 @@ function App() {
                 <ReactSwitch
                   onChange={toggleTheme}
                   checked={theme === "dark"}
+                  onColor="#86d3ff"
+                  onHandleColor="#2693e6"
+                  handleDiameter={30}
+                  uncheckedIcon={false}
+                  checkedIcon={false}
+                  boxShadow="0px 1px 5px rgba(0, 0, 0, 0.6)"
+                  activeBoxShadow="0px 0px 1px 10px rgba(0, 0, 0, 0.2)"
+                  height={20}
+                  width={48}
+                  className="react-switch"
+                  id="material-switch"
                 />
               </div>
               <Link to="/register">
@@ -225,6 +259,8 @@ function App() {
                   searchQueryFound={searchQueryFound}
                   searchedResult={searchedResult}
                   translate={t}
+                  setLoggedinUser={setLoggedinUser}
+                  setUsername={setUsername}
                 />
               }
             />
@@ -232,7 +268,7 @@ function App() {
               path="/adminPage"
               element={
                 <AdminPage
-                  t={t}
+                  translate={t}
                   setUserNotAllowed={setUserNotAllowed}
                   userNotAllowed={userNotAllowed}
                   userPermission={userPermission}
@@ -272,13 +308,14 @@ function App() {
                 />
               }
             />
-            <Route path="/register" element={<Registration />} />
+            <Route path="/register" element={<Registration translate={t} />} />
             <Route
               path="/login"
               element={
                 <Login
                   setIsUserLoggedIn={setIsUserLoggedIn}
                   setUsername={setUsername}
+                  translate={t}
                 />
               }
             />

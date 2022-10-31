@@ -1,8 +1,10 @@
 import { Button, Form, Modal, Alert } from "react-bootstrap";
 import { ImCancelCircle } from "react-icons/im";
 import { GrUpdate } from "react-icons/gr";
+import { TiTick } from "react-icons/ti";
 import { AiFillWarning } from "react-icons/ai";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 export const UpdateSingleItem = ({
   showUpdateItemModal,
   handleCloseUpdateItemModal,
@@ -11,8 +13,11 @@ export const UpdateSingleItem = ({
   fetchSingleCollection,
   userNotAllowed,
   setUserNotAllowed,
+  setShowUpdateItemModal,
+  translate
 }) => {
   const token = window.localStorage.getItem("token");
+  const [isItemUpdated, setIsItemUpdated] = useState(false);
   const updateSingleItem = async (id) => {
     const response = await fetch(`${window.remote_url}/items/${id}`, {
       method: "PUT",
@@ -23,9 +28,19 @@ export const UpdateSingleItem = ({
       },
     });
     if (response.ok) {
+      setIsItemUpdated(true)
+      setUserNotAllowed(false)
       fetchSingleCollection();
+      setTimeout(() => {
+        setIsItemUpdated(false);
+        setShowUpdateItemModal(false);
+      }, 2000);
     } else if (response.status === 401) {
       setUserNotAllowed(true);
+      setTimeout(() => {
+        setUserNotAllowed(false);
+        setShowUpdateItemModal(false);
+      }, 2000);
     }
   };
   return (
@@ -42,10 +57,15 @@ export const UpdateSingleItem = ({
       </Modal.Header>
       <Modal.Body>
         <Form>
-          {userNotAllowed ? (
+        {isItemUpdated ? (
+            <Alert variant="success" className="rounded-pill">
+              <TiTick />
+              {translate("SuccessMsg")}
+            </Alert>
+          ) : userNotAllowed ? (
             <Alert variant="danger" className="rounded-pill">
-              <AiFillWarning /> You are not allowed. Please register{" "}
-              <Link to="/register">here</Link>
+              <AiFillWarning /> {translate("UserPermission")}
+              <Link to="/register">{translate("ClickToRegister")}</Link>
             </Alert>
           ) : null}
           <Form.Group>

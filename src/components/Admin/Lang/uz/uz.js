@@ -19,6 +19,7 @@ export const translationsUz = {
     search: "Qidirish",
   },
   NoItem: "To'plamda hali narsa yo'q!",
+  NoCollection: "Sizda hali to‘plamlar yo‘q. Yaratish",
   ItemSectionTitle: "To'plamlar",
   UserPermission: "Sizga ruxsat berilmagan. Roʻyxatdan oʻting",
   ClickToRegister: "bu yerda",
@@ -51,4 +52,21 @@ export const translationsUz = {
     View: "Ko'rish",
     Delete: "O'chirish",
   },
+  UserRegistration: {
+    Title: "Akkaunt yaratish",
+    Username: "Foydalanuvchi nomi",
+    Email: "Email",
+    Password: "Parol",
+    Signup: "Ro'yxatdan o'tish",
+    Login: "Kirish",
+    OrContinueWith: "Yoki davom eting",
+    HaveAccount: "Akkaunt bormi?",
+    ExistErrorMsg: "Bu emailga ega foydalanuvchi allaqachon mavjud!",
+    SuccessMsg: "Muvaffaqiyatli ro'yxatdan o'tdi! Bir soniya kuting!",
+    SuccessMsgForlogin: "Muvaffaqiyatli tizimga kirildi",
+    NotFoundMsg: "Ushbu e-pochtaga ega foydalanuvchi topilmadi",
+    BlockedMsg: "Foydalanuvchi hisobi bloklandi. Siz tizimga kira olmaysiz!",
+    ServerMsg: "Server tomonida juda yomon narsa yuz berdi",
+    AllFieldsMsg: "Barcha maydonlarni toʻldirish talab qilinadi"
+  }
 };

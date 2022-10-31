@@ -13,7 +13,8 @@ import { FcGoogle } from "react-icons/fc";
 import { FaFacebook } from "react-icons/fa";
 import { BsGithub } from "react-icons/bs";
 import { Link, useNavigate } from "react-router-dom";
-const Registration = () => {
+
+const Registration = ({translate}) => {
   const navigate = useNavigate();
   const [emailExist, setEmailExist] = useState(false);
   const [isRegistered, setIsRegistered] = useState(false);
@@ -55,18 +56,17 @@ const Registration = () => {
         <Col md={6}>
           {emailExist ? (
             <Alert variant="danger" className="rounded-pill mb-5">
-              <MdCancel /> User with this email already exist!
+              <MdCancel /> {translate("UserRegistration.ExistErrorMsg")}
             </Alert>
           ) : isRegistered ? (
             <Alert variant="danger" className="rounded-pill mb-5">
-              <Spinner animation="grow" variant="success" /> Successfully
-              registered! Wait a sec!
+              <Spinner animation="grow" variant="success" /> {translate("UserRegistration.SuccessMsg")}
             </Alert>
           ) : null}
           <Form className="form" onSubmit={handleSubmit}>
-            <h3>Create an account</h3>
+            <h3>{translate("UserRegistration.Title")}</h3>
             <Form.Group className="form-group">
-              <Form.Label>Username</Form.Label>
+              <Form.Label>{translate("UserRegistration.Username")}</Form.Label>
               <Form.Control
                 type="text"
                 className="rounded-pill input"
@@ -76,7 +76,7 @@ const Registration = () => {
               />
             </Form.Group>
             <Form.Group className="form-group">
-              <Form.Label>Email</Form.Label>
+              <Form.Label>{translate("UserRegistration.Email")}</Form.Label>
               <Form.Control
                 type="email"
                 className="rounded-pill input"
@@ -86,7 +86,7 @@ const Registration = () => {
               />
             </Form.Group>
             <Form.Group className="form-group">
-              <Form.Label>Password</Form.Label>
+              <Form.Label>{translate("UserRegistration.Password")}</Form.Label>
               <Form.Control
                 type="password"
                 className="rounded-pill input"
@@ -100,10 +100,10 @@ const Registration = () => {
               type="submit"
               className="btn-submit rounded-pill mb-2"
             >
-              Sign Up
+              {translate("UserRegistration.Signup")}
             </Button>
             <span>
-              ______________________Or continue with______________________
+              ______________________{translate("UserRegistration.OrContinueWith")}______________________
             </span>
             <div
               className="d-flex justify-content-center"
@@ -120,7 +120,7 @@ const Registration = () => {
               </a>
             </div>
             <p className="mt-3">
-              Already have an account? <Link to="/login">Sign in</Link>
+            {translate("UserRegistration.HaveAccount")} <Link to="/login">{translate("UserRegistration.Login")}</Link>
             </p>
           </Form>
         </Col>

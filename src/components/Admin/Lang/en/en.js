@@ -19,6 +19,7 @@ export const translationsEn = {
     search: "Search",
   },
   NoItem: "Collection does not have item yet!",
+  NoCollection: "You do not have collections yet. Create",
   ItemSectionTitle: "Items",
   UserPermission: "You are not allowed. Please register",
   ClickToRegister: "here",
@@ -51,4 +52,21 @@ export const translationsEn = {
     View: "View",
     Delete: "Delete",
   },
+  UserRegistration: {
+    Title: "Create an account",
+    Username: "Username",
+    Email: "Email",
+    Password: "Password",
+    Signup: "Sign Up",
+    Login: "Sign in",
+    OrContinueWith: "Or continue with",
+    SuccessMsg: "Successfully registered! Wait a sec!",
+    SuccessMsgForlogin: "Successfully logged in",
+    HaveAccount: "Already have an account?",
+    ExistErrorMsg: "User with this email already exist!",
+    NotFoundMsg: "User with this email not found",
+    BlockedMsg: "User account blocked. You cannot log in!",
+    ServerMsg: "Something really bad happened in server side",
+    AllFieldsMsg: "All fields are required to fill"
+  }
 };
