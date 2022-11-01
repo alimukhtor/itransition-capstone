@@ -21,8 +21,8 @@ export const HomePage = ({
   return (
     <Container fluid>
       {searchQueryFound ? (
-        searchedResult.map((item) => (
-          <Row>
+        <Row>
+          {searchedResult.map((item) => (
             <Col xs={12} md={6} lg={2} key={item._id} className="p-4">
               <Card className="card">
                 <Card.Img variant="top" src={item.image} className="card_img" />
@@ -51,8 +51,8 @@ export const HomePage = ({
                 </Card.Body>
               </Card>
             </Col>
-          </Row>
-        ))
+          ))}
+        </Row>
       ) : (
         <Collections
           setUserNotAllowed={setUserNotAllowed}
