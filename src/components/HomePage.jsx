@@ -14,15 +14,15 @@ export const HomePage = ({
   searchedResult,
   translate,
   setLoggedinUser,
-  setUsername
+  setUsername,
 }) => {
   const navigate = useNavigate();
- 
+
   return (
     <Container fluid>
-      <Row>
-        {searchQueryFound ? (
-          searchedResult.map((item) => (
+      {searchQueryFound ? (
+        searchedResult.map((item) => (
+          <Row>
             <Col xs={12} md={6} lg={2} key={item._id} className="p-4">
               <Card className="card">
                 <Card.Img variant="top" src={item.image} className="card_img" />
@@ -51,19 +51,19 @@ export const HomePage = ({
                 </Card.Body>
               </Card>
             </Col>
-          ))
-        ) : (
-          <Collections
-            setUserNotAllowed={setUserNotAllowed}
-            userNotAllowed={userNotAllowed}
-            userPermission={userPermission}
-            ToastContainer={ToastContainer}
-            setCollections={setCollections}
-            collections={collections}
-            translate={translate}
-          />
-        )}
-      </Row>
+          </Row>
+        ))
+      ) : (
+        <Collections
+          setUserNotAllowed={setUserNotAllowed}
+          userNotAllowed={userNotAllowed}
+          userPermission={userPermission}
+          ToastContainer={ToastContainer}
+          setCollections={setCollections}
+          collections={collections}
+          translate={translate}
+        />
+      )}
     </Container>
   );
 };

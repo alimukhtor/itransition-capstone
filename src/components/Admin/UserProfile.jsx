@@ -27,7 +27,7 @@ export const UserProfile = ({
   };
 
   const updateUserProfile = async (id) => {
-    const response = await fetch(`http://localhost:3030/users/${id}`, {
+    const response = await fetch(`${window.remote_url}/users/${id}`, {
       method: "PUT",
       body: JSON.stringify(loggedinUser),
       headers: {
