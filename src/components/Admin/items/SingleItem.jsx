@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Col, Container, Form, Row } from "react-bootstrap";
+import { Col, Form, Row } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
 import "../../../App.css";

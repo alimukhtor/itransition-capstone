@@ -3,7 +3,6 @@ import { Card, Col, Nav, Row, Tab } from "react-bootstrap";
 import { FiPlusCircle } from "react-icons/fi";
 import { BsCollection } from "react-icons/bs";
 import { FiUsers } from "react-icons/fi";
-import { AiFillWarning } from "react-icons/ai";
 import { GoComment } from "react-icons/go";
 import { AiOutlineLike } from "react-icons/ai";
 import { useEffect } from "react";
@@ -13,7 +12,7 @@ import CreateCollection from "./collections/CreateCollection";
 import Collections from "./collections/Collections";
 import { MyCollections } from "./users/MyCollections";
 import { ToastContainer } from "react-toastify";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const AdminPage = ({
   setUserNotAllowed,
@@ -34,7 +33,6 @@ const AdminPage = ({
   const [users, setUsers] = useState([]);
   const [userCollections, setUserCollections] = useState([]);
   const [userRole, setUserRole] = useState("");
-  const [collectionNotFound, setCollectionNotFound] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const token = window.localStorage.getItem("token");
 
@@ -56,9 +54,6 @@ const AdminPage = ({
     });
     if (response.ok) {
       const collection = await response.json();
-      if (collection.length === 0) {
-        setCollectionNotFound(true);
-      }
       setUserCollections(collection);
     }
   };
@@ -167,17 +162,6 @@ const AdminPage = ({
             </Nav>
           </Col>
           <Col sm={10} className="main-page">
-            {collectionNotFound ? (
-              <h3 className="d-flex justify-content-center text-danger mt-4">
-                <AiFillWarning className="text-danger mt-1" />{" "}
-                {translate("NoCollection")}
-                <Link>
-                  <p className="ml-1" onClick={showModal}>
-                    {translate("ClickToRegister")}
-                  </p>
-                </Link>
-              </h3>
-            ) : null}
             {searchQueryFound ? (
               searchedResult.map((item) => (
                 <Col lg={3} key={item._id} className="p-3">
@@ -220,7 +204,6 @@ const AdminPage = ({
                         setUserNotAllowed={setUserNotAllowed}
                         userNotAllowed={userNotAllowed}
                         userPermission={userPermission}
-                        ToastContainer={ToastContainer}
                         setCollections={setCollections}
                         collections={collections}
                         fetchAllCollections={fetchAllCollections}

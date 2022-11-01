@@ -36,7 +36,7 @@ export const MyCollections = ({
   // deletes single collection by id
   const deleteCollection = async (id) => {
     const response = await fetch(
-      `${window.remote_url}/collections/${id}/deleteCollection`,
+      `${window.remote_url}/collections/${id}`,
       {
         method: "DELETE",
         headers: {

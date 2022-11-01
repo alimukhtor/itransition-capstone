@@ -145,6 +145,7 @@ export const CreateItem = (props) => {
               <CustomFields
                 fields={props.customFields}
                 handleAddCustomFieldValue={handleAddCustomFieldValue}
+                isSelected={isSelected}
               />
             ) : null}
             <Button

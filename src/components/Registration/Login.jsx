@@ -5,7 +5,6 @@ import { ImSad } from "react-icons/im";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useEffect } from "react";
 const Login = ({ setIsUserLoggedIn, setUsername, translate }) => {
   const navigate = useNavigate();
   const [notFound, setNotFound] = useState(false);
@@ -45,8 +44,7 @@ const Login = ({ setIsUserLoggedIn, setUsername, translate }) => {
       });
       const data = await response.json();
       console.log(data);
-      const { accessToken } = data;
-      localStorage.setItem("token", accessToken);
+      localStorage.setItem("token", data.accessToken.accessToken);
       localStorage.setItem("userId", data.user._id);
       localStorage.setItem("Username", data.user.username);
       if (

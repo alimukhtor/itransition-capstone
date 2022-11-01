@@ -35,6 +35,7 @@ export const translationsEn = {
     Create: "Create",
     SuccessMsg: "Added successfully",
     SuccessMsgCreate: "Collection successfully created",
+    SuccessMsgCustomField: "Added successfully",
   },
   CollectionBtn: {
     View: "View",

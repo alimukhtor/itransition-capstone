@@ -242,6 +242,11 @@ function App() {
                 setIsUserLoggedIn={setIsUserLoggedIn}
                 loggedinUser={loggedinUser}
                 fetchAllCollections={fetchAllCollections}
+                setLoggedinUser={setLoggedinUser}
+                getUserInfo={getUserInfo}
+                setUserProfileModal={setUserProfileModal}
+                translate={t}
+                setUsername={setUsername}
               />
             </Nav>
           </Navbar>

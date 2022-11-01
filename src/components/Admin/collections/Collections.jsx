@@ -5,18 +5,16 @@ import { useNavigate } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
 import { GrEdit } from "react-icons/gr";
 import { UpdateSingleCollection } from "./UpdateSingleCollection";
-import { ToastContainer, toast } from "react-toastify";
 import ReactMarkdown from "react-markdown";
 
 const Collections = ({
   setUserNotAllowed,
   userNotAllowed,
   userPermission,
-  ToastContainer,
   collections,
   setCollections,
   fetchAllCollections,
-  translate
+  translate,
 }) => {
   const [singleCollection, setSingleCollection] = useState(null);
   const token = window.localStorage.getItem("token");
@@ -25,12 +23,6 @@ const Collections = ({
   const navigate = useNavigate();
   const handleCloseModal = () => setShowModal(false);
   const handleShowModal = () => setShowModal(true);
-
-  const successMsg = () => {
-    toast.success("Deleted successfully", {
-      position: toast.POSITION.TOP_CENTER,
-    });
-  };
 
   // deletes single collection by id
   const deleteCollection = async (id) => {
@@ -48,9 +40,7 @@ const Collections = ({
     if (response.ok) {
       const restCollections = collections.filter((c) => c._id !== id);
       setCollections(restCollections);
-    } else if (response.status === 401) {
-      setUserNotAllowed(true);
-    }
+    } 
   };
 
   // gets single collection by id
@@ -66,7 +56,6 @@ const Collections = ({
 
   return (
     <>
-      { userNotAllowed ? <ToastContainer /> : null}
       <Row>
         {collections.map((collection) => (
           <Col xs={12} md={6} lg={3} key={collection._id} className="p-4">
@@ -98,9 +87,7 @@ const Collections = ({
                 <Card.Title className="title">{collection.name}</Card.Title>
                 <Card.Text className="text">
                   {" "}
-                  <ReactMarkdown>
-                    {collection.description}
-                  </ReactMarkdown>
+                  <ReactMarkdown>{collection.description}</ReactMarkdown>
                 </Card.Text>
                 <div className="d-flex justify-content-center">
                   <div className="user">
@@ -126,11 +113,7 @@ const Collections = ({
                       variant="danger"
                       type="submit"
                       className="card_btn"
-                      onClick={() => {
-                        userNotAllowed
-                          ? userPermission()
-                          : deleteCollection(collection._id);
-                      }}
+                      onClick={() => deleteCollection(collection._id)}
                     >
                       {translate("CollectionBtn.Delete")}
                     </button>

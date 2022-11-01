@@ -1,7 +1,12 @@
 import { useState } from "react";
-import { Button, Form } from "react-bootstrap";
+import { Alert, Button, Form } from "react-bootstrap";
 import { CgPushChevronUpR } from "react-icons/cg";
-export const CustomFields = ({ fields, handleAddCustomFieldValue }) => {
+import { TiTick } from "react-icons/ti";
+export const CustomFields = ({
+  fields,
+  handleAddCustomFieldValue,
+  isSelected,
+}) => {
   const [inputValues, setInputValues] = useState({
     textarea: "",
     text: "",
@@ -9,7 +14,7 @@ export const CustomFields = ({ fields, handleAddCustomFieldValue }) => {
     checked: false,
     date: "",
   });
-  
+
   // handles controlled inputs and sets object keys and values
   const handleInput = (fieldName, value) => {
     setInputValues({
@@ -99,6 +104,7 @@ export const CustomFields = ({ fields, handleAddCustomFieldValue }) => {
           })()}
         </Form.Group>
       ))}
+      {isSelected ? <Alert variant="success"><TiTick/> Successfully pushed</Alert> : null}
       <Button
         variant="info"
         className="rounded-pill mt-2"

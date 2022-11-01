@@ -1,6 +1,5 @@
-import { WithContext as ReactTags } from "react-tag-input";
-import { render } from "react-router-dom";
 import "../../../App.css";
+import { WithContext as ReactTags } from "react-tag-input";
 export const TagsInput = ({items, setInputTag, inputTag, requestData, setRequestData}) => {
   
   const suggestions = items.map((item) => {
