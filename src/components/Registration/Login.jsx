@@ -6,8 +6,6 @@ import { AiOutlineExclamationCircle } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
-import { GoogleLogin } from "react-google-login";
-import { gapi } from "gapi-script";
 const Login = ({ setIsUserLoggedIn, setUsername, translate }) => {
   const navigate = useNavigate();
   const [notFound, setNotFound] = useState(false);
@@ -19,24 +17,6 @@ const Login = ({ setIsUserLoggedIn, setUsername, translate }) => {
     password: "",
   });
 
-  const clientId =
-    "1027227542113-imio6suc2dkqq5js3tbqr47ic4pllqo7.apps.googleusercontent.com";
-  useEffect(() => {
-    const initClient = () => {
-      gapi.client.init({
-        clientId: clientId,
-        scope: "",
-      });
-    };
-    gapi.load("client:auth2", initClient);
-  });
-
-  const onSuccess = (res) => {
-    console.log("success:", res);
-  };
-  const onFailure = (err) => {
-    console.log("failed:", err);
-  };
   // toast for successfully logged in users
   const successMsgForLoggedinUser = () => {
     toast.success(translate("UserRegistration.SuccessMsgForlogin"), {
@@ -142,14 +122,6 @@ const Login = ({ setIsUserLoggedIn, setUsername, translate }) => {
                   onChange={handleInput}
                 />
               </Form.Group>
-              {/* <GoogleLogin
-                clientId={clientId}
-                buttonText="Sign in with Google"
-                onSuccess={onSuccess}
-                onFailure={onFailure}
-                cookiePolicy={"single_host_origin"}
-                isSignedIn={true}
-              /> */}
               <Button
                 type="submit"
                 variant="info"

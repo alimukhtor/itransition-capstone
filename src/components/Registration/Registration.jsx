@@ -109,13 +109,13 @@ const Registration = ({translate}) => {
               className="d-flex justify-content-center"
               style={{ fontSize: "35px", cursor: "pointer" }}
             >
-              <a href={`${window.remote_url}/users/googleLogin`}>
+              <a href={`http://localhost:3030/users/googleLogin`}>
                 <FcGoogle />
               </a>
-              <a href={`${window.remote_url}/users/facebookLogin`}>
+              <a href={`http://localhost:3030/users/facebookLogin`}>
                 <FaFacebook className="mx-4 text-primary" />
               </a>
-              <a href={`${window.remote_url}/users/githubLogin`}>
+              <a href={`http://localhost:3030/users/githubLogin`}>
                 <BsGithub className="text-info" />
               </a>
             </div>
