@@ -1,7 +1,5 @@
 Personal Collection Web App deployed on www.http://netlify.com
 <br/>
-Link to  deployment : https://personal-collection.netlify.app
-<br/>
 Backend Code: https://github.com/yzoken99/itransition-capstone-be
 <br/>
 Web application for personal collection management(books, post-stamps, cars, etc).
